@@ -1,7 +1,7 @@
 from app import app
 from flask import render_template
 from datashows import Shows
-
+from app.models import User, Post, Concerts
 
 @app.route('/')
 def index():
@@ -15,7 +15,7 @@ def about():
 
 @app.route("/shows")
 def shows():
-    return render_template("shows.html", title="Shows-", Shows=Shows())
+    return render_template("shows.html", title="Shows-", Shows=Shows(), concerts=Concerts)
 
 
 @app.route("/music")
