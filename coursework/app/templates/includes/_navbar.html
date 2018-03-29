@@ -34,9 +34,15 @@
             <li class="nav-item">
               <a class ="nav-link" href="/photos"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Gallery</h1></a>
           </li>
-            <li class="nav-item">
-              <a class ="nav-link" href="https://www.youtube.com/channel/UCkMYR1Nerqm5U6LQZpayMhg"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Youtube</h1></a>
-          </li>
+            {% if current_user.is_anonymous %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Login</h1></a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('user', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Profile</h1></a>
+                </li>
+            {% endif %}
         </ul>
 {#        <form class="form-inline mt-2 mt-md-0">#}
 {#          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}

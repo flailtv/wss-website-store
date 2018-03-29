@@ -12,8 +12,8 @@
 {% block body %}
 <div class="text-center">
     <h1>Shows</h1>
-    {% for i in concerts.id %}
-        <p>{{ concerts.location }}{{ concerts.venue }}{{ concerts.date }}</p>
+    {% for i in concerts %}
+        <p>{{ i.location }} -- {{ i.venue }} -- {{ i.date }}</p>
     {% endfor %}
 </div>
 {% endblock %}
