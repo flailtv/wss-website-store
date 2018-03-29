@@ -11,6 +11,10 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     posts = db.relationship("Post", backref="author", lazy="dynamic")
+    address1 = db.Column(db.String(40), index=True, unique=True)
+    address2 = db.Column(db.String(40), index=True, unique=True)
+    towncity = db.Column(db.String(40), index=True, unique=True)
+    postcode = db.Column(db.String(40), index=True, unique=True)
 
     def __repr__(self):
         return "<user {}>".format(self.username)
@@ -31,6 +35,7 @@ class Post(db.Model):
     def _repr__(self):
         return "<Post {}>".format(self.body)
 
+
 class Concerts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(40))
@@ -40,6 +45,8 @@ class Concerts(db.Model):
     def __repr__(self):
         return "<Show ()>".format(self.location)
 
+
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+

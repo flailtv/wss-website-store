@@ -1,5 +1,21 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1>Login</h1>
+    <div class="text-center">
+      <h1>Sign In</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.username.label }}<br>
+                {{ form.username(size=32) }}
+            </p>
+            <p>
+                {{ form.password.label }}<br>
+                {{ form.password(size=32) }}
+            </p>
+            <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+            <p>{{ form.submit() }}</p>
+            <p><a href="/register">Need An Account?</a> </p>
+        </form>
+    </div>
 {% endblock %}

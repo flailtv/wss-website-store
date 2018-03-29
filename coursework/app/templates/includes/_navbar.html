@@ -1,16 +1,12 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light mb-4">
-{#    <img src="logowithtext.jpg" width="15%" height="15%">#}
-{#    <img src="https://fanart.tv/api/download.php?type=download&image=147244&section=2" width="17%" height="15%" alt="While She Sleeps">#}
-{#    <a class="navbar-brand" href="/"><h1 style="font-size 150%:">While She Sleeps</h1></a>#}
+<nav class="navbar navbar-expand-md navbar-light bg-transparent mb-4">
+
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 {#    <div style="text-align: center"#}
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-{#          <li class="nav-item active">#}
-{#            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>#}
-{#          </li>#}
+
           <li class="nav-item">
               <a class="nav-link" href="/store"><h1 style="font-size:175%;margin-top: 0.4em">Store</h1></a>
           </li>
@@ -20,14 +16,15 @@
                 <a class="nav-link" href="/music"><h1 style="font-size:175%;margin-top: 0.4em">Music</h1></a>
             </li>
             <li class="nav-item">
-                <p style="margin-left: 19em"></p>
+                <p style="margin-left: 5em"></p>
             </li>
+        </ul>
+      <ul class="nav navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/"><img style="margin-left:0em ; margin-right: 0 ; text-align:center" src="https://fanart.tv/api/download.php?type=download&image=147244&section=2" width="120em" height="60em" alt="While She Sleeps"> </a>
+                <a class="nav-link" href="/"><img style="margin-right: 0" src="https://fanart.tv/api/download.php?type=download&image=147244&section=2" width="150" height="75" alt="While She Sleeps"> </a>
             </li>
-            <li class="nav-item">
-                <p style="margin-left: 19em"></p>
-            </li>
+        </ul>
+      <ul class="nav navbar-nav navbar-right">
           <li class="nav-item">
               <a class ="nav-link" href="/about"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">About</h1></a>
           </li>
@@ -36,7 +33,7 @@
           </li>
             {% if current_user.is_anonymous %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Login</h1></a>
+                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Login/SignUp</h1></a>
                 </li>
             {% else %}
                 <li class="nav-item">
@@ -44,9 +41,5 @@
                 </li>
             {% endif %}
         </ul>
-{#        <form class="form-inline mt-2 mt-md-0">#}
-{#          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">#}
-{#          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>#}
-{#        </form>#}
       </div>
     </nav>
