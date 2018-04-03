@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="text-center">
+        <h1>Edit Profile - {{ current_user.username }}</h1>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.email.label }}<br>
+                    {{ form.email(size=64) }}<br>
+                    {% for error in form.email.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=32) }}<br>
+                    {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password2.label }}<br>
+                    {{ form.password2(size=32) }}<br>
+                    {% for error in form.password2.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.address1.label }}<br>
+                    {{ form.address1(size=40) }}<br>
+                    {% for error in form.address1.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.address2.label }}<br>
+                    {{ form.address2(size=40) }}<br>
+                    {% for error in form.address2.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.towncity.label }}<br>
+                    {{ form.towncity(size=40) }}<br>
+                    {% for error in form.towncity.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+            <p>
+                    {{ form.postcode.label }}<br>
+                    {{ form.postcode(size=40) }}<br>
+                    {% for error in form.postcode.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>Leave Blank If Not Changing</p>
+                <p>{{ form.submit() }}</p>
+            </form>
+    </div>
+{% endblock %}

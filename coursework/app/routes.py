@@ -1,10 +1,9 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm, EditForm
 from datashows import Shows
 from app.models import User, Post, Concerts
 from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.urls import url_parse
 
 
 @app.route('/')
@@ -90,15 +89,18 @@ def savage():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
         flash('Login requested for user {}, remember_me={}'.format(
             form.username.data, form.remember_me.data))
-        return redirect( "/" )
+        login_user(user, remember=form.remember_me.data)
+        return redirect(url_for("index"))
     return render_template("login.html", title="Login-", form=form)
 
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -111,3 +113,21 @@ def register():
         flash("You Are Now A Registered User!")
         return redirect(url_for("login"))
     return render_template("register.html", title="Register-", form=form)
+
+@app.route("/user/<username>")
+@login_required
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    return render_template("profile.html", title="Profile-", user=user)
+
+
+@app.route("/user/edit", methods={"GET", "POST"})
+@login_required
+def edit_profile():
+    form = EditForm()
+    if form.validate_on_submit():
+        user = User(username=username, email=form.email.data, address1=form.address1.data,address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data )
+        user.set_password(form.password.data)
+        db.session.edit(user)
+        db.session.commit()
+    return render_template("edit_profile.html", title="Edit-",form=form)
