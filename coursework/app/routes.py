@@ -90,8 +90,9 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        flash('Login requested for user {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
+        if user is None or not user.check_password(form.password.data):
+            flash("Invalid Username or Password")
+            return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
     return render_template("login.html", title="Login-", form=form)
@@ -121,13 +122,21 @@ def profile(username):
     return render_template("profile.html", title="Profile-", user=user)
 
 
-@app.route("/user/edit", methods={"GET", "POST"})
+@app.route("/edit", methods={"GET", "POST"})
 @login_required
 def edit_profile():
-    form = EditForm()
+    form = EditForm(current_user.email)
     if form.validate_on_submit():
-        user = User(username=username, email=form.email.data, address1=form.address1.data,address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data )
-        user.set_password(form.password.data)
-        db.session.edit(user)
+        current_user.email = form.email.data
+        current_user.address1 = form.address1.data
+        current_user.address2 = form.address2.data
+        current_user.towncity = form.towncity.data
+        current_user.postcode = form.postcode.data
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash("Invalid Password")
+            return redirect(url_for("edit"))
         db.session.commit()
+        return redirect(url_for("profile"))
     return render_template("edit_profile.html", title="Edit-",form=form)
+

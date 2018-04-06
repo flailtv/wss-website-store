@@ -3,6 +3,7 @@
 {% block body %}
 <h1>Profile</h1>
     <p>Hi, {{ current_user.username }}!</p>
-    <p>Edit Profile (Coming Soon)</p><br>
+{#    {% if user = current_user %}#}
+    <a href="/edit">Edit Profile</a><br>
     <a href="/logout">Logout</a>
 {% endblock %}

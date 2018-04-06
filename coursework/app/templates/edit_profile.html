@@ -55,6 +55,13 @@
                     {% endfor %}
                 </p>
                 <p>Leave Blank If Not Changing</p>
+            <p>
+                    {{ form.og_password.label }}<br>
+                    {{ form.og_password(size=32) }}<br>
+                    {% for error in form.og_password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
                 <p>{{ form.submit() }}</p>
             </form>
     </div>

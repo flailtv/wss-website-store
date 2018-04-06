@@ -39,17 +39,20 @@ class EditForm(FlaskForm):
     address2 = StringField("Address 2")
     towncity = StringField("Town/City")
     postcode = StringField("Postcode")
-    submit=SubmitField("Submit Changes")
+    submit = SubmitField("Submit Changes")
     password = PasswordField("Password")
-    password2 = PasswordField("Repeat Password", validators=[EqualTo( "password" )] )
+    password2 = PasswordField("Repeat Password", validators=[EqualTo("password")])
+    og_password = PasswordField("Current Password", validators=[DataRequired])
 
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user is not None:
-            raise ValidationError("Please use a different username.")
+
+    def __init__(self,og_email, *args, **kwargs):
+        super(EditForm, self).__init__(*args, **kwargs)
+        self.og_email = og_email
+
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError("Please use a different email address.")
+        if email.data != self.og_email:
+            user = User.query.filter_by(email=email.data).first()
+            if user is not None:
+                raise ValidationError("Please use a different email address.")
 
