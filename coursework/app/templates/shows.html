@@ -15,5 +15,9 @@
     {% for i in concerts %}
         <p>{{ i.location }} -- {{ i.venue }} -- {{ i.date }}</p>
     {% endfor %}
+    {% if curremt_user.name == "Admin" %}
+        <a href="/shows/edit">Add Shows</a>
+    {% endif %}
 </div>
 {% endblock %}
+

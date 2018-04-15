@@ -61,30 +61,6 @@ def cart():
     return render_template("store/cart.html", title = "Store-")
 
 
-@app.route("/about/taylor")
-def tatylor():
-    return render_template("about/taylor.html", title = "About-")
-
-
-@app.route("/about/long")
-def long():
-    return render_template("about/long.html", title = "About-")
-
-
-@app.route("/about/welsh")
-def welsh():
-    return render_template("about/long.html", title = "About-")
-
-
-@app.route("/about/mckenzie")
-def mckenzie():
-    return render_template("about/mckenzie.html", title ="About-")
-
-
-@app.route("/about/savage")
-def savage():
-    return render_template("about/savage.html", title = "About-")
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -139,4 +115,9 @@ def edit_profile():
         db.session.commit()
         return redirect(url_for("profile"))
     return render_template("edit_profile.html", title="Edit-",form=form)
+
+@app.route("/shows/edit")
+@login_required
+def edit_shows():
+    return render_template("edit_shows.html", title="Shows-", form=form)
 
