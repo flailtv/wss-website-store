@@ -1,8 +1,8 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows
 from datashows import Shows
-from app.models import User, Post, Concerts
+from app.models import User, Concerts, store
 from flask_login import current_user, login_user, logout_user, login_required
 
 
@@ -83,7 +83,7 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data)
+        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel = 1, name = form.name.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -95,7 +95,7 @@ def register():
 @login_required
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template("profile.html", title="Profile-", user=user)
+    return render_template("profile.html", title="Profile-", user=User.query.all())
 
 
 @app.route("/edit", methods={"GET", "POST"})
@@ -108,6 +108,7 @@ def edit_profile():
         current_user.address2 = form.address2.data
         current_user.towncity = form.towncity.data
         current_user.postcode = form.postcode.data
+        current_user.name = form.name.data
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash("Invalid Password")
@@ -121,3 +122,38 @@ def edit_profile():
 def edit_shows():
     return render_template("edit_shows.html", title="Shows-", form=form)
 
+@app.route("/admin")
+@login_required
+def admin():
+    for i in User.query.all():
+        if i.username == current_user.username:
+            if i.accesslevel >= 2:
+                return render_template("admin.html", title="Admin-")
+            else:
+                return redirect(url_for("index"))
+
+@app.route("/owner")
+@login_required
+def owner():
+    for i in User.query.all():
+        if i.username == current_user.username:
+            if i.accesslevel == 3:
+                return render_template("owner.html", title="Owner-")
+            else:
+                return redirect(url_for("index"))
+
+@app.route("/admin/editshows", methods={"GET", "POST"})
+@login_required
+def owner_page():
+    for i in User.query.all():
+        if i.username == current_user.username:
+            if i.accesslevel >= 2:
+                form = add_shows()
+                if form.validate_on_submit():
+                    show = Concerts(location=form.location.data, date=form.date.data, venue=form.venue.data)
+                    db.session.add(show)
+                    db.session.commit()
+                    return redirect(url_for("edit_shows"))
+                return render_template("edit_shows.html", title="Admin-", form=form)
+            else:
+                return redirect(url_for("profile"))

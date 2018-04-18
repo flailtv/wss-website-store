@@ -1,9 +1,25 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1>Profile</h1>
-    <p>Hi, {{ current_user.username }}!</p>
-{#    {% if user = current_user %}#}
+    <div class="text-center">
+    <h1>Profile</h1>
+    <br>
+        <p>Hi, {{ current_user.username }}!</p>
+        {% for i in user %}
+            {% if i.username == current_user.username %}
+                <p>Address 1 = {{ i.address1 }}</p>
+                <p>Address 2 = {{ i.address2 }}</p>
+                <p>Town/City = {{ i.towncity }}</p>
+                <p>Postcode = {{ i.postcode }}</p>
+                {% if i.accesslevel >= 2 %}
+                    <a href="/admin">Admin Page</a><br>
+                {% endif %}
+                {% if i.accesslevel == 3 %}
+                    <a href="/owner">Owner Page</a><br>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
     <a href="/edit">Edit Profile</a><br>
-    <a href="/logout">Logout</a>
+        <a href="/logout">Logout</a>
+    </div>
 {% endblock %}

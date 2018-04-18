@@ -10,11 +10,12 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    posts = db.relationship("Post", backref="author", lazy="dynamic")
-    address1 = db.Column(db.String(40), index=True, unique=True)
-    address2 = db.Column(db.String(40), index=True, unique=True)
-    towncity = db.Column(db.String(40), index=True, unique=True)
-    postcode = db.Column(db.String(40), index=True, unique=True)
+    name = db.Column(db.String(40))
+    address1 = db.Column(db.String(40), index=True)
+    address2 = db.Column(db.String(40), index=True)
+    towncity = db.Column(db.String(40), index=True)
+    postcode = db.Column(db.String(40), index=True)
+    accesslevel = db.Column(db.Integer, index=True)
 
     def __repr__(self):
         return "<user {}>".format(self.username)
@@ -49,4 +50,22 @@ class Concerts(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+class store(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40))
+    image = db.Column(db.String(40))
+    cat = db.Column(db.String(40))
+    price = db.Column(db.Float)
+    sale = db.Column(db.Integer)
+    size = db.Column(db.String(40))
+    stock = db.Column(db.Integer)
+
+
+class orders(db.Model):
+    order_id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey("User.id"))
+    item_id = db.Column(db.Integer)
+    item_quant = db.Column(db.Integer)
+    order_status = db.Column(db.String(40))
 

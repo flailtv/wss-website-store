@@ -1,5 +1,33 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<div class="text-center">
+    <h1>Add Show</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.location.label }}<br>
+                {{ form.location(size=32) }}<br>
+                {% for error in form.location.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.date.label }}<br>
+                {{ form.date(size=32) }}<br>
+                {% for error in form.date.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.venue.label }}<br>
+                {{ form.venue(size=32) }}<br>
+                {% for error in form.venue.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+</div>
 
 {% endblock %}

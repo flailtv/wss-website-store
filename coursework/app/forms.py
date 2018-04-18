@@ -17,6 +17,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField("Password*", validators=[DataRequired()])
     password2 = PasswordField("Repeat Password*", validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("Register")
+    name = StringField("Name")
     address1 = StringField("Address 1")
     address2 = StringField("Address 2")
     towncity = StringField("Town/City")
@@ -43,11 +44,13 @@ class EditForm(FlaskForm):
     password = PasswordField("Password")
     password2 = PasswordField("Repeat Password", validators=[EqualTo("password")])
     og_password = PasswordField("Current Password", validators=[DataRequired])
+    name = StringField("Name")
 
 
-    def __init__(self,og_email, *args, **kwargs):
-        super(EditForm, self).__init__(*args, **kwargs)
-        self.og_email = og_email
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError("Please use a different username.")
 
 
     def validate_email(self, email):
@@ -56,3 +59,8 @@ class EditForm(FlaskForm):
             if user is not None:
                 raise ValidationError("Please use a different email address.")
 
+class add_shows(FlaskForm):
+    location = StringField("Loction")
+    date = StringField("Date (In Format YYYYMMDD")
+    venue = StringField("Venue")
+    submit = SubmitField("Submit")
