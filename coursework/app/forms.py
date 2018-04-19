@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
 
@@ -53,14 +53,9 @@ class EditForm(FlaskForm):
             raise ValidationError("Please use a different username.")
 
 
-    def validate_email(self, email):
-        if email.data != self.og_email:
-            user = User.query.filter_by(email=email.data).first()
-            if user is not None:
-                raise ValidationError("Please use a different email address.")
-
 class add_shows(FlaskForm):
     location = StringField("Loction")
-    date = StringField("Date (In Format YYYYMMDD")
+    date_second = StringField("Date (In Format YYYYMMDD")
+    date = DateField()
     venue = StringField("Venue")
     submit = SubmitField("Submit")

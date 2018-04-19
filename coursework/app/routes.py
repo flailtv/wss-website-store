@@ -1,8 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows
-from datashows import Shows
-from app.models import User, Concerts, store
+from app.models import User, Concerts, Store
 from flask_login import current_user, login_user, logout_user, login_required
 
 
@@ -115,7 +114,7 @@ def edit_profile():
             return redirect(url_for("edit"))
         db.session.commit()
         return redirect(url_for("profile"))
-    return render_template("edit_profile.html", title="Edit-",form=form)
+    return render_template("edit_profile.html", title="Edit-", form=form)
 
 @app.route("/shows/edit")
 @login_required
@@ -142,7 +141,7 @@ def owner():
             else:
                 return redirect(url_for("index"))
 
-@app.route("/admin/editshows", methods={"GET", "POST"})
+@app.route("/admin/editshows", methods=["GET", "POST"])
 @login_required
 def owner_page():
     for i in User.query.all():
@@ -150,7 +149,7 @@ def owner_page():
             if i.accesslevel >= 2:
                 form = add_shows()
                 if form.validate_on_submit():
-                    show = Concerts(location=form.location.data, date=form.date.data, venue=form.venue.data)
+                    show = Concerts(location=form.location.data, date=form.date.data, venue=form.venue.data, date_second=form.date_second.data)
                     db.session.add(show)
                     db.session.commit()
                     return redirect(url_for("edit_shows"))

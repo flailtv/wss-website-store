@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    name = db.Column(db.String(40))
+    name = db.Column(db.String(40), index = True)
     address1 = db.Column(db.String(40), index=True)
     address2 = db.Column(db.String(40), index=True)
     towncity = db.Column(db.String(40), index=True)
@@ -41,7 +41,8 @@ class Concerts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(40))
     venue = db.Column(db.String(40))
-    date = db.Column(db.String(8))
+    date = db.Column(db.String(10))
+    date_second = db.Column(db.Date)
 
     def __repr__(self):
         return "<Show ()>".format(self.location)
@@ -51,7 +52,7 @@ class Concerts(db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-class store(db.Model):
+class Store(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40))
     image = db.Column(db.String(40))
@@ -64,7 +65,7 @@ class store(db.Model):
 
 class orders(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey("User.id"))
+    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
     item_id = db.Column(db.Integer)
     item_quant = db.Column(db.Integer)
     order_status = db.Column(db.String(40))

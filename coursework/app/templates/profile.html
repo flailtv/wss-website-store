@@ -7,6 +7,7 @@
         <p>Hi, {{ current_user.username }}!</p>
         {% for i in user %}
             {% if i.username == current_user.username %}
+                <p>Name = {{ i.name }}</p>
                 <p>Address 1 = {{ i.address1 }}</p>
                 <p>Address 2 = {{ i.address2 }}</p>
                 <p>Town/City = {{ i.towncity }}</p>
