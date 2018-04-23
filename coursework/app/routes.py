@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level
 from app.models import User, Concerts, Store
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -17,7 +17,7 @@ def about():
 
 @app.route("/shows")
 def shows():
-    return render_template("shows.html", title="Shows-", Shows=Shows(), concerts=Concerts.query.all())
+    return render_template("shows.html", title="Shows-", concerts=Concerts.query.all())
 
 
 @app.route("/music")
@@ -70,7 +70,7 @@ def login():
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
-    return render_template("login.html", title="Login-", form=form)
+    return render_template("user/login.html", title="Login-", form=form)
 
 @app.route("/logout")
 def logout():
@@ -88,13 +88,13 @@ def register():
         db.session.commit()
         flash("You Are Now A Registered User!")
         return redirect(url_for("login"))
-    return render_template("register.html", title="Register-", form=form)
+    return render_template("user/register.html", title="Register-", form=form)
 
 @app.route("/user/<username>")
 @login_required
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
-    return render_template("profile.html", title="Profile-", user=User.query.all())
+    return render_template("user/profile.html", title="Profile-", user=User.query.all())
 
 
 @app.route("/edit", methods={"GET", "POST"})
@@ -114,12 +114,12 @@ def edit_profile():
             return redirect(url_for("edit"))
         db.session.commit()
         return redirect(url_for("profile"))
-    return render_template("edit_profile.html", title="Edit-", form=form)
+    return render_template("user/edit_profile.html", title="Edit-", form=form)
 
-@app.route("/shows/edit")
+@app.route("/shows/editshows")
 @login_required
 def edit_shows():
-    return render_template("edit_shows.html", title="Shows-", form=form)
+    return render_template("user/edit_shows.html", title="Shows-")
 
 @app.route("/admin")
 @login_required
@@ -137,22 +137,47 @@ def owner():
     for i in User.query.all():
         if i.username == current_user.username:
             if i.accesslevel == 3:
-                return render_template("owner.html", title="Owner-")
+                return render_template("user/owner.html", title="Owner-")
             else:
                 return redirect(url_for("index"))
 
-@app.route("/admin/editshows", methods=["GET", "POST"])
+@app.route("/admin/addshows", methods=["GET", "POST"])
 @login_required
-def owner_page():
+def add_show():
     for i in User.query.all():
         if i.username == current_user.username:
             if i.accesslevel >= 2:
                 form = add_shows()
                 if form.validate_on_submit():
-                    show = Concerts(location=form.location.data, date=form.date.data, venue=form.venue.data, date_second=form.date_second.data)
+                    show = Concerts(location=form.location.data, thedate=form.thedate.data, venue=form.venue.data,)
                     db.session.add(show)
                     db.session.commit()
-                    return redirect(url_for("edit_shows"))
-                return render_template("edit_shows.html", title="Admin-", form=form)
+                    return redirect(url_for("add_show"))
+                return render_template("user/add_shows.html", title="Admin-", form=form)
             else:
                 return redirect(url_for("profile"))
+
+@app.route("/owner/users")
+@login_required
+def owner_users():
+    for i in User.query.all():
+        if i.username == current_user.username:
+            if i.accesslevel == 3:
+                return render_template("user/all_users.html", title="Owner-", user = User.query.all())
+            else:
+                return redirect(url_for("index"))
+
+@app.route("/owner/edituser")
+@login_required
+def edit_user_access_level():
+    for i in User.query.all():
+        if i.username == current_user.username:
+            if i.accesslevel == 3:
+                form = edit_user_level()
+                return render_template("user/change_user_level.html", title="Owner-", form = form)
+            else:
+                return redirect(url_for(404))
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template("error_pages/404.html"), 404

@@ -54,8 +54,14 @@ class EditForm(FlaskForm):
 
 
 class add_shows(FlaskForm):
-    location = StringField("Loction")
-    date_second = StringField("Date (In Format YYYYMMDD")
-    date = DateField()
+    location = StringField("Location")
+    thedate = DateField("Date", format='%d-%m-%y')
     venue = StringField("Venue")
+    submit = SubmitField("Submit")
+
+
+class edit_user_level(FlaskForm):
+    username = StringField("Username")
+    accesslevel = StringField("New Access Level")
+    password = PasswordField("Password", validators=[DataRequired])
     submit = SubmitField("Submit")

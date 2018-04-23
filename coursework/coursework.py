@@ -1,6 +1,6 @@
 from app import app, db
 from app.models import User, Concerts, Store
-import arrow, threading, time
+import arrow, threading
 
 @app.shell_context_processor
 def make_shell_context():
@@ -12,12 +12,12 @@ def make_shell_context():
     }
 
 
-current_date = arrow.now().format("YYYYMMDD")
+current_date = arrow.now().format("YYMMDD")
 for i in Concerts.query.all():
-    if int(i.date_second) < int(current_date):
+    t = i.thedate.strftime("%y%m%d")
+    if int(t) < int(current_date):
         db.session.delete(i)
         db.session.commit()
-
 
 if __name__ == '__main__':
     app.run()

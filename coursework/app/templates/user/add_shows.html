@@ -13,19 +13,19 @@
                 {% endfor %}
             </p>
             <p>
-                {{ form.date.label }}<br>
-                {{ form.date(size=32) }}<br>
-                {% for error in form.date.errors %}
+                {{ form.thedate.label }}<br>
+                {{ form.thedate(size=32) }}<br>
+                {% for error in form.thedate.errors %}
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
-            <p>
-                {{ form.date_second.label }}<br>
-                {{ form.date_second(size=32) }}<br>
-                {% for error in form.date_second.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
-            </p>
+{#            <p>#}
+{#                {{ form.date_second.label }}<br>#}
+{#                {{ form.date_second(size=32) }}<br>#}
+{#                {% for error in form.date_second.errors %}#}
+{#                <span style="color: red;">[{{ error }}]</span>#}
+{#                {% endfor %}#}
+{#            </p>#}
             <p>
                 {{ form.venue.label }}<br>
                 {{ form.venue(size=32) }}<br>
