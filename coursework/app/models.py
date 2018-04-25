@@ -10,7 +10,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    name = db.Column(db.String(40), index = True)
+    name = db.Column(db.String(40), index=True)
     address1 = db.Column(db.String(40), index=True)
     address2 = db.Column(db.String(40), index=True)
     towncity = db.Column(db.String(40), index=True)
@@ -42,14 +42,16 @@ class Concerts(db.Model):
     location = db.Column(db.String(40))
     venue = db.Column(db.String(40))
     thedate = db.Column(db.Date)
+    date = db.Column(db.String(10))
 
     def __repr__(self):
         return "<Show ()>".format(self.location)
 
 
 @login.user_loader
-def load_user(id):
-    return User.query.get(int(id))
+def load_user(the_id):
+    return User.query.get(int(the_id))
+
 
 class Store(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,8 +60,14 @@ class Store(db.Model):
     cat = db.Column(db.String(40))
     price = db.Column(db.Float)
     sale = db.Column(db.Integer)
+
+
+class stock(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    itemid = db.Column(db.Integer, db.ForeignKey("store.id"))
     size = db.Column(db.String(40))
     stock = db.Column(db.Integer)
+    colour = db.Column(db.String(40))
 
 
 class orders(db.Model):
