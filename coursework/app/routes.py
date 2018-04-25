@@ -178,6 +178,3 @@ def edit_user_access_level():
             else:
                 return redirect(url_for(404))
 
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template("error_pages/404.html"), 404

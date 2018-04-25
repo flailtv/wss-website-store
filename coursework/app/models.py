@@ -42,7 +42,6 @@ class Concerts(db.Model):
     location = db.Column(db.String(40))
     venue = db.Column(db.String(40))
     thedate = db.Column(db.Date)
-    date_second = db.Column(db.Date)
 
     def __repr__(self):
         return "<Show ()>".format(self.location)
