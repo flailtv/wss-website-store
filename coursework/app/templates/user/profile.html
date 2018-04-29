@@ -8,9 +8,7 @@
         {% for i in user %}
             {% if i.username == current_user.username %}
                 <p>Name = {{ i.name }}</p>
-                {{ if i.address1 == Not None }}
-                    <p>Address 1 = {{ i.address1 }}</p>
-                {{ endif }}
+                <p>Address 1 = {{ i.address1 }}</p>
                 <p>Address 2 = {{ i.address2 }}</p>
                 <p>Town/City = {{ i.towncity }}</p>
                 <p>Postcode = {{ i.postcode }}</p>
