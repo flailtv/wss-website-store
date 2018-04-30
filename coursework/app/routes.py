@@ -62,7 +62,7 @@ def cart():
 @app.route("/store/item/<item_name>", methods=["GET", "POST"])
 def store_item(item_name):
     item = Store.query.filter_by(name=item_name).first()
-    return render_template("store/store_item.html", title="Store", store_item= item, store=Store.query.all(), stock=stock.query.all())
+    return render_template("store/store_item.html", title="Store", store_item=item, store=Store.query.all(), stock=stock.query.all())
 
 
 @app.route("/login", methods=["GET", "POST"])

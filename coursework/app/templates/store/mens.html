@@ -1,27 +1,27 @@
 {% extends "store/layout_store.html" %}
-{% block head %}
-    <style>
-    ul.item_list li {height: 1em; width: 1em; display: inline-block; vertical-align: top; margin-right: 0.1em}
-    </style>
-{% endblock %}
-
 {% block body %}
 <div class="text-center">
 <h1>Mens</h1>
 </div>
-{#<ul class="item_list ">#}
-{#{% for item in shop %}#}
-{#<li>#}
-{#    <a href="{{ url_for("store_item", item_name=item.name) }}">#}
-{#        <p>{{ item.name }}</p>#}
-{#        <img src="{{ url_for("static", filename=item.image) }}">#}
-{#    </a>#}
-{#</li>#}
-{#{% endfor %}#}
-{#</ul>#}
-
-    {% for num in range 5 %}
-
+    <table style="width: 100%">
+    <div style="display: inline-block">
+    {% for item in store %}
+        <th><br></th>
+        <th><br></th>
+        <th><br></th>
+        <th><br></th>
+        <th><br></th>
+            <td>
+                {% if item.cat == "Mens" %}
+                    <a href="{{ url_for("store_item", item_name=item.name) }}">
+                    <img src="{{ url_for("static", filename=item.image) }}">
+                    </a>
+                {% endif %}
+            {% endfor %}
+            </td>
+    </div>
+    </table>
+{% endblock %}
 {#        <table style="width: 100%">#}
 {#        <tr>#}
 {#        <th>#}
@@ -46,26 +46,3 @@
 {#            {% endif %}#}
 {#        {% endfor %}#}
 {#        </th>#}
-{#        <th>#}
-{#        {% for item in store %}#}
-{#            {% if item.cat == "Mens" %}#}
-{#            {% if item.id == 3 %}#}
-{#                <p>{{ item.name }}</p>#}
-{#                <img src="{{ url_for("static", filename=item.image) }}">#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#        {% endfor %}#}
-{#        </th>#}
-{#        <th>#}
-{#            {% for item in store %}#}
-{#            {% if item.cat == "Mens" %}#}
-{#            {% if item.id == 5 %}#}
-{#                <p>{{ item.name }}</p>#}
-{#                <img src="{{ url_for("static", filename=item.image) }}">#}
-{#            {% endif %}#}
-{#        {% endif %}#}
-{#        {% endfor %}#}
-{#        </th>#}
-{#        </tr>#}
-{#        </table>#}
-{% endblock %}
