@@ -4,20 +4,24 @@
     ul.item_list li {height: 1em; width: 1em; display: inline-block; vertical-align: top; margin-right: 0.1em}
     </style>
 {% endblock %}
+
 {% block body %}
 <div class="text-center">
 <h1>Mens</h1>
 </div>
-<ul class="ite_list ">
-{% for item in shop %}
-<li>
-    <a href="{{ url_for("store_item", item_name=item.name) }}">
-        <p>{{ item.name }}</p>
-        <img src="{{ url_for("static", filename=item.image) }}">
-    </a>
-</li>
-{% endfor %}
-</ul>
+{#<ul class="item_list ">#}
+{#{% for item in shop %}#}
+{#<li>#}
+{#    <a href="{{ url_for("store_item", item_name=item.name) }}">#}
+{#        <p>{{ item.name }}</p>#}
+{#        <img src="{{ url_for("static", filename=item.image) }}">#}
+{#    </a>#}
+{#</li>#}
+{#{% endfor %}#}
+{#</ul>#}
+
+    {% for num in range 5 %}
+
 {#        <table style="width: 100%">#}
 {#        <tr>#}
 {#        <th>#}
@@ -61,7 +65,7 @@
 {#            {% endif %}#}
 {#        {% endif %}#}
 {#        {% endfor %}#}
-        </th>
-        </tr>
-        </table>
+{#        </th>#}
+{#        </tr>#}
+{#        </table>#}
 {% endblock %}
