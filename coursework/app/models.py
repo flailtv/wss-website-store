@@ -58,6 +58,7 @@ class stock(db.Model):
     size = db.Column(db.String(40))
     stock = db.Column(db.Integer)
     colour = db.Column(db.String(40))
+    bought = db.Column(db.Integer)
 
 
 class orders(db.Model):
@@ -68,7 +69,7 @@ class orders(db.Model):
     order_status = db.Column(db.String(40))
 
 class cart(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    cart_id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey("user.id"))
     itemid = db.Column(db.String, db.ForeignKey("stock.id"))
     quantity = db.Column(db.String, db.ForeignKey("stock.stock"))

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
 
@@ -66,5 +66,11 @@ class edit_user_level(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired])
     submit = SubmitField("Submit")
 
-class store_item(FlaskForm):
-    select  = 
+# class store_item(FlaskForm):
+#
+
+class add_to_cart(FlaskForm):
+    size = SelectField(
+        choices=[("Select Size", "Select Size"), ("S", "S"), ("M", "M"), ("L","L"), ("XL", "XL")]
+    )
+    add = SubmitField("Add To Cart")

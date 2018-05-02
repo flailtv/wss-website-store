@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level
-from app.models import User, Concerts, Store, stock, orders
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart
+from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
 
 
@@ -34,6 +34,9 @@ def store():
 def photos():
     return render_template("Photos.html", title="Photos-")
 
+@app.route("/store/music")
+def store_music():
+    return render_template("store/music_store.html", title="Store-", store=Store.query.all())
 
 @app.route("/store/mens")
 def mens():
@@ -42,7 +45,7 @@ def mens():
 
 @app.route("/store/outwear")
 def outwear():
-    return render_template("store/outwear.html", title="Store-")
+    return render_template("store/outwear.html", title="Store-", store=Store.query.all())
 
 
 @app.route("/store/womens")
@@ -61,8 +64,9 @@ def cart():
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):
+    form = add_to_cart()
     item = Store.query.filter_by(id=item_id).first()
-    return render_template("store/store_item.html", title="Store", store_item=item, store=Store.query.all(), stock=stock.query.all())
+    return render_template("store/store_item.html", title="Store", store_item=item, store=Store.query.all(), stock=stock.query.all(), form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])

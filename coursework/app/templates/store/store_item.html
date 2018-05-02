@@ -13,9 +13,24 @@
         <tr>
         {% if item.itemid == store_item.id %}
             <td style="font-size: 150%">{{ item.size }}</td>
-            <td style="font-size: 150%">{{ item.stock }}</td>
+            {% if item.stock == 0 %}
+                <td style="font-size: 150%;color: red">{{ item.stock }}</td>
+                {% else %}
+                <td style="font-size: 150%">{{ item.stock }}</td>
+            {% endif %}
         {% endif %}
         </tr>
     {% endfor %}
     </table>
+    <br>
+    <div class="center" style="float: left;width: 100%;margin-left: 25%">
+        <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.size.label }}<br>
+                    {{ form.size(size=1) }}
+                    {{ form.add() }}
+                </p>
+        </form>
+    </div>
 {% endblock %}
