@@ -1,5 +1,14 @@
 {% extends "store/layout_store.html" %}
-
 {% block body %}
-Womens
+<div class="text-center">
+<h1>Womens</h1>
+<br>
+</div>
+    {% for item in store %}
+                {% if item.cat == "Womens" %}
+                    <a href="{{ url_for("store_item", item_id=item.id) }}">
+                    <img src="{{ url_for("static", filename=item.image) }}">
+                    </a>
+                {% endif %}
+            {% endfor %}
 {% endblock %}

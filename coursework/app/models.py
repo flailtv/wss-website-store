@@ -49,6 +49,7 @@ class Store(db.Model):
     cat = db.Column(db.String(40))
     price = db.Column(db.Float)
     sale = db.Column(db.Integer)
+    back_image=db.Column(db.String)
 
 
 class stock(db.Model):
@@ -66,3 +67,9 @@ class orders(db.Model):
     item_quant = db.Column(db.Integer)
     order_status = db.Column(db.String(40))
 
+class cart(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
+    itemid = db.Column(db.String, db.ForeignKey("stock.id"))
+    quantity = db.Column(db.String, db.ForeignKey("stock.stock"))
+    price = db.Column(db.String, db.ForeignKey("store.price"))

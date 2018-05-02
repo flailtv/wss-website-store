@@ -65,3 +65,6 @@ class edit_user_level(FlaskForm):
     accesslevel = StringField("New Access Level")
     password = PasswordField("Password", validators=[DataRequired])
     submit = SubmitField("Submit")
+
+class store_item(FlaskForm):
+    select  = 

@@ -1,17 +1,21 @@
 {% extends "store/layout_store.html" %}
 
 {% block body %}
-    <div class="text-center">
-    <p>{{ store_item.name }}</p>
-{#    <img src="{{ url_for("static", filename=store_item.image) }}">#}
+<div class="text-center"><h1>{{ store_item.name }}</h1></div>
+    <p style="float: left; width: 25%"></p>
+        <img style="float: left; width: 25%" src="{{ url_for("static", filename=store_item.image) }}">
+        <img style="float: left; width: 25%" src="{{ url_for("static", filename=store_item.back_image) }}">
+    <p style="float: left; width: 25%;margin-left: 13%"></p>
+    <table style="float: left;width: 50%">
+        <th><h2><u>Size</u></h2></th>
+    <th><h2><u>Stock</u></h2></th>
     {% for item in stock %}
+        <tr>
         {% if item.itemid == store_item.id %}
-            <table>
-            <th><img src="{{ url_for("static", filename=item.image_front) }}"></th>
-            <th><img src="{{ url_for("static", filename=item.image_back) }}"></th>
-            </table>
-            <p>{{ item.stock }}</p>
+            <td style="font-size: 150%">{{ item.size }}</td>
+            <td style="font-size: 150%">{{ item.stock }}</td>
         {% endif %}
+        </tr>
     {% endfor %}
-    </div>
+    </table>
 {% endblock %}

@@ -36,7 +36,7 @@ def photos():
 
 
 @app.route("/store/mens")
-def shirts():
+def mens():
     return render_template("store/mens.html", title="Store-", store=Store.query.all())
 
 
@@ -47,7 +47,7 @@ def outwear():
 
 @app.route("/store/womens")
 def womens():
-    return render_template("store/womens.html", title="Store-")
+    return render_template("store/womens.html", title="Store-", store=Store.query.all(), stock=stock.query.all())
 
 
 @app.route("/store/accessories")
@@ -59,9 +59,9 @@ def accessories():
 def cart():
     return render_template("store/cart.html", title = "Store-")
 
-@app.route("/store/item/<item_name>", methods=["GET", "POST"])
-def store_item(item_name):
-    item = Store.query.filter_by(name=item_name).first()
+@app.route("/store/item/<item_id>", methods=["GET", "POST"])
+def store_item(item_id):
+    item = Store.query.filter_by(id=item_id).first()
     return render_template("store/store_item.html", title="Store", store_item=item, store=Store.query.all(), stock=stock.query.all())
 
 
