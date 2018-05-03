@@ -66,7 +66,7 @@ def cart():
 def store_item(item_id):
     form = add_to_cart()
     item = Store.query.filter_by(id=item_id).first()
-    return render_template("store/store_item.html", title="Store", store_item=item, store=Store.query.all(), stock=stock.query.all(), form=form)
+    return render_template("store/store_item.html", title="Store-", store_item=item, store=Store.query.all(), stock=stock.query.all(), form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])

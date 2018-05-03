@@ -23,11 +23,10 @@
     {% endfor %}
     </table>
     <br>
-    <div class="center" style="float: left;width: 100%;margin-left: 25%">
+    <div class="center" style="float: left;width: 55%;margin-left: 45%">
         <form action="" method="post">
                 {{ form.hidden_tag() }}
                 <p>
-                    {{ form.size.label }}<br>
                     {{ form.size(size=1) }}
                     {{ form.add() }}
                 </p>
