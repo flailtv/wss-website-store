@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -65,9 +65,22 @@ def cart():
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):
     form = add_to_cart()
-    item = Store.query.filter_by(id=item_id).first()
-    return render_template("store/store_item.html", title="Store-", store_item=item, store=Store.query.all(), stock=stock.query.all(), form=form)
+    the_item = Store.query.filter_by(id=item_id).first()
+    # if form.validate_on_submit():
+    #     item = cart(user.id=current_user.id, itemid=the_item.id, quantity=amount)
+    return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
 
+
+# @app.route("/store/item/<item_id>/edit", methods=["GET", "POST"])
+# @login_required
+# def item_admin_page():
+#     for i in User.query.all():
+#         if i.username == current_user.username:
+#             if i.accesslevel >= 2:
+#                 form =
+#                 return render_template("user/change_user_level.html", title="Owner-", form = form)
+#             else:
+#                 return redirect(url_for(404))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -136,7 +149,7 @@ def admin():
     for i in User.query.all():
         if i.username == current_user.username:
             if i.accesslevel >= 2:
-                return render_template("admin.html", title="Admin-")
+                return render_template("user/admin.html", title="Admin-")
             else:
                 return redirect(url_for("index"))
 

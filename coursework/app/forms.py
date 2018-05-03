@@ -73,4 +73,17 @@ class add_to_cart(FlaskForm):
     size = SelectField(
         choices=[("Select Size", "Select Size"), ("S", "S"), ("M", "M"), ("L","L"), ("XL", "XL")]
     )
+    amount = SelectField(choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5"), (6, "6"), (7, "7"), (8, "8"), (9, "9")])
     add = SubmitField("Add To Cart")
+
+class add_item_to_store(FlaskForm):
+    name = StringField("Item Name", validators=[DataRequired])
+    cat = StringField("Category", validators=[DataRequired])
+    price = StringField("Price", validators=[DataRequired])
+    sale = StringField("Sale %")
+    image = StringField("Image Url", validators=[DataRequired])
+    back_image = StringField("2nd Image Url")
+    size = StringField("Size")
+    stock = StringField("Stock")
+    colour = StringField("Colour")
+

@@ -68,6 +68,7 @@ class orders(db.Model):
     item_quant = db.Column(db.Integer)
     order_status = db.Column(db.String(40))
 
+
 class cart(db.Model):
     cart_id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer, db.ForeignKey("user.id"))
