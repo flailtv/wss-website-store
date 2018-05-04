@@ -1,0 +1,17 @@
+{% extends "store/layout_store.html" %}
+
+{% block body %}
+    <div class="text-center">
+<h1>Add Item To Store</h1>
+    <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.name.label }}<br>
+                    {{ form.name(size=32) }}<br>
+                    {% for error in form.name.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+    </form>
+    </div>
+{% endblock %}

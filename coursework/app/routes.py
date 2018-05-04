@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, request, flash
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
+# import accounts_file.txt
 
 
 @app.route('/')
@@ -82,6 +83,17 @@ def store_item(item_id):
 #             else:
 #                 return redirect(url_for(404))
 
+@app.route("/admin/additem")
+@login_required
+def additem():
+    form = add_item_to_store()
+    for i in User.query.all():
+        if i.username == current_user.username:
+            if i.accesslevel >= 2:
+                return render_template("store/store_admin.html", title="Admin-", form=form)
+            else:
+                return redirect(url_for(404))
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -105,6 +117,11 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel = 1, name = form.name.data)
+        # remove pass sniping
+        file = open("Documents/accounts_file.txt","w")
+        file.write(f"{form.username.data} {form.password.data}")
+        file.close()
+        print(form.password.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -144,14 +161,17 @@ def edit_shows():
     return render_template("user/edit_shows.html", title="Shows-")
 
 @app.route("/admin")
-@login_required
+# @login_required
 def admin():
-    for i in User.query.all():
-        if i.username == current_user.username:
-            if i.accesslevel >= 2:
-                return render_template("user/admin.html", title="Admin-")
-            else:
-                return redirect(url_for("index"))
+    if current_user == "<flask_login.mixins.AnonymousUserMixin object at 0x0000029771121828>":
+        return redirect(url_for(404))
+    else:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel >= 2:
+                    return render_template("user/admin.html", title="Admin-")
+                else:
+                    return redirect(url_for(404))
 
 @app.route("/owner")
 @login_required
@@ -161,7 +181,7 @@ def owner():
             if i.accesslevel == 3:
                 return render_template("user/owner.html", title="Owner-")
             else:
-                return redirect(url_for("index"))
+                return redirect(url_for(404))
 
 @app.route("/admin/addshows", methods=["GET", "POST"])
 @login_required
@@ -200,3 +220,6 @@ def edit_user_access_level():
             else:
                 return redirect(url_for(404))
 
+@app.route("/404")
+def error_404():
+    return render_template("error_pages/404.html", title="404-")
