@@ -5,6 +5,7 @@ from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
 # import accounts_file.txt
 
+#T0D0 add an add size to add stock
 
 @app.route('/')
 def index():
@@ -90,6 +91,27 @@ def additem():
     for i in User.query.all():
         if i.username == current_user.username:
             if i.accesslevel >= 2:
+                if form.validate_on_submit():
+                    item = store(
+                        id=form.id.data,
+                        name=form.name.data,
+                        image=form.image.data,
+                        back_image=form.back_image.data,
+                        cat=form.cat.data,
+                        price=form.price.data,
+                        sale=form.sale.data
+                    )
+                    db.session.add(item)
+                    db.session.commit()
+                    item = stock(
+                        itemid=form.id.data,
+                        size=form.size.data,
+                        stock=form.stock.data,
+                        colour=form.colour.data,
+                    )
+                    db.session.add(item)
+                    db.session.commit()
+                    flash("Item Added To The Store")
                 return render_template("store/store_admin.html", title="Admin-", form=form)
             else:
                 return redirect(url_for(404))

@@ -77,13 +77,21 @@ class add_to_cart(FlaskForm):
     add = SubmitField("Add To Cart")
 
 class add_item_to_store(FlaskForm):
+    id = StringField("Item ID", validators=[DataRequired])
     name = StringField("Item Name", validators=[DataRequired])
     cat = StringField("Category", validators=[DataRequired])
     price = StringField("Price", validators=[DataRequired])
-    sale = StringField("Sale %")
-    image = StringField("Image Url", validators=[DataRequired])
+    sale = StringField("Sale % (If Applicable)")
+    image = StringField("Image Url (In Form images/folder/image)", validators=[DataRequired])
     back_image = StringField("2nd Image Url")
     size = StringField("Size")
-    stock = StringField("Stock")
+    stock = StringField("Stock", validators=[DataRequired])
     colour = StringField("Colour")
+    submit = SubmitField("Submit")
+
+    def validate_id(self, id):
+        user = User.query.filter_by(id=id.data).first()
+        if id is not None:
+            raise ValidationError("Please use a different Item ID.")
+
 

@@ -6,12 +6,76 @@
     <form action="" method="post">
                 {{ form.hidden_tag() }}
                 <p>
+                    {{ form.id.label }}<br>
+                    {{ form.id(size=32) }}<br>
+                    {% for error in form.id.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
                     {{ form.name.label }}<br>
                     {{ form.name(size=32) }}<br>
                     {% for error in form.name.errors %}
                     <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                 </p>
+                <p>
+                    {{ form.cat.label }}<br>
+                    {{ form.cat(size=32) }}<br>
+                    {% for error in form.cat.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.price.label }}<br>
+                    {{ form.price(size=32) }}<br>
+                    {% for error in form.price.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.sale.label }}<br>
+                    {{ form.sale(size=32) }}<br>
+                    {% for error in form.sale.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.image.label }}<br>
+                    {{ form.image(size=32) }}<br>
+                    {% for error in form.image.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.back_image.label }}<br>
+                    {{ form.back_image(size=32) }}<br>
+                    {% for error in form.back_image.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.size.label }}<br>
+                    {{ form.size(size=32) }}<br>
+                    {% for error in form.size.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.stock.label }}<br>
+                    {{ form.stock(size=32) }}<br>
+                    {% for error in form.stock.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.colour.label }}<br>
+                    {{ form.colour(size=32) }}<br>
+                    {% for error in form.colour.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit }}</p>
     </form>
     </div>
 {% endblock %}

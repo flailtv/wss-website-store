@@ -1,0 +1,1 @@
+add a add size to current stock in the add stock page
