@@ -62,7 +62,7 @@ def accessories():
 
 @app.route("/store/cart")
 def the_cart():
-    return render_template("store/cart.html", title = "Store-")
+    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all())
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):

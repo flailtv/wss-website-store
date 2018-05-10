@@ -1,7 +1,48 @@
 {% extends "store/layout_store.html" %}
+{% block head %}
+    <style>
+    .OOF{display: inline-block}
+    .Lemon{display: list-item}
+    #tblProduct td{
+        padding:5px 10px 5px 10px;
+        border:solid 1px #000000;
+        font-size:20px;
+        font-family:"Tahoma, Verdana";
+    }
+    
+    </style>
+{% endblock %}
 
 {% block body %}
 <div class="text-center">
 <h1>Cart</h1>
+
+{% for i in users %}
+    {% if i.id == current_user.id %}
+        <table id="tblProduct">
+        <tr>
+           <th>&nbsp;</th>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        {% for j in cart %}
+            {% if j.userid == i.id %}
+                {% for item in store %}
+                    {% if j.itemid == item.id %}
+                        <tr>
+                            <td><img  src="{{ url_for("static", filename=item.image) }}", width="30%", height="30%"></td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ j.quantity }}</td>
+                            <td>{{ j.price }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </table>
+    {% endif %}
+{% endfor %}
+
 </div>
 {% endblock %}
