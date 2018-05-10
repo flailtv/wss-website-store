@@ -61,15 +61,26 @@ def accessories():
 
 
 @app.route("/store/cart")
-def cart():
+def the_cart():
     return render_template("store/cart.html", title = "Store-")
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):
     form = add_to_cart()
     the_item = Store.query.filter_by(id=item_id).first()
-    # if form.validate_on_submit():
-    #     item = cart(user.id=current_user.id, itemid=the_item.id, quantity=amount)
+    print(the_item)
+    if form.validate_on_submit():
+        for i in stock.query.all():
+            if i.itemid == the_item.id:
+                if i.stock > 0:
+                    item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, size=form.size.data, price=the_item.price)
+                    db.session.add(item)
+                    db.session.commit()
+                    flash("Item Has Been Added To Your Cart!")
+                else:
+                    flash("There Is No Stock Available")
+    else:
+        print(form.errors)
     return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
 
 
@@ -93,7 +104,7 @@ def additem():
             if i.accesslevel >= 2:
                 if form.validate_on_submit():
                     item = store(
-                        id=form.id.data,
+                        id=int(form.id.data),
                         name=form.name.data,
                         image=form.image.data,
                         back_image=form.back_image.data,
@@ -112,9 +123,9 @@ def additem():
                     db.session.add(item)
                     db.session.commit()
                     flash("Item Added To The Store")
-                return render_template("store/store_admin.html", title="Admin-", form=form)
-            else:
-                return redirect(url_for(404))
+                return render_template("store/store_add.html", title="Admin-", form=form)
+            # else:
+            #     return redirect(url_for(404))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

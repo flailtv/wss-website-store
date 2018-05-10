@@ -71,7 +71,8 @@ class orders(db.Model):
 
 class cart(db.Model):
     cart_id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
-    itemid = db.Column(db.String, db.ForeignKey("stock.id"))
-    quantity = db.Column(db.String, db.ForeignKey("stock.stock"))
-    price = db.Column(db.String, db.ForeignKey("store.price"))
+    userid = db.Column(db.Integer)
+    itemid = db.Column(db.String)
+    quantity = db.Column(db.String)
+    price = db.Column(db.String)
+    size = db.Column(db.String)

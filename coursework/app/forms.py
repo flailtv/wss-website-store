@@ -66,15 +66,11 @@ class edit_user_level(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired])
     submit = SubmitField("Submit")
 
-# class store_item(FlaskForm):
-#
 
 class add_to_cart(FlaskForm):
-    size = SelectField(
-        choices=[("Select Size", "Select Size"), ("S", "S"), ("M", "M"), ("L","L"), ("XL", "XL")]
-    )
-    amount = SelectField(choices=[(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5"), (6, "6"), (7, "7"), (8, "8"), (9, "9")])
-    add = SubmitField("Add To Cart")
+    size = SelectField(choices=[("Select Size", "Select Size"), ("S", "S"), ("M", "M"), ("L","L"), ("XL", "XL")])
+    amount = SelectField(choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9")])
+    submit = SubmitField("Add To Cart")
 
 class add_item_to_store(FlaskForm):
     id = StringField("Item ID", validators=[DataRequired])
@@ -93,5 +89,4 @@ class add_item_to_store(FlaskForm):
         user = User.query.filter_by(id=id.data).first()
         if id is not None:
             raise ValidationError("Please use a different Item ID.")
-
 
