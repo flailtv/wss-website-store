@@ -61,26 +61,51 @@ def accessories():
 
 
 @app.route("/store/cart")
+@login_required
 def the_cart():
-    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all())
+    final_price = 0
+    for j in cart.query.all():
+        the_price = int(j.price) * int(j.quantity)
+        final_price = int(final_price) + int(the_price)
+    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price)
+
+
+@app.route("/store/cart/<the_cart_id>")
+@login_required
+def remove_item_cart(the_cart_id):
+    for i in cart.query.all():
+        if i.cart_id == int(the_cart_id):
+            db.session.delete(i)
+            db.session.commit()
+    return redirect((url_for("the_cart")))
+
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):
     form = add_to_cart()
     the_item = Store.query.filter_by(id=item_id).first()
-    print(the_item)
     if form.validate_on_submit():
-        for i in stock.query.all():
-            if i.itemid == the_item.id:
-                if i.stock > 0:
-                    item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, size=form.size.data, price=the_item.price)
-                    db.session.add(item)
-                    db.session.commit()
-                    flash("Item Has Been Added To Your Cart!")
-                else:
-                    flash("There Is No Stock Available")
-    else:
-        print(form.errors)
+        if current_user is not None:
+            for i in stock.query.all():
+                if i.itemid == the_item.id:
+                    if i.stock > 0:
+                        for item1 in cart.query.all():
+                            if item1.userid == current_user.id:
+                                if i.itemid == item1.itemid:
+                                    item1.quantity = item1.quantity + 1
+                                    db.session.commit()
+                                    return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),stock=stock.query.all(), form=form, user=User.query.all())
+                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, size=form.size.data, price=the_item.price)
+                        db.session.add(item)
+                        db.session.commit()
+                        flash("Item Has Been Added To Your Cart!")
+                    else:
+                        flash("There Is No Stock Available")
+        else:
+            flash("You must be logged in to add to your cart")
+    # else:
+    #     if form.errors is not None:
+    #         print(f"Store Form Errors: {form.errors}")
     return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
 
 

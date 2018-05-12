@@ -19,27 +19,39 @@
 
 {% for i in users %}
     {% if i.id == current_user.id %}
-        <table id="tblProduct">
+        <table id="tblProduct", width="100%">
         <tr>
            <th>&nbsp;</th>
             <th>Name</th>
             <th>Quantity</th>
+            <th>Size</th>
             <th>Price</th>
         </tr>
         {% for j in cart %}
+{#            {{ the_price = j.price * j.quantity }}#}
+{#            {{ final_price =final_price + the_price }}#}
             {% if j.userid == i.id %}
                 {% for item in store %}
                     {% if j.itemid == item.id %}
                         <tr>
-                            <td><img  src="{{ url_for("static", filename=item.image) }}", width="30%", height="30%"></td>
+                            <td><img  src="{{ url_for("static", filename=item.image) }}", width="18%", height="28%"></td>
                             <td>{{ item.name }}</td>
                             <td>{{ j.quantity }}</td>
-                            <td>{{ j.price }}</td>
+                            <td>{{ j.size }}</td>
+                            <td>£{{ j.price }}</td>
+                            <td><a href="{{ url_for("remove_item_cart", the_cart_id=j.cart_id) }}">Remove</a> </td>
                         </tr>
                     {% endif %}
                 {% endfor %}
             {% endif %}
         {% endfor %}
+        <tr>
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            <td>Total</td>
+            <td>£{{ final_price }}</td>
+        </tr>
         </table>
     {% endif %}
 {% endfor %}

@@ -1,3 +1,5 @@
 add a add size to current stock in the add stock page
 finish add item to store form
 add profile to store nav bar
+stop from being added to cart when there is no stock available
+run concert algo in background every day

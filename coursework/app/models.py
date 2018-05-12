@@ -73,6 +73,6 @@ class cart(db.Model):
     cart_id = db.Column(db.Integer, primary_key=True)
     userid = db.Column(db.Integer)
     itemid = db.Column(db.String)
-    quantity = db.Column(db.String)
-    price = db.Column(db.String)
+    quantity = db.Column(db.Integer)
+    price = db.Column(db.Integer)
     size = db.Column(db.String)
