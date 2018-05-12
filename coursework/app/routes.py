@@ -75,8 +75,12 @@ def the_cart():
 def remove_item_cart(the_cart_id):
     for i in cart.query.all():
         if i.cart_id == int(the_cart_id):
-            db.session.delete(i)
-            db.session.commit()
+            if i.quantity == 1:
+                db.session.delete(i)
+                db.session.commit()
+            else:
+                i.quantity = i.quantity - 1
+                db.session.commit()
     return redirect((url_for("the_cart")))
 
 
@@ -85,7 +89,7 @@ def store_item(item_id):
     form = add_to_cart()
     the_item = Store.query.filter_by(id=item_id).first()
     if form.validate_on_submit():
-        if current_user is not None:
+        if current_user is not "AnonymousUserMixin":
             for i in stock.query.all():
                 if i.itemid == the_item.id:
                     if i.stock > 0:
@@ -101,8 +105,6 @@ def store_item(item_id):
                         flash("Item Has Been Added To Your Cart!")
                     else:
                         flash("There Is No Stock Available")
-        else:
-            flash("You must be logged in to add to your cart")
     # else:
     #     if form.errors is not None:
     #         print(f"Store Form Errors: {form.errors}")
