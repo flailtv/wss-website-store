@@ -1,6 +1,6 @@
 from app import app, db
 from app.models import User, Concerts, Store, cart, stock
-import arrow, threading
+import arrow, threading, time
 
 @app.shell_context_processor
 def make_shell_context():
@@ -13,13 +13,14 @@ def make_shell_context():
         "Cart": cart,
     }
 
-
-current_date = arrow.now().format("YYMMDD")
-for i in Concerts.query.all():
-    t = i.thedate.strftime("%y%m%d")
-    if int(t) < int(current_date):
-        db.session.delete(i)
-        db.session.commit()
+def algo():
+    current_date = arrow.now().format("YYMMDD")
+    for i in Concerts.query.all():
+        t = i.thedate.strftime("%y%m%d")
+        if int(t) < int(current_date):
+            db.session.delete(i)
+            db.session.commit()
+        threading.Timer(60, algo).start()
 
 
 if __name__ == '__main__':

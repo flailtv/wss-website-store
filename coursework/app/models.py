@@ -30,8 +30,7 @@ class Concerts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(40))
     venue = db.Column(db.String(40))
-    thedate = db.Column(db.Date)
-    date = db.Column(db.String(10))
+    thedate = db.Column(db.DateTime)
 
     def __repr__(self):
         return "<Show ()>".format(self.location)

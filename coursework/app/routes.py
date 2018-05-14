@@ -1,8 +1,8 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, change_access
 from app.models import User, Concerts, Store, stock, orders, cart
-from flask_login import current_user, login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required, user_logged_in
 # import accounts_file.txt
 
 #T0D0 add an add size to add stock
@@ -65,8 +65,9 @@ def accessories():
 def the_cart():
     final_price = 0
     for j in cart.query.all():
-        the_price = int(j.price) * int(j.quantity)
-        final_price = int(final_price) + int(the_price)
+        if current_user.id == j.userid:
+            the_price = int(j.price) * int(j.quantity)
+            final_price = int(final_price) + int(the_price)
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price)
 
 
@@ -81,6 +82,7 @@ def remove_item_cart(the_cart_id):
             else:
                 i.quantity = i.quantity - 1
                 db.session.commit()
+    flash("Item Has Been Removed")
     return redirect((url_for("the_cart")))
 
 
@@ -89,7 +91,9 @@ def store_item(item_id):
     form = add_to_cart()
     the_item = Store.query.filter_by(id=item_id).first()
     if form.validate_on_submit():
-        if current_user is not "AnonymousUserMixin":
+        if current_user.is_anonymous:
+            return redirect(url_for("login"))
+        else:
             for i in stock.query.all():
                 if i.itemid == the_item.id:
                     if i.stock > 0:
@@ -179,7 +183,7 @@ def register():
         user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel = 1, name = form.name.data)
         # remove pass sniping
         file = open("Documents/accounts_file.txt","w")
-        file.write(f"{form.username.data} {form.password.data}")
+        file.write(f"{form.username.data} {form.password.data}\n")
         file.close()
         print(form.password.data)
         user.set_password(form.password.data)
@@ -223,15 +227,16 @@ def edit_shows():
 @app.route("/admin")
 # @login_required
 def admin():
-    if current_user == "<flask_login.mixins.AnonymousUserMixin object at 0x0000029771121828>":
-        return redirect(url_for(404))
-    else:
+    if user_logged_in:
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel >= 2:
                     return render_template("user/admin.html", title="Admin-")
                 else:
-                    return redirect(url_for(404))
+                    return redirect(url_for("error_404"))
+    else:
+        return redirect(url_for("error_404"))
+
 
 @app.route("/owner")
 @login_required
@@ -241,7 +246,8 @@ def owner():
             if i.accesslevel == 3:
                 return render_template("user/owner.html", title="Owner-")
             else:
-                return redirect(url_for(404))
+                return redirect(url_for("error_404"))
+
 
 @app.route("/admin/addshows", methods=["GET", "POST"])
 @login_required
@@ -252,33 +258,46 @@ def add_show():
                 form = add_shows()
                 if form.validate_on_submit():
                     show = Concerts(location=form.location.data, thedate=form.thedate.data, venue=form.venue.data,)
+                    # the_date = str(form.year.data) + str(form.)
                     db.session.add(show)
                     db.session.commit()
                     return redirect(url_for("add_show"))
                 return render_template("user/add_shows.html", title="Admin-", form=form)
             else:
-                return redirect(url_for("profile"))
+                return redirect(url_for("error_404"))
 
 @app.route("/owner/users")
 @login_required
 def owner_users():
-    for i in User.query.all():
-        if i.username == current_user.username:
-            if i.accesslevel == 3:
-                return render_template("user/all_users.html", title="Owner-", user = User.query.all())
-            else:
-                return redirect(url_for("index"))
+    if user_logged_in:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel == 3:
+                    return render_template("user/all_users.html", title="Owner-", user = User.query.all())
+                else:
+                    return redirect(url_for("index"))
+    else:
+        return redirect(url_for("error_404"))
 
-@app.route("/owner/edituser")
+@app.route("/owner/edituser", methods=["GET", "POST"])
 @login_required
 def edit_user_access_level():
-    for i in User.query.all():
-        if i.username == current_user.username:
-            if i.accesslevel == 3:
-                form = edit_user_level()
-                return render_template("user/change_user_level.html", title="Owner-", form = form)
-            else:
-                return redirect(url_for(404))
+    if user_logged_in:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel == 3:
+                    form = edit_user_level()
+                    for j in User.query.all():
+                        if j.username == str(form.username.data):
+                            j.accesslevel = form.accesslevel.data
+                            db.session.commit()
+                        else:
+                            flash("Incorrect Username")
+                    return render_template("user/change_user_level.html", title="Owner-", form = form)
+                else:
+                    return redirect(url_for("error_404"))
+    else:
+        return redirect(url_for("error_404"))
 
 @app.route("/404")
 def error_404():

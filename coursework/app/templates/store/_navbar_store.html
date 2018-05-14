@@ -39,9 +39,15 @@
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
           <ul class="navbar navbar-nav navbar-right">
-              <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:150%;">Login/SignUp</h1></a>
+              {% if current_user.is_anonymous %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Login/SignUp</h1></a>
                 </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Profile</h1></a>
+                </li>
+              {% endif %}
           </ul>
       </div>
     </nav>
