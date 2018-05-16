@@ -12,12 +12,17 @@
                 <span style="color: red;">[{{ error }}]</span>
                 {% endfor %}
             </p>
+{#            <p>#}
+{#                {{ form.thedate.label }}<br>#}
+{#                {{ form.thedate(size=32) }}<br>#}
+{#                {% for error in form.thedate.errors %}#}
+{#                <span style="color: red;">[{{ error }}]</span>#}
+{#                {% endfor %}#}
+{#            </p>#}
             <p>
-                {{ form.thedate.label }}<br>
-                {{ form.thedate(size=32) }}<br>
-                {% for error in form.thedate.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-                {% endfor %}
+                {{ form.day(size=1) }}
+                {{ form.month(size=1) }}
+                {{ form.year(size=1) }}
             </p>
 {#            <p>#}
 {#                {{ form.date_second.label }}<br>#}

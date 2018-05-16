@@ -3,6 +3,7 @@ from flask import render_template, redirect, url_for, request, flash
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, change_access
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required, user_logged_in
+from time import strftime
 # import accounts_file.txt
 
 #T0D0 add an add size to add stock
@@ -113,6 +114,7 @@ def store_item(item_id):
     #     if form.errors is not None:
     #         print(f"Store Form Errors: {form.errors}")
     return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
+#TODO Stop Items With No Stock Being Added To Cart
 
 
 # @app.route("/store/item/<item_id>/edit", methods=["GET", "POST"])
@@ -157,6 +159,7 @@ def additem():
                 return render_template("store/store_add.html", title="Admin-", form=form)
             # else:
             #     return redirect(url_for(404))
+#TODO add a add size to current stock in the add stock page
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -181,11 +184,8 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel = 1, name = form.name.data)
-        # remove pass sniping
-        file = open("Documents/accounts_file.txt","w")
-        file.write(f"{form.username.data} {form.password.data}\n")
-        file.close()
         print(form.password.data)
+        #TODO remove password sniping
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -257,10 +257,10 @@ def add_show():
             if i.accesslevel >= 2:
                 form = add_shows()
                 if form.validate_on_submit():
-                    show = Concerts(location=form.location.data, thedate=form.thedate.data, venue=form.venue.data,)
-                    # the_date = str(form.year.data) + str(form.)
+                    show = Concerts(location=form.location.data, venue=form.venue.data, day=form.day.data, month=form.month.data, year=form.year.data)
                     db.session.add(show)
                     db.session.commit()
+                    flash("Show Has Been Added")
                     return redirect(url_for("add_show"))
                 return render_template("user/add_shows.html", title="Admin-", form=form)
             else:
@@ -291,8 +291,8 @@ def edit_user_access_level():
                         if j.username == str(form.username.data):
                             j.accesslevel = form.accesslevel.data
                             db.session.commit()
-                        else:
-                            flash("Incorrect Username")
+                            flash("Changes Made")
+
                     return render_template("user/change_user_level.html", title="Owner-", form = form)
                 else:
                     return redirect(url_for("error_404"))

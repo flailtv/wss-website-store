@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
 
@@ -55,7 +55,7 @@ class EditForm(FlaskForm):
 
 class add_shows(FlaskForm):
     location = StringField("Location")
-    thedate = DateField("Date", format='%d-%m-%y')
+    # thedate = StringField("Date")
     venue = StringField("Venue")
     submit = SubmitField("Submit")
     day = SelectField(
@@ -93,6 +93,8 @@ class add_item_to_store(FlaskForm):
     stock = StringField("Stock", validators=[DataRequired])
     colour = StringField("Colour")
     submit = SubmitField("Submit")
+#TODO Finish Add Item To Store Form
+
 
     def validate_id(self, id):
         user = User.query.filter_by(id=id.data).first()

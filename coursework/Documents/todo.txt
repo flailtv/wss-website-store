@@ -1,6 +1,0 @@
-add a add size to current stock in the add stock page
-finish add item to store form
-stop from being added to cart when there is no stock available
-run concert algo in background every day
-finish lower navbar
-fix concerts section
