@@ -101,6 +101,6 @@ class add_item_to_store(FlaskForm):
         if id is not None:
             raise ValidationError("Please use a different Item ID.")
 
-class change_access(FlaskForm):
-    for i in User.query.all():
-        name = SelectField(choices=[(i.username, i.username)])
+
+class checkout(FlaskForm):
+    submit = SubmitField("Checkout")

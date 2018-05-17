@@ -1,12 +1,10 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, change_access
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required, user_logged_in
-from time import strftime
-# import accounts_file.txt
+import arrow
 
-#T0D0 add an add size to add stock
 
 @app.route('/')
 def index():
@@ -20,6 +18,12 @@ def about():
 
 @app.route("/shows")
 def shows():
+    current_date = arrow.now().format("YYYYMMDD")
+    for i in Concerts.query.all():
+        t = str(i.year) + str(i.month) + str(i.day)
+        if int(t) < int(current_date):
+            db.session.delete(i)
+            db.session.commit()
     return render_template("shows.html", title="Shows-", concerts=Concerts.query.all())
 
 
@@ -64,13 +68,25 @@ def accessories():
 @app.route("/store/cart")
 @login_required
 def the_cart():
+    form = checkout()
     final_price = 0
     for j in cart.query.all():
         if current_user.id == j.userid:
             the_price = int(j.price) * int(j.quantity)
             final_price = int(final_price) + int(the_price)
-    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price)
-
+    if form.validate_on_submit():
+        for i in cart.query.all():
+            if current_user.id == i.userid:
+                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing")
+                db.session.add(item)
+                db.session.commit()
+                db.session.delete(i)
+                db.session.commit()
+        flash("Order Has Been Placed")
+    else:
+        print(form.errors)
+    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
+#TODO Get The Checkout Button To Work
 
 @app.route("/store/cart/<the_cart_id>")
 @login_required

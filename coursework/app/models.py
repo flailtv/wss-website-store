@@ -30,11 +30,9 @@ class Concerts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     location = db.Column(db.String(40))
     venue = db.Column(db.String(40))
-    thedate = db.Column(db.String)
     day = db.Column(db.Integer)
     month = db.Column(db.Integer)
     year = db.Column(db.Integer)
-#TODO Remove thedate
 
 
 @login.user_loader
