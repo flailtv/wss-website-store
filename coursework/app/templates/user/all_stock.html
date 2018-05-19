@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <table>
+    <tr>
+        <td>Stock Id</td>
+        <td>Item Id</td>
+        <td>Item Size</td>
+        <td>Item Stock</td>
+        <td>Amount Bought</td>
+    </tr>
+{% for i in stock %}
+    <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.itemid }}</td>
+        <td>{{ i.size }}</td>
+        <td>{{ i.stock }}</td>
+        <td>{{ i.bought }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

@@ -1,8 +1,9 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout, topup_form
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required, user_logged_in
+import datetime
 import arrow
 
 
@@ -65,7 +66,7 @@ def accessories():
     return render_template("store/accessories.html", title="Store-")
 
 
-@app.route("/store/cart")
+@app.route("/store/cart", methods=["GET", "POST"])
 @login_required
 def the_cart():
     form = checkout()
@@ -77,14 +78,14 @@ def the_cart():
     if form.validate_on_submit():
         for i in cart.query.all():
             if current_user.id == i.userid:
-                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing")
+                current_date = arrow.now().format("DD-MM-YYYY")
+                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date)
                 db.session.add(item)
                 db.session.commit()
                 db.session.delete(i)
                 db.session.commit()
         flash("Order Has Been Placed")
-    else:
-        print(form.errors)
+        return redirect(url_for("the_cart"))
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
 #TODO Get The Checkout Button To Work
 
@@ -101,6 +102,12 @@ def remove_item_cart(the_cart_id):
                 db.session.commit()
     flash("Item Has Been Removed")
     return redirect((url_for("the_cart")))
+
+
+@app.route("/store/orders")
+@login_required
+def orders():
+    return render_template("store/orders.html", title="Store-", store=Store.query.all(), orders=orders.query.all(), user=User.query.all())
 
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
@@ -177,6 +184,40 @@ def additem():
             #     return redirect(url_for(404))
 #TODO add a add size to current stock in the add stock page
 
+@app.route("/admin/topup", methods=["GET", "POST"])
+def topup():
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for j in User.query.all():
+            if current_user.id == j.id:
+                if j.accesslevel>= 2:
+                    form = topup_form()
+                    if form.validate_on_submit():
+                        for i in stock.query.all():
+                            if str(form.item.data) == str(i.id):
+                                i.stock = i.stock + int(form.amount.data)
+                                db.session.commit()
+                                flash("Stock Updated")
+                                # return render_template("user/topup.html", title="Admin", form=form)
+                else:
+                    return redirect(404)
+    return render_template("user/topup.html", title="Admin", form=form)
+
+
+@app.route("/admin/allstock", methods=["GET", "POST"])
+def all_stock():
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for i in User.query.all():
+            if current_user.id == i.id:
+                if i.accesslevel >= 2:
+                    return render_template("user/all_stock.html", title="Admin", stock=stock.query.all)
+                else:
+                    return redirect(404)
+
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -190,6 +231,7 @@ def login():
     return render_template("user/login.html", title="Login-", form=form)
 
 @app.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
@@ -236,69 +278,74 @@ def edit_profile():
     return render_template("user/edit_profile.html", title="Edit-", form=form)
 
 @app.route("/shows/editshows")
-@login_required
 def edit_shows():
+    if current_user.is_anonymous:
+        return redirect(404)
     return render_template("user/edit_shows.html", title="Shows-")
 
 @app.route("/admin")
-# @login_required
 def admin():
-    if user_logged_in:
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel >= 2:
                     return render_template("user/admin.html", title="Admin-")
                 else:
-                    return redirect(url_for("error_404"))
-    else:
-        return redirect(url_for("error_404"))
+                    return redirect(404)
 
 
 @app.route("/owner")
-@login_required
 def owner():
-    for i in User.query.all():
-        if i.username == current_user.username:
-            if i.accesslevel == 3:
-                return render_template("user/owner.html", title="Owner-")
-            else:
-                return redirect(url_for("error_404"))
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel == 3:
+                    return render_template("user/owner.html", title="Owner-")
+                else:
+                    return redirect(404)
 
 
 @app.route("/admin/addshows", methods=["GET", "POST"])
-@login_required
 def add_show():
-    for i in User.query.all():
-        if i.username == current_user.username:
-            if i.accesslevel >= 2:
-                form = add_shows()
-                if form.validate_on_submit():
-                    show = Concerts(location=form.location.data, venue=form.venue.data, day=form.day.data, month=form.month.data, year=form.year.data)
-                    db.session.add(show)
-                    db.session.commit()
-                    flash("Show Has Been Added")
-                    return redirect(url_for("add_show"))
-                return render_template("user/add_shows.html", title="Admin-", form=form)
-            else:
-                return redirect(url_for("error_404"))
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel >= 2:
+                    form = add_shows()
+                    if form.validate_on_submit():
+                        show = Concerts(location=form.location.data, venue=form.venue.data, day=form.day.data, month=form.month.data, year=form.year.data)
+                        db.session.add(show)
+                        db.session.commit()
+                        flash("Show Has Been Added")
+                        return redirect(url_for("add_show"))
+                    return render_template("user/add_shows.html", title="Admin-", form=form)
+                else:
+                    return redirect(404)
 
 @app.route("/owner/users")
-@login_required
 def owner_users():
-    if user_logged_in:
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel == 3:
                     return render_template("user/all_users.html", title="Owner-", user = User.query.all())
                 else:
                     return redirect(url_for("index"))
-    else:
-        return redirect(url_for("error_404"))
+
 
 @app.route("/owner/edituser", methods=["GET", "POST"])
-@login_required
 def edit_user_access_level():
-    if user_logged_in:
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel == 3:
@@ -308,13 +355,16 @@ def edit_user_access_level():
                             j.accesslevel = form.accesslevel.data
                             db.session.commit()
                             flash("Changes Made")
-
                     return render_template("user/change_user_level.html", title="Owner-", form = form)
                 else:
-                    return redirect(url_for("error_404"))
-    else:
-        return redirect(url_for("error_404"))
+                    return redirect(404)
 
-@app.route("/404")
-def error_404():
-    return render_template("error_pages/404.html", title="404-")
+
+@app.errorhandler(404)
+def error_404(error):
+    return render_template("error_pages/404.html"), 404
+
+@app.errorhandler(500)
+def error_500(error):
+    db.session.rollback()
+    return render_template("error_pages/500.html"), 500

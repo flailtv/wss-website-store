@@ -1,0 +1,31 @@
+{% extends "store/layout_store.html" %}
+
+{% block head %}
+    <style>
+    .OOF{display: inline-block}
+    .Lemon{display: list-item}
+    #tblProduct td{
+        padding:5px 10px 5px 10px;
+        border:solid 1px #000000;
+        font-size:20px;
+        font-family:"Tahoma, Verdana";
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="text-center">
+<h1>Orders</h1>
+{% for user in user %}
+    {% if user.id == current_usser.id %}
+        <table id="tblProduct", width="100%">
+        <tr>
+           <th>User</th>
+            <th>Order Id</th>
+            <th>Item Id</th>
+            <th>Quantity</th>
+            <th>Order Status</th>
+        </tr>
+</div>
+{% endblock %}
+{#TODO Finish Order Page#}

@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="text-center">
+<h1>Top-Up Stock</h1>
+<form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p style="font-size: 120%">
+                {{ form.item.label }}<br>
+                {{ form.item(size=64) }}<br>
+                {% for error in form.item.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p style="font-size: 120%">
+                {{ form.amount.label }}<br>
+                {{ form.amount(size=64) }}<br>
+                {% for error in form.amount.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                </p>
+            <p>{{ form.submit() }}</p>
+    </form>
+</div>
+{% endblock %}

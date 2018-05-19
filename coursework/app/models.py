@@ -61,10 +61,12 @@ class stock(db.Model):
 
 class orders(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
-    userid = db.Column(db.Integer, db.ForeignKey("user.id"))
+    userid = db.Column(db.Integer)
     item_id = db.Column(db.Integer)
     item_quant = db.Column(db.Integer)
     order_status = db.Column(db.String(40))
+    date = db.Column(db.Date)
+#TODO As Soon As I Added Date It Went Tits Up
 
 
 class cart(db.Model):
