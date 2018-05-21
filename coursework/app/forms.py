@@ -108,4 +108,4 @@ class checkout(FlaskForm):
 class topup_form(FlaskForm):
     item = StringField("Stock Id")
     amount = StringField("Amount Of Stock Added")
-    submit = SubmitField("submit")
+    submit = SubmitField("Submit")

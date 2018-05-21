@@ -6,6 +6,7 @@ from flask_login import current_user, login_user, logout_user, login_required, u
 import datetime
 import arrow
 
+#TODO Add email comfirmation
 
 @app.route('/')
 def index():
@@ -89,7 +90,7 @@ def the_cart():
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
 #TODO Get The Checkout Button To Work
 
-@app.route("/store/cart/<the_cart_id>")
+@app.route("/store/cart/<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")
 @login_required
 def remove_item_cart(the_cart_id):
     for i in cart.query.all():
@@ -133,9 +134,6 @@ def store_item(item_id):
                         flash("Item Has Been Added To Your Cart!")
                     else:
                         flash("There Is No Stock Available")
-    # else:
-    #     if form.errors is not None:
-    #         print(f"Store Form Errors: {form.errors}")
     return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
 #TODO Stop Items With No Stock Being Added To Cart
 
@@ -155,34 +153,38 @@ def store_item(item_id):
 @login_required
 def additem():
     form = add_item_to_store()
-    for i in User.query.all():
-        if i.username == current_user.username:
-            if i.accesslevel >= 2:
-                if form.validate_on_submit():
-                    item = store(
-                        id=int(form.id.data),
-                        name=form.name.data,
-                        image=form.image.data,
-                        back_image=form.back_image.data,
-                        cat=form.cat.data,
-                        price=form.price.data,
-                        sale=form.sale.data
-                    )
-                    db.session.add(item)
-                    db.session.commit()
-                    item = stock(
-                        itemid=form.id.data,
-                        size=form.size.data,
-                        stock=form.stock.data,
-                        colour=form.colour.data,
-                    )
-                    db.session.add(item)
-                    db.session.commit()
-                    flash("Item Added To The Store")
-                return render_template("store/store_add.html", title="Admin-", form=form)
-            # else:
-            #     return redirect(url_for(404))
-#TODO add a add size to current stock in the add stock page
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel >= 2:
+                    if form.validate_on_submit():
+                        item = store(
+                            id=int(form.id.data),
+                            name=form.name.data,
+                            image=form.image.data,
+                            back_image=form.back_image.data,
+                            cat=form.cat.data,
+                            price=form.price.data,
+                            sale=form.sale.data
+                        )
+                        db.session.add(item)
+                        db.session.commit()
+                        item = stock(
+                            itemid=form.id.data,
+                            size=form.size.data,
+                            stock=form.stock.data,
+                            colour=form.colour.data,
+                        )
+                        db.session.add(item)
+                        db.session.commit()
+                        flash("Item Added To The Store")
+
+                else:
+                    return redirect(url_for(404))
+    return render_template("store/store_add.html", title="Admin-", form=form)
+
 
 @app.route("/admin/topup", methods=["GET", "POST"])
 def topup():
@@ -229,6 +231,7 @@ def login():
         login_user(user, remember=form.remember_me.data)
         return redirect(url_for("index"))
     return render_template("user/login.html", title="Login-", form=form)
+
 
 @app.route("/logout")
 @login_required
@@ -277,11 +280,13 @@ def edit_profile():
         return redirect(url_for("profile"))
     return render_template("user/edit_profile.html", title="Edit-", form=form)
 
+
 @app.route("/shows/editshows")
 def edit_shows():
     if current_user.is_anonymous:
         return redirect(404)
     return render_template("user/edit_shows.html", title="Shows-")
+
 
 @app.route("/admin")
 def admin():
@@ -327,6 +332,7 @@ def add_show():
                     return render_template("user/add_shows.html", title="Admin-", form=form)
                 else:
                     return redirect(404)
+
 
 @app.route("/owner/users")
 def owner_users():
