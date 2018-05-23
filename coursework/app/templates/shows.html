@@ -6,6 +6,9 @@
     {% for i in concerts %}
         <p>{{ i.location }} -- {{ i.venue }} -- {{ i.day }}-{{ i.month }}-{{ i.year }}</p>
     {% endfor %}
+    <audio controls>
+        <source src="{{ url_for("static", filename="music/You Are We/03 - Feel.mp3") }}" type="audio/mpeg">
+    </audio>
 </div>
 {% endblock %}
 
