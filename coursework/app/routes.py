@@ -1,7 +1,7 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout, topup_form
-from app.models import User, Concerts, Store, stock, orders, cart
+from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required, user_logged_in
 import datetime
 import arrow
