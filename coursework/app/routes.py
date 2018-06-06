@@ -94,7 +94,7 @@ def the_cart():
         flash("Order Has Been Placed")
         return redirect(url_for("the_cart"))
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
-#TODO Get The Checkout Button To Work
+
 
 @app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")
 @login_required
