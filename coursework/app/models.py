@@ -65,7 +65,7 @@ class orders(db.Model):
     item_id = db.Column(db.Integer)
     item_quant = db.Column(db.Integer)
     order_status = db.Column(db.String(40))
-    date = db.Column(db.Date)
+    date = db.Column(db.String)
 #TODO As Soon As I Added Date It Went Tits Up
 
 

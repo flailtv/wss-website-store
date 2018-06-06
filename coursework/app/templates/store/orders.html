@@ -17,15 +17,36 @@
 <div class="text-center">
 <h1>Orders</h1>
 {% for user in user %}
-    {% if user.id == current_usser.id %}
+    {% if user.id == current_user.id %}
         <table id="tblProduct", width="100%">
         <tr>
-           <th>User</th>
             <th>Order Id</th>
-            <th>Item Id</th>
+            <th>Item Name</th>
+            <th> </th>
             <th>Quantity</th>
+            <th>Date</th>
             <th>Order Status</th>
         </tr>
+        {% for j in orders %}
+            {% if j.userid == current_user.id %}
+                {% for k in store %}
+                    {% if k.id == j.item_id %}
+                        <tr>
+                            <th>{{ j.order_id }}</th>
+                            <th>{{ k.name }}</th>
+                            <th> <img src="{{ url_for("static", filename=k.image) }}" style="width: 8%"> </th>
+                            <th>{{ j.item_quant }}</th>
+                            <th>{{ j.date }}</th>
+                            <th>{{ j.order_status }}</th>
+        {#                TODO Change Item ID To Name And Picture#}
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endfor %}
 </div>
+
 {% endblock %}
 {#TODO Finish Order Page#}

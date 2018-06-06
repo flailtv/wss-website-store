@@ -7,6 +7,8 @@ import datetime
 import arrow
 
 #TODO Add email comfirmation
+#TODO Profits and Google Charts API
+#TODO add price to orders
 
 @app.route('/')
 def index():
@@ -79,6 +81,10 @@ def the_cart():
     if form.validate_on_submit():
         for i in cart.query.all():
             if current_user.id == i.userid:
+                for j in stock.query.all():
+                    if i.itemid == j.itemid:
+                        j.stock = int(j.stock) - (i.quantity)
+                        db.session.commit()
                 current_date = arrow.now().format("DD-MM-YYYY")
                 item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date)
                 db.session.add(item)
@@ -90,7 +96,7 @@ def the_cart():
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
 #TODO Get The Checkout Button To Work
 
-@app.route("/store/cart/<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")
+@app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")
 @login_required
 def remove_item_cart(the_cart_id):
     for i in cart.query.all():
@@ -107,8 +113,20 @@ def remove_item_cart(the_cart_id):
 
 @app.route("/store/orders")
 @login_required
-def orders():
+def the_orders():
     return render_template("store/orders.html", title="Store-", store=Store.query.all(), orders=orders.query.all(), user=User.query.all())
+
+
+@app.route("/admin/orders")
+def all_orders():
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for i in User.query.all():
+            if i.username == current_user.username:
+                if i.accesslevel >= 2:
+                    return render_template("user/all_orders.html", title="Admin-", orders=orders.query.all())
+#TODO Finish ALL Order Page
 
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
@@ -245,8 +263,6 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel = 1, name = form.name.data)
-        print(form.password.data)
-        #TODO remove password sniping
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
