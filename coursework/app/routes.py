@@ -86,7 +86,7 @@ def the_cart():
                         j.stock = int(j.stock) - (i.quantity)
                         db.session.commit()
                 current_date = arrow.now().format("DD-MM-YYYY")
-                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date)
+                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=i.price)
                 db.session.add(item)
                 db.session.commit()
                 db.session.delete(i)
