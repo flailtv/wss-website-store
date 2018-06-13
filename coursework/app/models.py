@@ -67,7 +67,6 @@ class orders(db.Model):
     order_status = db.Column(db.String(40))
     date = db.Column(db.String)
     price = db.Column(db.Integer)
-#TODO As Soon As I Added Date It Went Tits Up
 
 
 class cart(db.Model):

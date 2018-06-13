@@ -58,8 +58,18 @@
         var modal = document.getElementById("musicmodal");
         var btn = document.getElementById("musicplayer");
         var span = document.getElementsByClassName("close")[0];
+        var shuffmod = document.getElementById("shuffle_the_music");
+        var shuffle = document.getElementById("music-shuffle");
+        var span2 = document.getElementsByClassName("close2")[0];
+
         btn.onclick = function () {
             modal.style.display = "block";
+        };
+        shuffle.onclick = function () {
+            shuffmod.style.display = "block";
+        };
+        span2.onclick = function () {
+            shuffmod.style.display = "none";
         };
         span.onclick = function () {
             modal.style.display = "none";
@@ -103,11 +113,18 @@
     <div id="musicmodal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-{#            {% for i in  musicplayer.query.all() %}#}
+{#            {% for i in  music_play %}#}
 {#                <p>{{ i.name }}</p>#}
 {#            {% endfor %}#}
-            <p>Some text</p>
+            <button id="music-shuffle" style="width: 8%">Suffle</button>
+                <div id="shuffle_the_music" class="modal">
+                    <div class="modal-content">
+                        <span class="close2">&times;</span>
+                        <p>shufflesss</p>
+                    </div>
+                </div>
         </div>
+{#        TODO Get Music Player To Work#}
     </div>
     <p style="float: left;width: 100%;"> </p>
 </div>

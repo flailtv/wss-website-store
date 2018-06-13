@@ -1,14 +1,14 @@
 from app import app, db
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, flash
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout, topup_form
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
-from flask_login import current_user, login_user, logout_user, login_required, user_logged_in
-import datetime
+from flask_login import current_user, login_user, logout_user, login_required
 import arrow
 
 #TODO Add email comfirmation
 #TODO Profits and Google Charts API
-#TODO add price to orders
+#TODO Add music_play to every single fucking thing
+#TODO Add a payment thing
 
 @app.route('/')
 def index():
@@ -33,7 +33,7 @@ def shows():
 
 @app.route("/music")
 def music():
-    return render_template("Music.html", title="Music-")
+    return render_template("Music.html", title="Music-", music_play=musicplayer.query.all())
 
 
 @app.route("/store")
