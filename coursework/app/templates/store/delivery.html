@@ -1,0 +1,23 @@
+{% extends "store/layout_store.html" %}
+
+{% block body %}
+<div class="text-center">
+<h1 style="font-size: 120%">Checkout</h1>
+<h3>Delivery Address</h3>
+{% for i in users %}
+    {% if i.name == current_user.name %}
+        <p>{{ i.address1 }}</p>
+        <p>{{ i.address2 }}</p>
+        <p>{{ i.towncity }}</p>
+        <p>{{ i.postcode }}</p>
+    {% endif %}
+{% endfor %}
+<a href="{{ url_for("edit_profile") }}">If This Is Not Correct Change It Here</a>
+<p> </p>
+<a href="{{ url_for("pay") }}"><img style="width: 29%" src="{{ url_for("static", filename="images/pay here.png") }}"></a>
+<h3>Or</h3>
+<a href="Doesnt Work Yet"><img style="width: 25%;" src="{{ url_for("static", filename="images/paypal button.png") }}"></a>
+<h3>Or</h3>
+<a href="May Never Work"><img style="width: 25%" src="{{ url_for("static", filename="images/pay with amazon.jpg") }}"></a>
+</div>
+{% endblock %}

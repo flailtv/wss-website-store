@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout, topup_form
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout, topup_form, pay_form
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required
 import arrow
@@ -49,6 +49,7 @@ def photos():
 def store_music():
     return render_template("store/music_store.html", title="Store-", store=Store.query.all())
 
+
 @app.route("/store/mens")
 def mens():
     return render_template("store/mens.html", title="Store-", store=Store.query.all())
@@ -94,6 +95,31 @@ def the_cart():
         flash("Order Has Been Placed")
         return redirect(url_for("the_cart"))
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
+
+
+@app.route("/store/delivery")
+def delivery():
+    form = pay_form()
+    if form.validate_on_submit():
+        for i in cart.query.all():
+            if current_user.id == i.userid:
+                for j in stock.query.all():
+                    if i.itemid == j.itemid:
+                        j.stock = int(j.stock) - (i.quantity)
+                        db.session.commit()
+                current_date = arrow.now().format("DD-MM-YYYY")
+                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=i.price)
+                db.session.add(item)
+                db.session.commit()
+                db.session.delete(i)
+                db.session.commit()
+        flash("Order Has Been Placed")
+    return render_template("store/delivery.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), form=form)
+
+
+@app.route("/store/pay")
+def pay():
+    return render_template("store/pay.html", title="Store-")
 
 
 @app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")

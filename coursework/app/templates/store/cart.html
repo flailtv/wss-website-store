@@ -52,9 +52,10 @@
         </table>
     {% endif %}
 {% endfor %}
-<form action="" method="post" style="float: right; padding-right: 14px">
-            {{ form.hidden_tag() }}
-            <p>{{ form.submit() }}</p>
-    </form>
+<a style="float: right; padding-right: 14px; font-size: 150%;color: #4e555b" href="{{ url_for("delivery") }}">Checkout</a>
+{#<form action="" method="post" style="float: right; padding-right: 14px">#}
+{#            {{ form.hidden_tag() }}#}
+{#            <p>{{ form.submit() }}</p>#}
+{#    </form>#}
 </div>
 {% endblock %}

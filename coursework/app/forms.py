@@ -109,3 +109,9 @@ class topup_form(FlaskForm):
     item = StringField("Stock Id")
     amount = StringField("Amount Of Stock Added")
     submit = SubmitField("Submit")
+
+class pay_form(FlaskForm):
+    card = StringField("Card No.")
+    date = StringField("Expiry Date")
+    cvv = StringField("CVV")
+    submit = SubmitField("Add Payment Details")
