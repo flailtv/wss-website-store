@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required
 import arrow
@@ -8,7 +8,6 @@ import arrow
 #TODO Add email comfirmation
 #TODO Profits and Google Charts API
 #TODO Add music_play to every single fucking thing
-#TODO Add a payment thing
 #TODO Change all "if current_user.name" to "current_user.id"
 
 @app.route('/')
@@ -111,15 +110,17 @@ def pay():
     if form.validate_on_submit():
         for i in User.query.all():
             if i.id == current_user.id:
-                card_no = str(form.card.data)[-4]
+                card_no = str(form.card.data)
                 i.card = card_no
                 db.session.commit()
         return redirect(url_for("confirmation"))
+    else:
+        print(form.errors)
     return render_template("store/pay.html", title="Store-", form=form)
 # TODO Fix all of tis
 
 
-@app.route("/store/confirm")
+@app.route("/store/confirm", methods=["GET", "POST"])
 @login_required
 def confirmation():
     form = pay_form()
@@ -180,8 +181,7 @@ def all_orders():
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel >= 2:
-                    return render_template("user/all_orders.html", title="Admin-", orders=orders.query.all())
-#TODO Finish ALL Order Page
+                    return render_template("user/all_orders.html", title="Admin-", orders=orders.query.all(), users=User.query.all())
 
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
@@ -288,7 +288,7 @@ def all_stock():
         for i in User.query.all():
             if current_user.id == i.id:
                 if i.accesslevel >= 2:
-                    return render_template("user/all_stock.html", title="Admin", stock=stock.query.all)
+                    return render_template("user/all_stock.html", title="Admin", stock=stock.query.all())
                 else:
                     return redirect(404)
 
@@ -413,7 +413,7 @@ def owner_users():
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel == 3:
-                    return render_template("user/all_users.html", title="Owner-", user = User.query.all())
+                    return render_template("user/all_users.html", title="Owner-", user=User.query.all())
                 else:
                     return redirect(url_for("index"))
 
@@ -433,6 +433,28 @@ def edit_user_access_level():
                             db.session.commit()
                             flash("Changes Made")
                     return render_template("user/change_user_level.html", title="Owner-", form = form)
+                else:
+                    return redirect(404)
+
+
+@app.route("/admin/update", methods=["GET", "POST"])
+def update_order():
+    if current_user.is_anonymous:
+        return redirect(404)
+    else:
+        for i in User.query.all():
+            if i.id == current_user.id:
+                if i.accesslevel >= 2:
+                    form = update_orders_form()
+                    if form.validate_on_submit():
+                        for k in orders.query.all():
+                            if int(k.order_id) == int(form.select.data):
+                                k.order_status = form.update.data
+                                db.session.commit() #TODO SEND OUT EMAIL
+                                flash("Changes Made")
+                    else:
+                        print(form.errors)
+                    return render_template("user/update_order.html", title="Admin-", form=form)
                 else:
                     return redirect(404)
 

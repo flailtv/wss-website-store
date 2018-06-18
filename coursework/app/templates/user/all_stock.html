@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <table>
-    <tr>
+    <div class="text-center">
+    <table style="width: 100%">
+    <tr style="font-size: 140%; color: blue">
         <td>Stock Id</td>
         <td>Item Id</td>
         <td>Item Size</td>
@@ -10,7 +11,7 @@
         <td>Amount Bought</td>
     </tr>
 {% for i in stock %}
-    <tr>
+    <tr style="border: solid 1px #6c757d">
         <td>{{ i.id }}</td>
         <td>{{ i.itemid }}</td>
         <td>{{ i.size }}</td>
@@ -19,4 +20,5 @@
     </tr>
     {% endfor %}
     </table>
+    </div>
 {% endblock %}

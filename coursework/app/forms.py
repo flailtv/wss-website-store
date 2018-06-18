@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
+from app.models import orders, User, stock
 
 
 class LoginForm(FlaskForm):
@@ -71,9 +72,16 @@ class add_shows(FlaskForm):
 
 
 class edit_user_level(FlaskForm):
-    username = StringField("Username")
-    accesslevel = StringField("New Access Level")
-    password = PasswordField("Password", validators=[DataRequired])
+    the_list = [(None, "Select User")]
+    for i in User.query.all():
+        the_list.append((str(i.username), str(i.username)))
+    username = SelectField(
+        choices=the_list
+    )
+    accesslevel = SelectField(
+        choices=[(None, "Select Access Level"), ("1", "1"), ("2", "2"), ("3", "3")]
+    )
+    password = PasswordField("Enter Your Password ", validators=[DataRequired])
     submit = SubmitField("Submit")
 
 class add_to_cart(FlaskForm):
@@ -112,7 +120,12 @@ class pay_money(FlaskForm):
     submit = SubmitField("Next")
 
 class topup_form(FlaskForm):
-    item = StringField("Stock Id")
+    the_list = [(None, "Select Item ID")]
+    for i in stock.query.all():
+        the_list.append((str(i.id), str(i.id)))
+    item = SelectField(
+        choices=the_list
+    )
     amount = StringField("Amount Of Stock Added")
     submit = SubmitField("Submit")
 
@@ -120,4 +133,16 @@ class pay_form(FlaskForm):
     card = StringField("Card No.")
     date = StringField("Expiry Date")
     cvv = StringField("CVV")
-    submit = SubmitField("Add Payment Details")
+    submit = SubmitField("Place Order")
+
+class update_orders_form(FlaskForm):
+    the_list = [(None, "Select Order ID")]
+    for i in orders.query.all():
+        the_list.append((str(i.order_id), str(i.order_id))) #TODO Use this in other places
+    select = SelectField(
+        choices=the_list
+    )
+    update = SelectField(
+        choices=[(None, "Select Status"), ("Dispatched", "Dispatched"), ("Delivered", "Delivered")]
+    )
+    submit = SubmitField("Submit")

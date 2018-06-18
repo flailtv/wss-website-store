@@ -17,23 +17,31 @@
 <div class="text-center">
 <h1>Orders</h1>
     <table id="tblProduct", width="100%">
-    <tr>
+    <tr style="color: blue">
         <th>Order ID</th>
         <th>User ID</th>
+        <th>User Name</th>
         <th>Item ID</th>
         <th>Quantity</th>
         <th>Date</th>
+        <th>Amount</th>
         <th>Order Status</th>
     </tr>
         {% for i in orders %}
+            {% for j in users %}
+                {% if i.userid == j.id %}
         <tr>
             <th>{{ i.order_id }}</th>
             <th>{{ i.userid }}</th>
+            <th>{{ j.name }}</th>
             <th>{{ i.item_id }}</th>
             <th>{{ i.item_quant }}</th>
             <th>{{ i.date }}</th>
+            <th>£{{ i.price }}</th>
             <th>{{ i.order_status }}</th>
         </tr>
+                {% endif %}
+                {% endfor %}
         {% endfor %}
 
 {% endblock %}

@@ -65,6 +65,7 @@
                     <h6 style="font-size: 120%">{{ i.postcode }}</h6>
                 {% endif %}
             {% endfor %}
+        <a href="{{ url_for("edit_profile") }}" style="color: #4e555b">Change Here If Needed</a>
         </div>
     </div>
     <p style="float: left; width: 100%"> </p>
@@ -74,6 +75,7 @@
                 <h4>Pay With Card Ending In {{ i.card }}</h4>
             {% endif %}
         {% endfor %}
+        <a href="{{ url_for("pay") }}" style="color: #4e555b;">Change Here If Needed</a>
         <form action="" method="post">
             {{ form.hidden_tag() }}
             <p>{{ form.submit() }}</p>

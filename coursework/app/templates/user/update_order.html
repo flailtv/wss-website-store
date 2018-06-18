@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+ <div class="text-center">
+ <h1>Update Order Status</h1>
+    <form action="" method="post">
+            {{ form.hidden_tag() }}
+        <p>
+            {{ form.select(size=1) }}
+            {{ form.update(size=1) }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+ </div>
+{% endblock %}
