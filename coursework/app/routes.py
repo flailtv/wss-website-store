@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, add_to_cart, add_item_to_store, checkout, topup_form, pay_form
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required
 import arrow
@@ -9,6 +9,7 @@ import arrow
 #TODO Profits and Google Charts API
 #TODO Add music_play to every single fucking thing
 #TODO Add a payment thing
+#TODO Change all "if current_user.name" to "current_user.id"
 
 @app.route('/')
 def index():
@@ -73,33 +74,61 @@ def accessories():
 @app.route("/store/cart", methods=["GET", "POST"])
 @login_required
 def the_cart():
-    form = checkout()
+    # form = checkout()
     final_price = 0
     for j in cart.query.all():
         if current_user.id == j.userid:
             the_price = int(j.price) * int(j.quantity)
             final_price = int(final_price) + int(the_price)
-    if form.validate_on_submit():
-        for i in cart.query.all():
-            if current_user.id == i.userid:
-                for j in stock.query.all():
-                    if i.itemid == j.itemid:
-                        j.stock = int(j.stock) - (i.quantity)
-                        db.session.commit()
-                current_date = arrow.now().format("DD-MM-YYYY")
-                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=i.price)
-                db.session.add(item)
-                db.session.commit()
-                db.session.delete(i)
-                db.session.commit()
-        flash("Order Has Been Placed")
-        return redirect(url_for("the_cart"))
-    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price, form=form)
+    # if form.validate_on_submit():
+        # for i in cart.query.all():
+        #     if current_user.id == i.userid:
+        #         for j in stock.query.all():
+        #             if i.itemid == j.itemid:
+        #                 j.stock = int(j.stock) - (i.quantity)
+        #                 db.session.commit()
+        #         current_date = arrow.now().format("DD-MM-YYYY")
+        #         item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=i.price)
+        #         db.session.add(item)
+        #         db.session.commit()
+        #         db.session.delete(i)
+        #         db.session.commit()
+        # flash("Order Has Been Placed")
+        # return redirect(url_for("the_cart"))
+    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price)
 
 
 @app.route("/store/delivery")
+@login_required
 def delivery():
+    return render_template("store/delivery.html", title="Store-", users=User.query.all())
+
+
+@app.route("/store/pay", methods=["GET", "POST"])
+@login_required
+def pay():
+    form = pay_money()
+    if form.validate_on_submit():
+        for i in User.query.all():
+            if i.id == current_user.id:
+                card_no = str(form.card.data)[-4]
+                i.card = card_no
+                db.session.commit()
+        return redirect(url_for("confirmation"))
+    return render_template("store/pay.html", title="Store-", form=form)
+# TODO Fix all of tis
+
+
+@app.route("/store/confirm")
+@login_required
+def confirmation():
     form = pay_form()
+    final_price = 0
+    for j in cart.query.all():
+        if current_user.id == j.userid:
+            the_price = int(j.price) * int(j.quantity)
+            final_price = int(final_price) + int(the_price)
+            final_price = int(final_price) + 4
     if form.validate_on_submit():
         for i in cart.query.all():
             if current_user.id == i.userid:
@@ -108,18 +137,18 @@ def delivery():
                         j.stock = int(j.stock) - (i.quantity)
                         db.session.commit()
                 current_date = arrow.now().format("DD-MM-YYYY")
-                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=i.price)
+                card_no = "N/A"
+                for user in User.query.all():
+                    if user.name == current_user.name:
+                        card_no = user.card
+                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing",
+                              date=current_date, price=i.price, card=card_no)
                 db.session.add(item)
                 db.session.commit()
                 db.session.delete(i)
                 db.session.commit()
         flash("Order Has Been Placed")
-    return render_template("store/delivery.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), form=form)
-
-
-@app.route("/store/pay")
-def pay():
-    return render_template("store/pay.html", title="Store-")
+    return render_template("store/confirm.html", title="Store-", cart=cart.query.all(), form=form, store=Store.query.all(), users=User.query.all(), final_price=final_price)
 
 
 @app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")

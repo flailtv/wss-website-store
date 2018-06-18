@@ -15,6 +15,7 @@ class User(UserMixin, db.Model):
     towncity = db.Column(db.String(40), index=True)
     postcode = db.Column(db.String(40), index=True)
     accesslevel = db.Column(db.Integer, index=True)
+    card = db.Column(db.String)
 
     def __repr__(self):
         return "<user {}>".format(self.username)
@@ -67,6 +68,7 @@ class orders(db.Model):
     order_status = db.Column(db.String(40))
     date = db.Column(db.String)
     price = db.Column(db.Integer)
+    card = db.Column(db.String)
 
 
 class cart(db.Model):

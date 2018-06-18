@@ -2,5 +2,35 @@
 
 {% block body %}
 {#TODO make this pay page and add to routes#}
-    <p> do stuff</p>
+    <div class="text-center">
+    <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.card.label }}<br>
+                {{ form.card(size=32) }}<br>
+                {% for error in form.card.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.date.label }}<br>
+                {{ form.date(size=32) }}<br>
+                {% for error in form.date.errors %}
+                <span style="color: red;">[{{ error }}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.cvv.label }}<br>
+                {{ form.cvv(size=32) }}<br>
+                {% for error in form.cvv.errors %}
+                <span style="color: red;">[{{ error }}</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.submit() }}
+            </p>
+    </form>
+    <p>*Please note: Do not enter your real card details as this is not a real site and you will not get your order</p>
+    </div>
+
 {% endblock %}

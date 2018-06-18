@@ -36,7 +36,7 @@
                             <td>{{ j.quantity }}</td>
                             <td>{{ j.size }}</td>
                             <td>£{{ j.price }}</td>
-                            <td><a href="{{ url_for("remove_item_cart", the_cart_id=j.cart_id) }}">Remove</a> </td>
+                            <td><a href="{{ url_for("remove_item_cart", the_cart_id=j.cart_id) }}" style="color: #4e555b">Remove</a> </td>
                         </tr>
                     {% endif %}
                 {% endfor %}

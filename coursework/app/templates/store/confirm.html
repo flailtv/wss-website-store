@@ -1,0 +1,84 @@
+{% extends "store/layout_store.html" %}
+
+{% block head %}
+    <style>
+    .OOF{display: inline-block}
+    .Lemon{display: list-item}
+    #tblProduct td{
+        padding:5px 10px 5px 10px;
+        border:solid 1px #000000;
+        font-size:20px;
+        font-family:"Tahoma, Verdana";
+    }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="text-center">
+    <h1>Confirmation</h1>
+    <table id="tblProduct", style="float: left; width: 50%">
+                <tr>
+                    <th> </th>
+                    <th>Name</th>
+                    <th>Quantity</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                </tr>
+    {% for item in cart %}
+        {% if item.userid == current_user.id %}
+                {% for item2 in store %}
+                    {% if item.itemid == item2.id %}
+                        <tr>
+                            <td><img  src="{{ url_for("static", filename=item2.image) }}", width="15%", height="20%"></td>
+                            <td>{{ item2.name }}</td>
+                            <td>{{ item.size }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>£{{ item.price }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                        <tr>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                            <td>Postage</td>
+                            <td>£4</td>
+                        </tr>
+                        <tr>
+                            <th> </th>
+                            <th> </th>
+                            <th> </th>
+                            <td>Total</td>
+                            <td>£{{ final_price }}</td>
+                        </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    <div style="float: left; width: 50%">
+        <div class="text-center">
+            <h3 style="font-size: 120%">Delivery Address</h3>
+            {% for i in users %}
+                {% if i.name == current_user.name %}
+                    <h6 style="font-size: 120%">{{ i.address1 }}</h6>
+                    <h6 style="font-size: 120%">{{ i.address2 }}</h6>
+                    <h6 style="font-size: 120%">{{ i.towncity }}</h6>
+                    <h6 style="font-size: 120%">{{ i.postcode }}</h6>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <p style="float: left; width: 100%"> </p>
+    <div class="text-center", style="float: left; width: 100%">
+        {% for i in users %}
+            {% if i.id == current_user.id %}
+                <h4>Pay With Card Ending In {{ i.card }}</h4>
+            {% endif %}
+        {% endfor %}
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>{{ form.submit() }}</p>
+        </form>
+    </div>
+    </div>
+
+{% endblock %}

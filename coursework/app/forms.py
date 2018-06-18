@@ -105,6 +105,12 @@ class add_item_to_store(FlaskForm):
 class checkout(FlaskForm):
     submit = SubmitField("Checkout")
 
+class pay_money(FlaskForm):
+    card = StringField("Card Number", validators=[DataRequired])
+    date = StringField("Expiry Date", validators=[DataRequired])
+    cvv = StringField("CVV", validators=[DataRequired])
+    submit = SubmitField("Next")
+
 class topup_form(FlaskForm):
     item = StringField("Stock Id")
     amount = StringField("Amount Of Stock Added")
