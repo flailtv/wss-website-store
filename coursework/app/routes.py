@@ -33,7 +33,7 @@ def shows():
 
 @app.route("/music")
 def music():
-    return render_template("Music.html", title="Music-", music_play=musicplayer.query.all())
+    return render_template("Music.html", title="Music-", music=musicplayer.query.all())
 
 
 @app.route("/store")
@@ -452,8 +452,6 @@ def update_order():
                                 k.order_status = form.update.data
                                 db.session.commit() #TODO SEND OUT EMAIL
                                 flash("Changes Made")
-                    else:
-                        print(form.errors)
                     return render_template("user/update_order.html", title="Admin-", form=form)
                 else:
                     return redirect(404)

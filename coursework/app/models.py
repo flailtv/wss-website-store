@@ -86,3 +86,4 @@ class musicplayer(db.Model):
     name = db.Column(db.String)
     album = db.Column(db.String)
     file = db.Column(db.String)
+    cover = db.Column(db.String)

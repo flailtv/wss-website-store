@@ -51,6 +51,16 @@
         from {top: -300px; opacity: 0}
         to {top: 0; opacity: 1}
         }
+        #songs{
+            list-style: none;
+        }
+        #songs li a{
+            color: #4e555b;
+            text-decoration: none;
+        }
+        #songs .current_song a{
+            color: blue;
+        }
     </style>
     <script>
     window.onload = function () {
@@ -58,18 +68,9 @@
         var modal = document.getElementById("musicmodal");
         var btn = document.getElementById("musicplayer");
         var span = document.getElementsByClassName("close")[0];
-        var shuffmod = document.getElementById("shuffle_the_music");
-        var shuffle = document.getElementById("music-shuffle");
-        var span2 = document.getElementsByClassName("close2")[0];
 
         btn.onclick = function () {
             modal.style.display = "block";
-        };
-        shuffle.onclick = function () {
-            shuffmod.style.display = "block";
-        };
-        span2.onclick = function () {
-            shuffmod.style.display = "none";
         };
         span.onclick = function () {
             modal.style.display = "none";
@@ -80,6 +81,7 @@
             }
         }
     }
+
     </script>
     {% block head %}{% endblock %}
 {#    <style type="text/css" rel="stylesheet" href="{{ url_for('static', filename="css/style.css") }}"></style>#}
@@ -108,26 +110,51 @@
 {#<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>#}
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>#}
 {#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>#}
-    <p style="float: left;width: 100%;"> </p>
-    <button id="musicplayer" style="float: left;width: 8%">Music Player</button>
+{#    <p style="float: left;width: 100%;"> </p>#}
+    <button id="musicplayer" style="float: left;width: 8%; position: fixed;bottom: 10px;left: 30px">Music Player</button>
     <div id="musicmodal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-{#            {% for i in  music_play %}#}
-{#                <p>{{ i.name }}</p>#}
-{#            {% endfor %}#}
-            <button id="music-shuffle" style="width: 8%">Suffle</button>
-                <div id="shuffle_the_music" class="modal">
-                    <div class="modal-content">
-                        <span class="close2">&times;</span>
-                        <p>shufflesss</p>
-                    </div>
-                </div>
+            <div style="overflow: auto" class="align-content-center">
+                <audio src="" controls id="music_player">
+                    Sorry, your browser does not support HTML5!
+                </audio>
+                <ul id="songs">
+                    {% for i in music %}
+                    <li class="current-song"><a href="{{ url_for("static", filename=i.file) }}">{{ i.track }} - {{ i.name }} - {{ i.album }}</a></li>
+                    {% endfor %}
+                </ul>
+{#                <table id="songs" style="padding-left: 100px;width: 60%">#}
+{#                    {% for i in music %}#}
+{#                        <tr>#}
+{#                        <th><img style="width: 10%;" src="{{ url_for("static", filename=i.cover) }}"></th>#}
+{#                        <th><a href="{{ url_for("static", filename=i.file) }}">{{ i.track }}</a> </th>#}
+{#                        <th><a href="{{ url_for("static", filename=i.file) }}">{{ i.name }}</a> </th>#}
+{#                            <th>{{ i.album }}</th>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                </table>#}
+            </div>
         </div>
 {#        TODO Get Music Player To Work#}
     </div>
-    <p style="float: left;width: 100%;"> </p>
 </div>
-</body>
+<script src="../../audioPlayer.js"></script>
+<script>
+    var audio = document.getElementById("music_player");
+    audio.volume = 0.3;
 
+    audioPlayer()
+
+    {#music_player();#}
+    {#function music_player() {#}
+    {#    $("#music_player")[0].src = $("#songs li a")[0];#}
+    {#    $("#songs li a").click(function (i) {#}
+    {#        i.preventDefault();#}
+    {#        $("#music_player")[0].src = this;#}
+        })
+    }
+</script>
+</body>
+{#TODO script alert(" "); can be used to alert#}
 </html>
