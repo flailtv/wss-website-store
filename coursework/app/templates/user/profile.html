@@ -1,7 +1,20 @@
 {% extends "layout.html" %}
 
+{% block head %}
+<style>
+#word{
+    color: black;
+    text-decoration: none;
+}
+#word:hover{
+    color: blue;
+}
+
+</style>
+{% endblock %}
+
 {% block body %}
-    <div class="text-center">
+    <div class="text-center" style="font-size: 150%">
     <h1>Profile</h1>
     <br>
         <p>Hi, {{ current_user.username }}!</p>
@@ -12,15 +25,16 @@
                 <p>Address 2 = {{ i.address2 }}</p>
                 <p>Town/City = {{ i.towncity }}</p>
                 <p>Postcode = {{ i.postcode }}</p>
+                <a id="word" href="{{ url_for("the_orders") }}">Your Orders</a><br>
                 {% if i.accesslevel >= 2 %}
-                    <a href="/admin">Admin Page</a><br>
+                    <a id="word" href="/admin">Admin Page</a><br>
                 {% endif %}
                 {% if i.accesslevel == 3 %}
-                    <a href="/owner">Owner Page</a><br>
+                    <a id="word" href="/owner">Owner Page</a><br>
                 {% endif %}
             {% endif %}
         {% endfor %}
-    <a href="/edit">Edit Profile</a><br>
-        <a href="/logout">Logout</a>
+    <a id="word" href="/edit">Edit Profile</a><br>
+        <a id="word" href="/logout">Logout</a>
     </div>
 {% endblock %}
