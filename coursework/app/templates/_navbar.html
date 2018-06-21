@@ -8,12 +8,12 @@
         <ul class="navbar-nav mr-auto">
 
           <li class="nav-item">
-              <a class="nav-link" href="/store"><h1 style="font-size:175%;margin-top: 0.4em">Store</h1></a>
+              <a class="nav-link" href="/store"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Store</b></h1></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/shows"><h1 style="font-size:175%;margin-top: 0.4em">Shows</h1></a>
+              <a class="nav-link" href="/shows"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Shows</b></h1></a>
             <li class="nav-item">
-                <a class="nav-link" href="/music"><h1 style="font-size:175%;margin-top: 0.4em">Music</h1></a>
+            <a class="nav-link" href="/music"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Music</b></h1></a>
             </li>
             <li class="nav-item">
                 <p style="margin-left: 5em"></p>
@@ -22,19 +22,19 @@
       <ul class="nav navbar-nav mr-auto">
             <li class="nav-item">
 {#                <a class="nav-link" href="/"><img style="margin-right: 0" src="https://fanart.tv/api/download.php?type=download&image=147244&section=2" width="150" height="75" alt="While She Sleeps"> </a>#}
-                <a class="nav-link" href="/"><img style="margin-right: 0" src="{{ url_for("static", filename="images/logowithtext.jpg") }}" width="150" height="75" alt="While She Sleeps"> </a>
+                <a class="nav-link" href="/"><img style="margin-right: 0" src="{{ url_for("static", filename="images/logowithtext.jpg") }}" width="165" height="75" alt="While She Sleeps"> </a>
             </li>
         </ul>
       <ul class="nav navbar-nav navbar-right">
           <li class="nav-item">
-              <a class ="nav-link" href="/about"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">About</h1></a>
+              <a class ="nav-link" href="/about"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>About</b></h1></a>
           </li>
             <li class="nav-item">
-              <a class ="nav-link" href="/photos"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Gallery</h1></a>
+                <a class ="nav-link" href="/photos"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Gallery</b></h1></a>
           </li>
             {% if current_user.is_anonymous %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Login/SignUp</h1></a>
+                    <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Login/SignUp</b></h1></a>
                 </li>
             {% else %}
                 <li class="nav-item">
