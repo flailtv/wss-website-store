@@ -61,6 +61,7 @@
         #songs .current_song a{
             color: blue;
         }
+
     </style>
     <script>
     window.onload = function () {
@@ -111,7 +112,7 @@
 {#<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>#}
 {#<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>#}
 {#    <p style="float: left;width: 100%;"> </p>#}
-    <button id="musicplayer" style="float: left;width: 8%; position: fixed;bottom: 10px;left: 30px">Music Player</button>
+    <button id="musicplayer" style="float: left;width: 10%; position: fixed;bottom: 10px;left: 30px">Music Player</button>
     <div id="musicmodal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -139,12 +140,34 @@
 {#        TODO Get Music Player To Work#}
     </div>
 </div>
-<script src="../../audioPlayer.js"></script>
+{#<script src="../../audioPlayer.js"></script>#}
 <script>
     var audio = document.getElementById("music_player");
     audio.volume = 0.3;
+    function audioPlayer(){
+            var currentSong = 0;
+            $("#audioPlayer")[0].src = $("#playlist li a")[0];
+            $("#audioPlayer")[0].play();
+            $("#playlist li a").click(function(e){
+               e.preventDefault();
+               $("#audioPlayer")[0].src = this;
+               $("#audioPlayer")[0].play();
+               $("#playlist li").removeClass("current-song");
+                currentSong = $(this).parent().index();
+                $(this).parent().addClass("current-song");
+            });
 
-    audioPlayer()
+            $("#audioPlayer")[0].addEventListener("ended", function(){
+               currentSong++;
+                if(currentSong == $("#playlist li a").length)
+                    currentSong = 0;
+                $("#playlist li").removeClass("current-song");
+                $("#playlist li:eq("+currentSong+")").addClass("current-song");
+                $("#audioPlayer")[0].src = $("#playlist li a")[currentSong].href;
+                $("#audioPlayer")[0].play();
+            });
+        }
+    audioPlayer();
 
     {#music_player();#}
     {#function music_player() {#}
@@ -152,8 +175,13 @@
     {#    $("#songs li a").click(function (i) {#}
     {#        i.preventDefault();#}
     {#        $("#music_player")[0].src = this;#}
+<<<<<<< HEAD
     {#    })#}
     {#}#}
+=======
+{#        })#}
+{#    }#}
+>>>>>>> e51bca6e0d44604050f37891a9a8c4cc77f92ceb
 </script>
 </body>
 {#TODO script alert(" "); can be used to alert#}
