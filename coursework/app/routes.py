@@ -9,6 +9,8 @@ import arrow
 #TODO Profits and Google Charts API
 #TODO Add music_play to every single fucking thing
 #TODO Change all "if current_user.name" to "current_user.id"
+#TODO scrape wss
+# Fonts: Navbar- Century Gothic  Titles-Rockwell  Text-Myriad Pro
 
 @app.route('/')
 def index():

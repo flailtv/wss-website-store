@@ -2,17 +2,30 @@
 
 {% block body %}
     <style>
-    body {
-{#        background: url("images/concrete.jpg") no-repeat;#}
+    #text{
+        float: left;
+        width: 25%;
+        font-size: 150%;
+        margin-top: 4%;
+        margin-left: 5%;
+{#        font-family: "Myriad Pro";#}
+        font-family: Rockwell;
     }
+    #title{
+        font-family: Rockwell;
+        margin-top: 4%;
+        margin-bottom: 2%;
+        width: 100%;
+        float: left;
+    }
+{#    TODO choose font pls#}
     </style>
     <div class="text-center">
 {#        <h1 style="margin-top: 1%; margin-bottom: 2%;width: 100%"><br/></h1>#}
-        <h1 style="margin-top: 1.5%; margin-bottom: 2%;width: 100%;">You Are We (2017)</h1>
+        <h1 id="title" style="margin-top: 1.5%">You Are We (2017)</h1>
 {#    <h1 style="margin-top: 1%;margin-bottom: 2%; width: 100%;margin-left: 45%;"></h1>#}
         <img width="325px" height="325" src="/static/images/album_covers/You_Are_We_cover_by_While_She_Sleeps.jpg" style="float: left;margin-left: 10%;">
-{#        <img src="url_for('static', filename='/static/images\You_Are_We_cover_by_While_She_Sleeps.jpg')">#}
-        <p style="float: left;width: 25%;margin-left: 5%; font-size: 150%;margin-top: 4%">
+        <p id="text">
             1. You Are We <br />
             2. Steal The Sun <br/>
             3. Feel <br/>
@@ -20,7 +33,7 @@
             5. Wide Awake <br/>
             6. Silence Speaks
         </p>
-        <p style="float: left;font-size: 150%;width: 25%;margin-top: 4%">
+        <p id="text">
             7. Settle Down Society <br/>
             8. Hurricane<br/>
             9. Revolt <br/>
@@ -29,10 +42,10 @@
         </p>
 
 
-    <h1 style="float: left;width: 100%;margin-bottom: 2%;margin-top: 4%">Brainwashed Deluxe Edition (2015)</h1>
+    <h1 id="title">Brainwashed Deluxe Edition (2015)</h1>
         <img width="325px" height="325" src="\static\images\album_covers/Brainwashed_cover_art.jpg" style="float: left;margin-left: 10%;">
 {#    <img width="325px" height="325px" src="https://upload.wikimedia.org/wikipedia/en/0/00/Brainwashed_cover_art.jpg" style="float: left;margin-left: 10%;">#}
-    <p style="float: left;width: 25%;margin-left: 5%; font-size: 150%;margin-top: 0.5%">
+    <p id="text" style="margin-top: 0.5%">
         1. The Divide <br/>
         2. New World Torture <br/>
         3. Your Evolution <br/>
@@ -42,7 +55,7 @@
         7. Four Walls <br/>
         8. Tourment
     </p>
-    <p style="float: left;width: 25%;margin-left: 5%; font-size: 150%;margin-top: 0.5%">
+    <p id="text" style="margin-top: 0.5%">
         9. Kangaezu Ni <br/>
         10. Life In Tension <br/>
         11. Trophies Of Violence <br/>
@@ -55,7 +68,7 @@
 <h1 style="float: left;margin-top: 4%;margin-bottom: 2%;width: 100%">This Is The Six Deluxe Edition (2012)</h1>
         <img width="325px" height="325" src="\static\images\album_covers/This_Is_The_Six_cover_art.jpg" style="float: left;margin-left: 10%;">
 {#    <img width="325px" height="325px" src="https://upload.wikimedia.org/wikipedia/en/a/ae/This_Is_The_Six_cover_art.jpg" style="float: left;margin-left: 10%;">#}
-    <p style="float: left;width: 25%;margin-left: 5%;font-size: 130%;margin-top: 0.5%">
+    <p id="text" style="font-size: 130%;margin-top: 0.5%">
     1. Dead Behind The Eyes <br/>
     2. False Freedom <br/>
     3. Satisfied In Suffering <br/>
@@ -67,7 +80,7 @@
     9. Until The Death <br/>
     10. Love At War
     </p>
-    <p style="float: left;width: 25%;margin-left: 5%;font-size: 130%;margin-top: 0.5%">
+    <p id="text" style="font-size: 130%;margin-top: 0.5%">
     11.  The Plague of a New Age <br/>
     12. Reunite <br/>
     13. Death Toll <br/>
@@ -81,7 +94,7 @@
 <h1 style="margin-top: 4%;margin-bottom: 2%;width: 100%;float: left">The North Stands For Nothing (2010)</h1>
         <img width="325px" height="325" src="{{ url_for("static", filename="images/album_covers/The_North_Stands_For_Nothing_cover_art.jpg") }}" style="float: left;margin-left: 10%;">
 {#    <img width="325px" height="325px" src="https://upload.wikimedia.org/wikipedia/en/2/20/The_North_Stands_For_Nothing_cover_art.jpg" style="float: left;margin-left: 10%;margin-bottom: 5%">#}
-    <p style="float: left;width: 25%;margin-left: 5%;font-size: 130%;margin-top: 2%">
+    <p id="text" style="font-size: 130%;margin-top: 2%">
     1. The North Stands For Nothing <br/>
     2. Trophies <br/>
     3. Crows <br/>
