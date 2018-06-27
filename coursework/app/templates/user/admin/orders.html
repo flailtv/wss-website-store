@@ -1,0 +1,55 @@
+{% extends "user/admin/admin_layout.html" %}
+
+{% block head %}
+<style>
+#admin_orders{
+    color: black;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="text-center" style="float: left;width: 50%;font-family: Rockwell">
+ <h1>Update Order Status</h1>
+    <form action="" method="post">
+            {{ form.hidden_tag() }}
+        <p>
+            {{ form.select(size=1) }}
+            {{ form.update(size=1) }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+ </div>
+<div class="text-center" style="float: left;width: 50%; overflow: paged-y;">
+{# TODO See is this overflow works and change on stock.html if needed#}
+<h1>Orders</h1>
+    <table id="tblProduct" width="95%">
+    <tr style="color: blue">
+        <th>Order ID</th>
+        <th>User ID</th>
+        <th>User Name</th>
+        <th>Item ID</th>
+        <th>Quantity</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Order Status</th>
+    </tr>
+        {% for i in orders %}
+            {% for j in users %}
+                {% if i.userid == j.id %}
+        <tr style="border: solid 1px black">
+            <th>{{ i.order_id }}</th>
+            <th>{{ i.userid }}</th>
+            <th>{{ j.name }}</th>
+            <th>{{ i.item_id }}</th>
+            <th>{{ i.item_quant }}</th>
+            <th>{{ i.date }}</th>
+            <th>£{{ i.price }}</th>
+            <th>{{ i.order_status }}</th>
+        </tr>
+                {% endif %}
+                {% endfor %}
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

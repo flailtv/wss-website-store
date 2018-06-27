@@ -86,7 +86,8 @@
 <body>
 <div class="container" style="width: 100%">
     {% include"_navbar.html" %}
-<hr>
+{#<hr>#}
+{# This is the line ^ #}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul>
@@ -99,7 +100,7 @@
     {% block body %}{% endblock %}
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-    <button id="musicplayer" style="float: left;width: 10%; position: fixed;bottom: 10px;left: 30px">Music Player</button>
+    <button id="musicplayer" style="float: left;width: 120px; position: fixed;bottom: 10px;left: 30px">Music Player</button>
     <div id="musicmodal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -162,13 +163,12 @@
     {#    $("#songs li a").click(function (i) {#}
     {#        i.preventDefault();#}
     {#        $("#music_player")[0].src = this;#}
-<<<<<<< HEAD
+{#<<<<<<< HEAD#}
     {#    })#}
-    {#}#}
-=======
+{#=======#}
 {#        })#}
 {#    }#}
->>>>>>> e51bca6e0d44604050f37891a9a8c4cc77f92ceb
+{#>>>>>>> e51bca6e0d44604050f37891a9a8c4cc77f92ceb#}
 </script>
 </body>
 {#TODO script alert(" "); can be used to alert#}

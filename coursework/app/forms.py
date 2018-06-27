@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
-from app.models import orders, User, stock
+from app.models import orders, User, stock, Concerts
 
 
 class LoginForm(FlaskForm):
@@ -69,6 +69,28 @@ class add_shows(FlaskForm):
         choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"),
                  ("9", "9"), ("10", "10"), ("11", "11"), ("12", "12")])
     year = SelectField(choices=[("2018", "2018"), ("2019", "2019"), ("2020", "2020"), ("2021", "2021")])
+
+
+class edit_shows(FlaskForm):
+    location = StringField("Location")
+    venue = StringField("Venue")
+    submit = SubmitField("Submit")
+    day = SelectField(
+        choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"),
+                 ("9", "9"), ("10", "10"), ("11", "11"), ("12", "12"), ("13", "13"), ("14", "14"), ("15", "15"),
+                 ("16", "16"), ("17", "17"), ("18", "18"), ("19", "19"), ("20", "20"), ("21", "21"), ("22", "22"),
+                 ("23", "23"), ("24", "24"), ("25", "25"), ("26", "26"), ("27", "27"), ("28", "28"), ("29", "29"),
+                 ("30", "30"), ("31", "31")])
+    month = SelectField(
+        choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"),
+                 ("9", "9"), ("10", "10"), ("11", "11"), ("12", "12")] )
+    year = SelectField(choices=[("2018", "2018"), ("2019", "2019"), ("2020", "2020"), ("2021", "2021")])
+    the_list = [(None, "Select Show ID")]
+    for i in Concerts.query.all():
+        the_list.append((str(i.id), str(i.id)))
+    show_id = SelectField(
+        choices=the_list
+    )
 
 
 class edit_user_level(FlaskForm):

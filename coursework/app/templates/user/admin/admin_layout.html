@@ -11,7 +11,8 @@
 </head>
 <body>
 <div class="container">
-    {% include"store/_navbar_store.html" %}
+    {% include"_navbar.html" %}
+    {% include"user/admin/admin_navbar.html" %}
 {#<hr>#}
 {# This is the line ^ #}
 {% with messages = get_flashed_messages() %}

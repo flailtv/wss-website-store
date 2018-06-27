@@ -9,7 +9,9 @@
 #word:hover{
     color: blue;
 }
-
+#current_profile{
+    color: black;
+}
 </style>
 {% endblock %}
 
@@ -20,17 +22,24 @@
         <p>Hi, {{ current_user.username }}!</p>
         {% for i in user %}
             {% if i.username == current_user.username %}
-                <p>Name = {{ i.name }}</p>
+                {% if i.name %}
+                    <p>Name = {{ i.name }}</p>
+                    {% endif %}
+                {% if i.address1 %}
                 <p>Address 1 = {{ i.address1 }}</p>
+                    {% endif %}
+                {% if i.address2 %}
                 <p>Address 2 = {{ i.address2 }}</p>
+                    {% endif %}
+                {% if i.towncity %}
                 <p>Town/City = {{ i.towncity }}</p>
+                    {% endif %}
+                {% if i.postcode %}
                 <p>Postcode = {{ i.postcode }}</p>
+                    {% endif %}
                 <a id="word" href="{{ url_for("the_orders") }}">Your Orders</a><br>
                 {% if i.accesslevel >= 2 %}
-                    <a id="word" href="/admin">Admin Page</a><br>
-                {% endif %}
-                {% if i.accesslevel == 3 %}
-                    <a id="word" href="/owner">Owner Page</a><br>
+                    <a id="word" href="/admin">Admin Tools</a><br>
                 {% endif %}
             {% endif %}
         {% endfor %}

@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-md navbar-light bg-light mb-4">
+    <a class="navbar-brand" href="/admin" style="font-family: 'Century Gothic'"><h1 style="font-size: 160%">Admin Tools</h1></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+{#          <li class="nav-item active">#}
+{#            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>#}
+{#          </li>#}
+            <li class="nav-item">
+                <a class="nav-link">    </a>
+            </li>
+            <li class="nav-item">
+                <a id="admin_orders" class="nav-link" href="/admin/orders"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Orders</b></h1></a>
+          </li>
+          <li class="nav-item">
+            <a id="admin_stock" class="nav-link" href="/admin/stock"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Stock</b></h1></a>
+          </li>
+            <li class="nav-item">
+                <a id="admin_shows" class ="nav-link" href="/admin/shows"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Shows</b></h1></a>
+            </li>
+            {%  for i in users %}
+                {% if i.id == current_user.id %}
+                    {% if i .accesslevel ==3 %}
+                        <li class="navbar-brand"><h1 style="font-size: 160%;font-family: 'Century Gothic';margin-left: 50px">Owner Tools</h1> </li>
+                        <li><a id="owner_access" class="nav-link" href="/admin/users"><h1 style="font-size: 150%;font-family: 'Century Gothic'"><b>User Access</b></h1></a> </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+      </div>
+    </nav>

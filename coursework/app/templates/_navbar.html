@@ -11,12 +11,12 @@
               <a class="nav-link" href="/store"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Store</b></h1></a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="/shows"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Shows</b></h1></a>
+              <a id="current_shows" class="nav-link" href="/shows"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Shows</b></h1></a>
             <li class="nav-item">
-            <a class="nav-link" href="/music"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Music</b></h1></a>
+            <a id="current_music" class="nav-link" href="/music"><h1 style="font-size:175%;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Music</b></h1></a>
             </li>
             <li class="nav-item">
-                <p style="margin-left: 5em"></p>
+                <p style="margin-left: 4em"></p>
             </li>
         </ul>
       <ul class="nav navbar-nav mr-auto">
@@ -27,10 +27,10 @@
         </ul>
       <ul class="nav navbar-nav navbar-right">
           <li class="nav-item">
-              <a class ="nav-link" href="/about"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>About</b></h1></a>
+              <a id="current_about" class ="nav-link" href="/about"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>About</b></h1></a>
           </li>
             <li class="nav-item">
-                <a class ="nav-link" href="/photos"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Gallery</b></h1></a>
+                <a id="current_photos" class ="nav-link" href="/photos"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Gallery</b></h1></a>
           </li>
             {% if current_user.is_anonymous %}
                 <li class="nav-item">
@@ -38,7 +38,7 @@
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Profile</h1></a>
+                    <a id="current_profile" class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em; font-family: 'Century Gothic'"><b>Profile</b></h1></a>
                 </li>
             {% endif %}
         </ul>

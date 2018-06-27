@@ -1,0 +1,74 @@
+{% extends"user/admin/admin_layout.html" %}
+
+{% block head %}
+<style>
+#admin_stock{
+    color: black;
+}
+#tblProduct td{
+        padding:5px 10px 5px 10px;
+        border:solid 1px #000000;
+        font-size:14px;
+        font-family: Rockwell;
+    }
+#link{
+    color: black;
+    text-decoration: none;
+    font-family: Rockwell;
+    font-size: 22px;
+}
+#link:hover{
+    color: blue;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="text-center" style="float: left; width: 50%;font-family: Rockwell">
+<h1>Top-Up Stock</h1>
+<form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p style="font-size: 120%">
+                {{ form.item(size=1) }}<br>
+            </p>
+            <p style="font-size: 120%">
+                {{ form.amount.label }}<br>
+                {{ form.amount(size=16) }}<br>
+                {% for error in form.amount.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+                </p>
+            <p>{{ form.submit() }}</p>
+    </form>
+<br>
+    <a id="link" href="{{ url_for("additem") }}">Add An Item To The Store</a>
+</div>
+    <div class="text-center" style="float: left;width: 50%; overflow: auto">
+    <table id="tblProduct" style="width: 95%">
+    <tr style="font-size: 140%; color: blue">
+        <th>Stock Id</th>
+        <th>Item Id</th>
+        <th>Item Name</th>
+        <th>Category</th>
+        <th>Item Size</th>
+        <th>Item Stock</th>
+        <th>Amount Bought</th>
+    </tr>
+{% for i in stock %}
+    {% for j in store %}
+        {% if j.id == i.itemid %}
+    <tr style="border: solid 1px #6c757d">
+        <th>{{ i.id }}</th>
+        <th>{{ i.itemid }}</th>
+        <th>{{ j.name }}</th>
+        <th>{{ j.cat }}</th>
+        <th>{{ i.size }}</th>
+        <th>{{ i.stock }}</th>
+        <th>{{ i.bought }}</th>
+    </tr>
+        {% endif %}
+        {% endfor %}
+    {% endfor %}
+    </table>
+    </div>
+{% endblock %}

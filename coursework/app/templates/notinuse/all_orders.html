@@ -2,13 +2,11 @@
 
 {% block head %}
     <style>
-    .OOF{display: inline-block}
-    .Lemon{display: list-item}
     #tblProduct td{
         padding:5px 10px 5px 10px;
         border:solid 1px #000000;
         font-size:20px;
-        font-family:"Tahoma, Verdana";
+        font-family: Rockwell;
     }
     </style>
 {% endblock %}
@@ -16,7 +14,7 @@
 {% block body %}
 <div class="text-center">
 <h1>Orders</h1>
-    <table id="tblProduct", width="100%">
+    <table id="tblProduct" width="100%">
     <tr style="color: blue">
         <th>Order ID</th>
         <th>User ID</th>
@@ -43,5 +41,5 @@
                 {% endif %}
                 {% endfor %}
         {% endfor %}
-
+    </table>
 {% endblock %}

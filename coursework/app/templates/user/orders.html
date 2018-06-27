@@ -8,13 +8,13 @@
         padding:5px 10px 5px 10px;
         border:solid 1px #000000;
         font-size:20px;
-        font-family:"Tahoma, Verdana";
+        font-family:Rockwell;
     }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="text-center">
+<div class="text-center" style="font-family: Rockwell">
 <h1>Orders</h1>
 {% for user in user %}
     {% if user.id == current_user.id %}

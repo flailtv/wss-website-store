@@ -1,0 +1,87 @@
+{% extends"user/admin/admin_layout.html" %}
+
+{% block head %}
+<style>
+#admin_shows{
+    color: black;
+}
+#tbl{
+    padding:5px 10px 5px 10px;
+    border:solid 1px #000000;
+    font-size:20px;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="text-center" style="float: left; width: 50%;font-family: Rockwell">
+    <h1>Add Show</h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.location.label }}<br>
+                {{ form.location(size=32) }}<br>
+                {% for error in form.location.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form.day(size=1) }}
+                {{ form.month(size=1) }}
+                {{ form.year(size=1) }}
+            </p>
+            <p>
+                {{ form.venue.label }}<br>
+                {{ form.venue(size=32) }}<br>
+                {% for error in form.venue.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+<br>
+<h1>Edit Show</h1>
+<form action="" method="post">
+    {{ form2.hidden_tag() }}
+            <p>{{ form2.show_id(size=1) }}</p>
+            <p>
+                {{ form2.location.label }}<br>
+                {{ form2.location(size=32) }}<br>
+                {% for error in form2.location.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>
+                {{ form2.day(size=1) }}
+                {{ form2.month(size=1) }}
+                {{ form2.year(size=1) }}
+            </p>
+            <p>
+                {{ form2.venue.label }}<br>
+                {{ form2.venue(size=32) }}<br>
+                {% for error in form2.venue.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form2.submit() }}</p>
+</form>
+</div>
+    <div class="text-center" style="float: left;width: 50%; font-family: Rockwell">
+    <table style="font-size: 20px;overflow: paged-y" width="100%">
+        <tr style="color: blue">
+            <th>Show ID</th>
+            <th>Location</th>
+            <th>Venue</th>
+            <th>Date</th>
+        </tr>
+        {% for i in shows %}
+        <tr style="border: solid 1px black">
+            <th>{{ i.id }}</th>
+            <th>{{ i.location }}</th>
+            <th>{{ i.venue }}</th>
+            <th>{{ i.day }}/{{ i.month }}/{{ i.year }}</th>
+        </tr>
+        {% endfor %}
+    </table>
+    </div>
+{% endblock %}

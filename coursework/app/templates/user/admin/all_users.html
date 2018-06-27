@@ -1,0 +1,50 @@
+{% extends"user/admin/admin_layout.html" %}
+
+{% block head %}
+<style>
+#owner_access{
+    color: black;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+    <div class="text-center" style="float: left;width: 50%;font-family: Rockwell">
+    <h1>Change Access Level</h1>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.username(size=1) }}
+                </p>
+                <p>
+                    {{ form.accesslevel(size=1) }}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(size=28) }}<br>
+                    {% for error in form.password.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit() }}</p>
+            </form>
+    </div>
+<div class="text-center" style="float: left;width: 50%; font-family: Rockwell">
+<table width="95%">
+    <tr style="color: blue">
+        <th>User ID</th>
+        <th>Username</th>
+        <th>Access Level</th>
+        <th>Email</th>
+    </tr>
+    {% for i in users %}
+        <tr style="border: solid 1px black">
+        <th>{{ i.id }}</th>
+        <th>{{ i.username }}</th>
+        <th>{{ i.accesslevel }}</th>
+        <th>{{ i.email }}</th>
+        </tr>
+    {% endfor %}
+</table>
+    </div>
+{% endblock %}

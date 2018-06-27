@@ -1,7 +1,16 @@
 {% extends "store/layout_store.html" %}
 
+{% block head %}
+<style>
+#store_cart{
+    color: black;
+}
+</style>
+{% endblock %}
+
 {% block body %}
-    <div class="text-center">
+    <div class="text-center" style="font-family: Rockwell">
+    <H1>Pay</H1>
     <form action="" method="post">
             {{ form.hidden_tag() }}
             <p>

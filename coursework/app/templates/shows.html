@@ -1,15 +1,21 @@
 {%  extends "layout.html" %}
 
-{% block body %}
-<div class="text-center">
-    <h1>Shows</h1>
-    {% for i in concerts %}
-        <p>{{ i.location }} -- {{ i.venue }} -- {{ i.day }}-{{ i.month }}-{{ i.year }}</p>
-    {% endfor %}
-    <audio controls>
-        <source src="{{ url_for("static", filename="music/You Are We/Feel.mp3") }}" type="audio/mpeg">
-    </audio>
-</div>
+
+{% block head %}
+<style>
+#current_shows{
+    color: black;
+}
+</style>
 {% endblock %}
 
-{#TODO remove song thing#}
+
+{% block body %}
+<div class="text-center">
+    <h1 style="font-family: Rockwell" >Shows</h1>
+    {% for i in concerts %}
+        <p style="font-family: Rockwell">{{ i.location }} -- {{ i.venue }} -- {{ i.day }}-{{ i.month }}-{{ i.year }}</p>
+    {% endfor %}
+
+</div>
+{% endblock %}

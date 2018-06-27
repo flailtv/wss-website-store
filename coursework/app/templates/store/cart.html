@@ -15,11 +15,15 @@
     #word:hover{
         color: blue;
     }
+    #store_cart{
+        color: black;
+    }
     </style>
 {% endblock %}
 {% block body %}
-<div class="text-center">
-<h1>Cart</h1>
+<div class="text-center" style="font-family: Rockwell">
+{#<h1>Cart</h1>#}
+<br>
 {% for i in users %}
     {% if i.id == current_user.id %}
         <table id="tblProduct", width="100%">

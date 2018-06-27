@@ -12,26 +12,24 @@
                 <a class="nav-link">    </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/store/music"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Music</b></h1></a>
+                <a id="store_music" class="nav-link" href="/store/music"><h1 style="font-size:160%;font-family: 'Century Gothic'"><b>Music</b></h1></a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/store/mens"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Mens</b></h1></a>
+            <a id="store_mens" class="nav-link" href="/store/mens"><h1 style="font-size:160%;font-family: 'Century Gothic'"><b>Mens</b></h1></a>
           </li>
             <li class="nav-item">
-                <a class ="nav-link" href="/store/womens"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Womens</b></h1></a>
+                <a id="store_womens" class ="nav-link" href="/store/womens"><h1 style="font-size:160%;font-family: 'Century Gothic'"><b>Womens</b></h1></a>
             </li>
           <li class="nav-item">
-              <a class="nav-link" href="/store/outwear"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Outwear</b></h1></a>
+              <a id="store_outwear" class="nav-link" href="/store/outwear"><h1 style="font-size:160%;font-family: 'Century Gothic'"><b>Outwear</b></h1></a>
           </li>
           <li class="nav-item">
-              <a class ="nav-link" href="/store/accessories"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Accessories</b></h1></a>
+              <a id="store_accessories" class ="nav-link" href="/store/accessories"><h1 style="font-size:160%;font-family: 'Century Gothic'"><b>Accessories</b></h1></a>
           </li>
             <li class="nav-item">
-                <a class="nav-link" href="/store/cart"><h1 style="font-size: 150%;font-family: 'Century Gothic'"><b>Cart</b></h1></a>
+                <a id="store_cart" class="nav-link" href="/store/cart"><h1 style="font-size: 160%;font-family: 'Century Gothic'"><b>Cart</b></h1></a>
             </li>
-            <li class="nav-item">
-                <a class ="nav-link" href="/"><h1 style="font-size:150%;font-family: 'Century Gothic'"><b>Home</b></h1></a>
-            </li>
+
         </ul>
 
 {#        <form class="form-inline mt-2 mt-md-0">#}
@@ -40,15 +38,19 @@
 {#        </form>#}
 {#      #TODO Add search if want to#}
           <ul class="navbar navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class ="nav-link" href="/"><h1 style="font-size:175%;font-family: 'Century Gothic';margin-top: 0.4em"><b>Home</b></h1></a>
+            </li>
               {% if current_user.is_anonymous %}
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('login') }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em; font-family: 'Century Gothic'"><b>Login/SignUp</b></h1></a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em">Profile</h1></a>
+                    <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Profile</b></h1></a>
                 </li>
               {% endif %}
+
           </ul>
       </div>
     </nav>
