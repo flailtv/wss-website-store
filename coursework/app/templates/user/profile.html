@@ -19,31 +19,35 @@
     <div class="text-center" style="font-size: 150%">
     <h1>Profile</h1>
     <br>
+    {% for i in user %}
+        {% if i.username == current_user.username %}
         <p>Hi, {{ current_user.username }}!</p>
-        {% for i in user %}
-            {% if i.username == current_user.username %}
-                {% if i.name %}
-                    <p>Name = {{ i.name }}</p>
-                    {% endif %}
-                {% if i.address1 %}
-                <p>Address 1 = {{ i.address1 }}</p>
-                    {% endif %}
-                {% if i.address2 %}
-                <p>Address 2 = {{ i.address2 }}</p>
-                    {% endif %}
-                {% if i.towncity %}
-                <p>Town/City = {{ i.towncity }}</p>
-                    {% endif %}
-                {% if i.postcode %}
-                <p>Postcode = {{ i.postcode }}</p>
-                    {% endif %}
+            <div class="text-center" style="float: left;width: 50%">
                 <a id="word" href="{{ url_for("the_orders") }}">Your Orders</a><br>
                 {% if i.accesslevel >= 2 %}
                     <a id="word" href="/admin">Admin Tools</a><br>
                 {% endif %}
-            {% endif %}
-        {% endfor %}
-    <a id="word" href="/edit">Edit Profile</a><br>
+        <a id="word" href="/edit">Edit Profile</a><br>
         <a id="word" href="/logout">Logout</a>
+            </div>
+        <div class="text-center" style="float: left;width: 50%">
+            {% if i.name %}
+                <p>Name = {{ i.name }}</p>
+                {% endif %}
+            {% if i.address1 %}
+            <p>Address 1 = {{ i.address1 }}</p>
+                {% endif %}
+            {% if i.address2 %}
+            <p>Address 2 = {{ i.address2 }}</p>
+                {% endif %}
+            {% if i.towncity %}
+            <p>Town/City = {{ i.towncity }}</p>
+                {% endif %}
+            {% if i.postcode %}
+            <p>Postcode = {{ i.postcode }}</p>
+                {% endif %}
+        {% endif %}
+    {% endfor %}
+        </div>
     </div>
 {% endblock %}

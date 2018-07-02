@@ -1,7 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField, DateTimeField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
-from app.models import User
 from app.models import orders, User, stock, Concerts
 
 
@@ -44,7 +43,7 @@ class EditForm(FlaskForm):
     submit = SubmitField("Submit Changes")
     password = PasswordField("Password")
     password2 = PasswordField("Repeat Password", validators=[EqualTo("password")])
-    og_password = PasswordField("Current Password", validators=[DataRequired])
+    og_password = PasswordField("Current Password", validators=[DataRequired()])
     name = StringField("Name")
 
 
@@ -103,7 +102,7 @@ class edit_user_level(FlaskForm):
     accesslevel = SelectField(
         choices=[(None, "Select Access Level"), ("1", "1"), ("2", "2"), ("3", "3")]
     )
-    password = PasswordField("Enter Your Password ", validators=[DataRequired])
+    password = PasswordField("Enter Your Password ", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
 class add_to_cart(FlaskForm):
@@ -112,15 +111,15 @@ class add_to_cart(FlaskForm):
     submit = SubmitField("Add To Cart")
 
 class add_item_to_store(FlaskForm):
-    id = StringField("Item ID", validators=[DataRequired])
-    name = StringField("Item Name", validators=[DataRequired])
-    cat = StringField("Category", validators=[DataRequired])
-    price = StringField("Price", validators=[DataRequired])
+    id = StringField("Item ID", validators=[DataRequired()])
+    name = StringField("Item Name", validators=[DataRequired()])
+    cat = StringField("Category", validators=[DataRequired()])
+    price = StringField("Price", validators=[DataRequired()])
     sale = StringField("Sale % (If Applicable)")
-    image = StringField("Image Url (In Form images/folder/image)", validators=[DataRequired])
+    image = StringField("Image Url (In Form images/folder/image)")
     back_image = StringField("2nd Image Url")
     size = StringField("Size")
-    stock = StringField("Stock", validators=[DataRequired])
+    stock = StringField("Stock")
     colour = StringField("Colour")
     submit = SubmitField("Submit")
 #TODO Finish Add Item To Store Form
@@ -136,9 +135,9 @@ class checkout(FlaskForm):
     submit = SubmitField("Checkout")
 
 class pay_money(FlaskForm):
-    card = StringField("Card Number", validators=[DataRequired])
-    date = StringField("Expiry Date", validators=[DataRequired])
-    cvv = StringField("CVV", validators=[DataRequired])
+    card = StringField("Card Number", validators=[DataRequired()])
+    date = StringField("Expiry Date", validators=[DataRequired()])
+    cvv = StringField("CVV", validators=[DataRequired()])
     submit = SubmitField("Next")
 
 class topup_form(FlaskForm):
