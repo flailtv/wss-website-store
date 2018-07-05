@@ -1,17 +1,49 @@
 from app import app, db
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.utils import secure_filename
 import arrow
 
 # TODO Add email comfirmation
 # TODO Profits and Google Charts API
 # TODO Add music_play to every single fucking thing
-# TODO Change all "if current_user.name" to "current_user.id"
 # TODO scrape wss
 # TODO When item is bought add purchase to stock database
 # Fonts: Navbar- Century Gothic  Titles-Rockwell  Text-Myriad Pro
+
+# Upload Files from Flask Mega Tutorial
+upload_folder_mens = "static/images/mens"
+upload_folder_womens = "static/images/womens"
+allowed_extensions = set(["png", "jpg", "jpeg"])
+app.config["upload_folder_mens"] = upload_folder_mens
+app.config["upload_folder_womens"] = upload_folder_womens
+
+def allowed_file(filename):
+    return "." in filename and filename.rsplit(".", 1)[1]/lower() in allowed_extensions
+
+@app.route("/test", methods=["GET", "POST"])
+def test_uplaod():
+    form = add_item_to_store()
+    if request.method == "POST":
+        if "file" not in request.files:
+            flash("No File Part")
+            return redirect(request.url)
+        file = request.files["file"]
+        if file.filename == "":
+            flash("No Selected File")
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            if str(form.catagory.data) == "Mens":
+                file.save(os.path.join(app.config["upload_folder_mens"], filename))
+                return redirect(url_for("uploaded_file", filename=filename))
+            elif str(form.catagory.data) == "Womens":
+                file.save(os.path.join(app.config["upload_folder_mens"], filename))
+                return redirect(url_for("uploaded_file", filename=filename))
+#             TODO finnish this test with a file and check that it works
+
 
 @app.route('/')
 def index():
@@ -128,7 +160,7 @@ def confirmation():
                 current_date = arrow.now().format("DD-MM-YYYY")
                 card_no = "N/A"
                 for user in User.query.all():
-                    if user.name == current_user.name:
+                    if user.id == current_user.id:
                         card_no = user.card
                 item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing",
                               date=current_date, price=(int(i.price)*int(i.quantity)), card=card_no)

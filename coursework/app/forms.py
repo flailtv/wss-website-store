@@ -122,7 +122,10 @@ class add_item_to_store(FlaskForm):
     stock = StringField("Stock")
     colour = StringField("Colour")
     submit = SubmitField("Submit")
-#TODO Finish Add Item To Store Form
+    catagory = SelectField(
+        choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens")]
+    )
+#TODO Finish Add Item To Store Form and catagory form
 
 
     def validate_id(self, id):
@@ -167,3 +170,4 @@ class update_orders_form(FlaskForm):
         choices=[(None, "Select Status"), ("Dispatched", "Dispatched"), ("Delivered", "Delivered")]
     )
     submit = SubmitField("Submit")
+
