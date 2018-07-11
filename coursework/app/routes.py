@@ -11,6 +11,7 @@ import arrow
 # TODO Add music_play to every single fucking thing
 # TODO scrape wss
 # TODO When item is bought add purchase to stock database
+# TODO Remove the delivered orders from the admin page
 # Fonts: Navbar- Century Gothic  Titles-Rockwell  Text-Myriad Pro
 
 # Upload Files from Flask Mega Tutorial
@@ -376,10 +377,10 @@ def register():
         return redirect(url_for("login"))
     return render_template("user/register.html", title="Register-", form=form)
 
+
 @app.route("/user/<username>")
 @login_required
 def profile(username):
-    user = User.query.filter_by(username=username).first_or_404()
     return render_template("user/profile.html", title="Profile-", user=User.query.all())
 
 
@@ -457,10 +458,11 @@ def edit_user_access_level():
 
 
 @app.errorhandler(404)
-def error_404(error):
+def error_404():
     return render_template("error_pages/404.html"), 404
 
+
 @app.errorhandler(500)
-def error_500(error):
+def error_500():
     db.session.rollback()
     return render_template("error_pages/500.html"), 500

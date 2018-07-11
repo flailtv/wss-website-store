@@ -123,7 +123,7 @@ class add_item_to_store(FlaskForm):
     colour = StringField("Colour")
     submit = SubmitField("Submit")
     catagory = SelectField(
-        choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens")]
+        choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens"), ("Outwear", "Outwear"), ("Accessories", "Accessories")]
     )
 #TODO Finish Add Item To Store Form and catagory form
 
