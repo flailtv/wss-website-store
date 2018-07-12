@@ -5,6 +5,7 @@
 #word{
     color: black;
     text-decoration: none;
+    font-family: "Myriad Pro";
 }
 #word:hover{
     color: blue;
@@ -17,11 +18,11 @@
 
 {% block body %}
     <div class="text-center" style="font-size: 150%">
-    <h1>Profile</h1>
+    <h1 style="font-family: Rockwell">Profile</h1>
     <br>
     {% for i in user %}
         {% if i.username == current_user.username %}
-        <p>Hi, {{ current_user.username }}!</p>
+        <p style="font-family: 'Myriad Pro'">Hi, {{ current_user.username }}!</p>
             <div class="text-center" style="float: left;width: 50%">
                 <a id="word" href="{{ url_for("the_orders") }}">Your Orders</a><br>
                 {% if i.accesslevel >= 2 %}
@@ -30,7 +31,7 @@
         <a id="word" href="/edit">Edit Profile</a><br>
         <a id="word" href="/logout">Logout</a>
             </div>
-        <div class="text-center" style="float: left;width: 50%">
+        <div class="text-center" style="float: left;width: 50%; font-family: 'Myriad Pro'">
             {% if i.name %}
                 <p>Name = {{ i.name }}</p>
                 {% endif %}

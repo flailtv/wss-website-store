@@ -8,7 +8,7 @@ import arrow
 
 # TODO Add email comfirmation
 # TODO Profits and Google Charts API
-# TODO Add music_play to every single fucking thing
+# TODO Add music_play to every single thing
 # TODO scrape wss
 # TODO When item is bought add purchase to stock database
 # TODO Remove the delivered orders from the admin page
@@ -110,7 +110,6 @@ def accessories():
 @app.route("/store/cart", methods=["GET", "POST"])
 @login_required
 def the_cart():
-    # form = checkout()
     final_price = 0
     for j in cart.query.all():
         if current_user.id == j.userid:
@@ -133,11 +132,10 @@ def pay():
         for i in User.query.all():
             if i.id == current_user.id:
                 card_no = str(form.card.data)
-                i.card = card_no
+                i.card = card_no[-5:-1]
                 db.session.commit()
         return redirect(url_for("confirmation"))
     return render_template("store/pay.html", title="Store-", form=form)
-# TODO Fix all of tis
 
 
 @app.route("/store/confirm", methods=["GET", "POST"])

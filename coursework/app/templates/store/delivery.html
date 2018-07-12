@@ -30,10 +30,11 @@
 <a id="word" href="{{ url_for("edit_profile") }}">If This Is Not Correct Change It Here</a>
 <p> </p>
 <a id="word" href="{{ url_for("pay") }}"><img style="width: 29%" src="{{ url_for("static", filename="images/pay here.png") }}"></a>
-<h3>Or</h3>
-<a id="word" href="Doesnt Work Yet"><img style="width: 20%;" src="{{ url_for("static", filename="images/paypal button.png") }}"></a>
-<h3>Or</h3>
-<a id="word" href="May Never Work"><img style="width: 20%" src="{{ url_for("static", filename="images/pay with amazon.jpg") }}"></a>
-<p>*Please note: Do not enter your real card details as this is not a real site and you will not get your order</p>
+{#<h3>Or</h3>#}
+{#<a id="word" href="Doesnt Work Yet"><img style="width: 20%;" src="{{ url_for("static", filename="images/paypal button.png") }}"></a>#}
+{#<h3>Or</h3>#}
+{#<a id="word" href="May Never Work"><img style="width: 20%" src="{{ url_for("static", filename="images/pay with amazon.jpg") }}"></a>#}
+{#TODO Decide weither i want to keep these images #}
+    <p>*Please note: Do not enter your real card details as this is not a real site and you will not get your order</p>
 </div>
 {% endblock %}
