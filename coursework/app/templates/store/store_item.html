@@ -1,5 +1,17 @@
 {% extends "store/layout_store.html" %}
 
+{% block head %}
+<script>
+$("#size").change(function () {
+    var size = $("#size").val();
+    if (size) {
+        var sizelabel = $("label[for="+size+"]").text();
+        document.getElementById("thesize").innerHTML = sizelabel.toString();
+    }
+})
+</script>
+{% endblock %}
+
 {% block body %}
 <div class="text-center"><h1>{{ store_item.name }}</h1></div>
     <p style="float: left; width: 25%"></p>
@@ -30,10 +42,11 @@
                     {{ form.size(size=1) }}
                     {{ form.amount(size=1) }}
                     {{ form.submit() }}
-                </p
+                </p>
 {#            {% if form.size == "S" %}#}
 {#            <p>this workls</p>#}
         </form>
+        <p id="thesize"></p>
     <br>
 
     </div>

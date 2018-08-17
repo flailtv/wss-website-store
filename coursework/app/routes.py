@@ -1,10 +1,12 @@
-from app import app, db
-from flask import render_template, redirect, url_for, flash, request
+from app import app, db, mail
+from flask import render_template, redirect, url_for, flash, request, Flask
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
+from flask_mail import Message
 import arrow
+
 
 # TODO Add email comfirmation
 # TODO Profits and Google Charts API
@@ -43,6 +45,7 @@ def test_uplaod():
             elif str(form.catagory.data) == "Womens":
                 file.save(os.path.join(app.config["upload_folder_mens"], filename))
                 return redirect(url_for("uploaded_file", filename=filename))
+    return render_template("test.html", form=form)
 #             TODO finnish this test with a file and check that it works
 
 
@@ -205,7 +208,13 @@ def order_page():
                         for k in orders.query.all():
                             if int(k.order_id) == int(form.select.data):
                                 k.order_status = form.update.data
-                                db.session.commit()  # TODO SEND OUT EMAIL
+                                db.session.commit()
+                                for person in User.query.all():
+                                    if person.id == k.userid:
+                                        if str(form.update.data) == "Dispatched":
+                                            msg = Message("Your Order Has Been Dispatched", sender="donotreply@wss.com", recipients=str(person.email))
+                                            mail.send(msg)
+                                # TODO SEND OUT EMAIL
                                 flash("Changes Made")
                     return render_template("user/admin/orders.html", title="Admin-", orders=orders.query.all(), users=User.query.all(), form=form)
                 else:

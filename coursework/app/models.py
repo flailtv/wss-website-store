@@ -48,7 +48,8 @@ class Store(db.Model):
     cat = db.Column(db.String(40))
     price = db.Column(db.Float)
     sale = db.Column(db.Integer)
-    back_image=db.Column(db.String)
+    back_image = db.Column(db.String)
+    cost = db.Column(db.Float)
 
 
 class stock(db.Model):
