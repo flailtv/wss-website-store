@@ -82,7 +82,7 @@ def photos():
 
 @app.route("/store")
 def store():
-    return render_template("store/store.html", title="Store-")
+    return render_template("store/store.html", title="Store-", store=Store.query.all())
 
 
 @app.route("/store/music")
@@ -107,7 +107,7 @@ def womens():
 
 @app.route("/store/accessories")
 def accessories():
-    return render_template("store/accessories.html", title="Store-")
+    return render_template("store/accessories.html", title="Store-", store=Store.query.all())
 
 
 @app.route("/store/cart", methods=["GET", "POST"])
@@ -209,11 +209,11 @@ def order_page():
                             if int(k.order_id) == int(form.select.data):
                                 k.order_status = form.update.data
                                 db.session.commit()
-                                for person in User.query.all():
-                                    if person.id == k.userid:
-                                        if str(form.update.data) == "Dispatched":
-                                            msg = Message("Your Order Has Been Dispatched", sender="donotreply@wss.com", recipients=str(person.email))
-                                            mail.send(msg)
+                                # for person in User.query.all():
+                                #     if person.id == k.userid:
+                                #         if str(form.update.data) == "Dispatched":
+                                #             msg = Message("Your Order Has Been Dispatched", sender="donotreply@wss.com", recipients=str(person.email))
+                                #             mail.send(msg)
                                 # TODO SEND OUT EMAIL
                                 flash("Changes Made")
                     return render_template("user/admin/orders.html", title="Admin-", orders=orders.query.all(), users=User.query.all(), form=form)

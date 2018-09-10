@@ -94,20 +94,20 @@
 {% endwith %}
     {% block body %}{% endblock %}
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-    <button id="musicplayer" style="float: left;width: 120px; position: fixed;bottom: 10px;left: 30px">Music Player</button>
-    <div id="musicmodal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div style="overflow: auto" class="align-content-center">
-                <audio src="" controls id="music_player">
-                    Sorry, your browser does not support HTML5!
-                </audio>
-                <ul id="songs">
-                    {% for i in music %}
-                    <li class="current-song"><a href="{{ url_for("static", filename=i.file) }}">{{ i.track }} - {{ i.name }} - {{ i.album }}</a></li>
-                    {% endfor %}
-                </ul>
+{#TODO Finnish music player (maybe)#}
+{#    <button id="musicplayer" style="float: left;width: 120px; position: fixed;bottom: 10px;left: 30px">Music Player</button>#}
+{#    <div id="musicmodal" class="modal">#}
+{#        <div class="modal-content">#}
+{#            <span class="close">&times;</span>#}
+{#            <div style="overflow: auto" class="align-content-center">#}
+{#                <audio src="" controls id="music_player">#}
+{#                    Sorry, your browser does not support HTML5!#}
+{#                </audio>#}
+{#                <ul id="songs">#}
+{#                    {% for i in music %}#}
+{#                    <li class="current-song"><a href="{{ url_for("static", filename=i.file) }}">{{ i.track }} - {{ i.name }} - {{ i.album }}</a></li>#}
+{#                    {% endfor %}#}
+{#                </ul>#}
 {#                <table id="songs" style="padding-left: 100px;width: 60%">#}
 {#                    {% for i in music %}#}
 {#                        <tr>#}

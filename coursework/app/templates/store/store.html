@@ -3,5 +3,13 @@
 {% block body %}
 <div class="text-center">
 <h1>Most Popular</h1>
-</div>
+</div>{% for item in store %}
+                    <a href="{{ url_for("store_item", item_id=item.id) }}">
+                    {% if store.id == 10  %}
+                        <img style="width: 350px; height: 350px" src="{{ url_for("static", filename=item.image) }}">
+                    {% else %}
+                        <img style="width: 350px; height: 561px" src="{{ url_for("static", filename=item.image) }}">
+                    {% endif %}
+                    </a>
+            {% endfor %}
 {% endblock %}

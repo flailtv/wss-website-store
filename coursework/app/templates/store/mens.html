@@ -16,7 +16,7 @@
     {% for item in store %}
                 {% if item.cat == "Mens" %}
                     <a href="{{ url_for("store_item", item_id=item.id) }}">
-                    <img src="{{ url_for("static", filename=item.image) }}">
+                    <img width="350" height="561" src="{{ url_for("static", filename=item.image) }}">
                     </a>
                 {% endif %}
             {% endfor %}

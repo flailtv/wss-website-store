@@ -13,6 +13,52 @@ $("#size").change(function () {
 {% endblock %}
 
 {% block body %}
+    {% if store_item.id == 8 or store_item.id == 9 or store_item.id == 10 or store_item.id == 11 or store_item.id == 12 or store_item.id == 13 %}
+    <div class="text-center"><h1>{{ store_item.name }}</h1></div>
+    <p style="float: left; width: 25%"></p>
+        {% if store_item.id == 10 or store_item.id == 11 or store_item.id == 12 or store_item.id == 13 %}
+            <img style="float: left; width: 25%;margin-left: 13%" src="{{ url_for("static", filename=store_item.back_image) }}">
+        {% else %}
+            <img style="float: left; width: 25%" src="{{ url_for("static", filename=store_item.image) }}">
+            <img style="float: left; width: 25%" src="{{ url_for("static", filename=store_item.back_image) }}">
+        {% endif %}
+    <p style="float: left; width: 25%;margin-left: 13%"></p>
+    <table style="float: left;width: 50%;margin-left: 32%">
+        <th><h2><u>Colour</u></h2></th>
+    <th><h2><u>Stock</u></h2></th>
+        {% for item in stock %}
+        <tr>
+        {% if item.itemid == store_item.id %}
+            <td style="font-size: 150%">{{ item.size }}</td>
+            {% if item.stock == 0 %}
+                <td style="font-size: 150%;color: red">{{ item.stock }}</td>
+                {% else %}
+                <td style="font-size: 150%">{{ item.stock }}</td>
+            {% endif %}
+        {% endif %}
+        </tr>
+    {% endfor %}
+    </table>
+        <div class="center" style="float: left;width: 55%;margin-left: 45%">
+        <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {% if store_item.id == 8 %}
+                    {{ form.colour8(size=1) }}
+                        {% endif %}
+                    {% if store_item.id == 9 %}
+                        {{ form.colour9(size=1) }}
+                        {% endif %}
+                    {% if store_item.id == 10 or 11 or 12 or 13%}
+                        {{ form.music(size1=1) }}
+                        {% endif %}
+                    {{ form.amount(size=1) }}
+                    {{ form.submit() }}
+                </p>
+        </form>
+        <p id="thesize"></p>
+    <br>
+    {% else %}
 <div class="text-center"><h1>{{ store_item.name }}</h1></div>
     <p style="float: left; width: 25%"></p>
         <img style="float: left; width: 25%" src="{{ url_for("static", filename=store_item.image) }}">
@@ -50,4 +96,5 @@ $("#size").change(function () {
     <br>
 
     </div>
+    {% endif %}
 {% endblock %}
