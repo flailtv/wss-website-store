@@ -106,9 +106,6 @@ class edit_user_level(FlaskForm):
     submit = SubmitField("Submit")
 
 class add_to_cart(FlaskForm):
-    music = SelectField(choices=[("Select Colour", "Select Colour"), ("N/A", "N/A")])
-    colour8 = SelectField(choices=[("Select Colour", "Select Colour"), ("Red", "Red"), ("Blue", "Blue")])
-    colour9 = SelectField(choices=[("Select Colour", "Select Colour"), ("Black", "Black")])
     size = SelectField(choices=[("Select Size", "Select Size"), ("S", "S"), ("M", "M"), ("L","L"), ("XL", "XL")])
     amount = SelectField(choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9")])
     submit = SubmitField("Add To Cart")

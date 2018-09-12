@@ -150,7 +150,7 @@ def confirmation():
         if current_user.id == j.userid:
             the_price = int(j.price) * int(j.quantity)
             final_price = int(final_price) + int(the_price)
-            final_price = int(final_price) + 4
+    final_price = int(final_price) + 4
     if form.validate_on_submit():
         for i in cart.query.all():
             if current_user.id == i.userid:
@@ -223,8 +223,8 @@ def order_page():
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):
-    form = add_to_cart()
     the_item = Store.query.filter_by(id=item_id).first()
+    form = add_to_cart()
     if form.validate_on_submit():
         if current_user.is_anonymous:
             return redirect(url_for("login"))
@@ -238,7 +238,7 @@ def store_item(item_id):
                                     item1.quantity = item1.quantity + 1
                                     db.session.commit()
                                     return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),stock=stock.query.all(), form=form, user=User.query.all())
-                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, size=form.size.data, price=the_item.price)
+                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price)
                         db.session.add(item)
                         db.session.commit()
                         flash("Item Has Been Added To Your Cart!")
@@ -411,7 +411,7 @@ def edit_profile():
     return render_template("user/edit_profile.html", title="Edit-", form=form)
 
 
-@app.route("/admin")
+@app.route("/admin", methods=["GET", "POST"])
 def admin():
     if current_user.is_anonymous:
         return redirect(404)
@@ -419,7 +419,16 @@ def admin():
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel >= 2:
-                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all())
+                    thedect = {}
+                    thelist = []
+                    for i in stock.query.all():
+                        thedect[i] = (i.bought, i.id)
+                    for j in thedect:
+                        thelist.append(thedect[j])
+                    thelist = sorted(thelist, reverse=True)
+                    # for x in sorted(thelist, reverse=True):
+                    #     print(x[1])
+                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist = thelist)
                     # return render_template("user/admin.html", title="Admin-")
                 else:
                     return redirect(404)

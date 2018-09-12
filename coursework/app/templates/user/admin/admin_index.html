@@ -1,10 +1,49 @@
 {% extends "user/admin/admin_layout.html" %}
 
 {% block head %}
-
+    <style>
+    #tbl tr{
+        padding:5px 10px 5px 10px;
+        border:solid 1px #000000;
+        font-size:20px;
+        font-family:Rockwell;
+    }
+    #top{
+        border: solid 1px #000000;
+    }
+    </style>
 {% endblock %}
 
 {% block body %}
-google charts and main data
+    <table id="tbl">
+    <tr>
+        <th id="top">Item Id</th>
+        <th id="top">Stock ID</th>
+        <th id="top">Item Name</th>
+        <th id="top">Item Size</th>
+        <th id="top">Amount Bought</th>
+        <th id="top">Profit</th>
+        <th id="top">Total Profit</th>
+    </tr>
+    {% for k in thelist %}
+        {% for i in stock %}
+            {% for j in store %}
+                {% if j.id == i.itemid %}
+                    {% if k[1] == i.id %}
+                        <tr>
+                            <th>{{ i.itemid }}</th>
+                            <th>{{ i.id }}</th>
+                            <th>{{ j.name }}</th>
+                            <th>{{ i.size }}</th>
+                            <th>{{ i.bought }}</th>
+                            <th>£{{ j.price - j.cost }}</th>
+                            <th>£{{ (j.price - j.cost)*i.bought }}</th>
+                        </tr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+    </table>
 {#    TODO Finnish this page #}
 {% endblock %}

@@ -23,8 +23,8 @@
                 <tr>
                     <th> </th>
                     <th>Name</th>
-                    <th>Quantity</th>
                     <th>Size</th>
+                    <th>Quantity</th>
                     <th>Price</th>
                 </tr>
     {% for item in cart %}
@@ -40,7 +40,9 @@
                         </tr>
                     {% endif %}
                 {% endfor %}
-                        <tr>
+            {% endif %}
+        {% endfor %}
+    <tr>
                             <th> </th>
                             <th> </th>
                             <th> </th>
@@ -54,8 +56,6 @@
                             <td>Total</td>
                             <td>£{{ final_price }}</td>
                         </tr>
-            {% endif %}
-        {% endfor %}
     </table>
     <div style="float: left; width: 50%">
         <div class="text-center">
