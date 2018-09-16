@@ -9,9 +9,6 @@ import arrow
 
 
 # TODO Add email comfirmation
-# TODO Profits and Google Charts API
-# TODO Add music_play to every single thing
-# TODO scrape wss
 # TODO When item is bought add purchase to stock database
 # TODO Remove the delivered orders from the admin page
 # Fonts: Navbar- Century Gothic  Titles-Rockwell  Text-Myriad Pro
@@ -113,7 +110,7 @@ def accessories():
 @app.route("/store/cart", methods=["GET", "POST"])
 @login_required
 def the_cart():
-    final_price = 0
+    final_price = 0     #This finds the total price of all the items in the cart
     for j in cart.query.all():
         if current_user.id == j.userid:
             the_price = int(j.price) * int(j.quantity)
@@ -150,7 +147,7 @@ def confirmation():
         if current_user.id == j.userid:
             the_price = int(j.price) * int(j.quantity)
             final_price = int(final_price) + int(the_price)
-    final_price = int(final_price) + 4
+    final_price = int(final_price) + 4  #This makes the total amount from the items in the cart and adds the shipping cost (£4)
     if form.validate_on_submit():
         for i in cart.query.all():
             if current_user.id == i.userid:
@@ -426,10 +423,20 @@ def admin():
                     for j in thedect:
                         thelist.append(thedect[j])
                     thelist = sorted(thelist, reverse=True)
-                    # for x in sorted(thelist, reverse=True):
-                    #     print(x[1])
-                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist = thelist)
-                    # return render_template("user/admin.html", title="Admin-")
+                    total_cost = 0
+                    total_prof = 0
+                    total_price = 0
+                    for i in stock.query.all():
+                        for j in Store.query.all():
+                            if i.itemid == j.id:
+                                ind_cost = j.cost * i.bought
+                                ind_profit = j.price-j.cost
+                                ind_profit1 = ind_profit*i.bought
+                                total_cost += ind_cost
+                                total_prof += ind_profit1
+                                ind_price = j.price*i.bought
+                                total_price += ind_price
+                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist = thelist, total_cost=total_cost, total_prof=total_prof, total_price=total_price)
                 else:
                     return redirect(404)
 
@@ -452,25 +459,6 @@ def edit_user_access_level():
                 else:
                     return redirect(404)
 
-#
-# @app.route("/admin/update", methods=["GET", "POST"])
-# def update_order():
-#     if current_user.is_anonymous:
-#         return redirect(404)
-#     else:
-#         for i in User.query.all():
-#             if i.id == current_user.id:
-#                 if i.accesslevel >= 2:
-#                     form = update_orders_form()
-#                     if form.validate_on_submit():
-#                         for k in orders.query.all():
-#                             if int(k.order_id) == int(form.select.data):
-#                                 k.order_status = form.update.data
-#                                 db.session.commit() #TODO SEND OUT EMAIL
-#                                 flash("Changes Made")
-#                     return render_template("user/update_order.html", title="Admin-", form=form)
-#                 else:
-#                     return redirect(404)
 
 
 @app.errorhandler(404)

@@ -9,15 +9,40 @@
         font-family:Rockwell;
     }
     #top{
-        border: solid 1px #000000;
+        border: solid 1px black;
     }
     </style>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+      // Load the Visualization API and the corechart package.
+      google.charts.load('current', {'packages':['corechart']});
+
+      // Set a callback to run when the Google Visualization API is loaded.
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Total Cost');
+        data.addColumn('number', 'Total Profit');
+        data.addRows([['Total Cost: £{{ total_cost }}', {{ total_cost }}], ['Total Profit: £{{ total_prof }}', {{ total_prof }}]]);
+      // Set chart options
+        var options = {'title':'Total Cost:Profit Ratio. Total Revenue: £{{ total_price }}',
+                       'width':800,
+                       'height':600};
+        var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
 {% endblock %}
 
 {% block body %}
+    <div class="text-center">
+    <div style="float: left; width: 50%">
     <table id="tbl">
     <tr>
-        <th id="top">Item Id</th>
+        <th >Item Id</th>
         <th id="top">Stock ID</th>
         <th id="top">Item Name</th>
         <th id="top">Item Size</th>
@@ -45,5 +70,9 @@
         {% endfor %}
     {% endfor %}
     </table>
-{#    TODO Finnish this page #}
+    </div>
+    <div style="float: left;width: 50%">
+        <div id="chart_div"></div>
+    </div>
+    </div>
 {% endblock %}
