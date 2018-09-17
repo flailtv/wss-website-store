@@ -37,16 +37,19 @@
         {% for i in orders %}
             {% for j in users %}
                 {% if i.userid == j.id %}
-        <tr style="border: solid 1px black">
-            <th>{{ i.order_id }}</th>
-            <th>{{ i.userid }}</th>
-            <th>{{ j.name }}</th>
-            <th>{{ i.item_id }}</th>
-            <th>{{ i.item_quant }}</th>
-            <th>{{ i.date }}</th>
-            <th>£{{ i.price }}</th>
-            <th>{{ i.order_status }}</th>
-        </tr>
+                    {% if i.order_status == "Delivered" %}
+                        {% else %}
+                            <tr style="border: solid 1px black">
+                                <th>{{ i.order_id }}</th>
+                                <th>{{ i.userid }}</th>
+                                <th>{{ j.name }}</th>
+                                <th>{{ i.item_id }}</th>
+                                <th>{{ i.item_quant }}</th>
+                                <th>{{ i.date }}</th>
+                                <th>£{{ i.price }}</th>
+                                <th>{{ i.order_status }}</th>
+                            </tr>
+                        {% endif %}
                 {% endif %}
                 {% endfor %}
         {% endfor %}

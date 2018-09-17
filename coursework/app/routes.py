@@ -1,16 +1,14 @@
 from app import app, db, mail
+from config import Config
 from flask import render_template, redirect, url_for, flash, request, Flask
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
 from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
-from flask_mail import Message
 import arrow
-
 
 # TODO Add email comfirmation
 # TODO When item is bought add purchase to stock database
-# TODO Remove the delivered orders from the admin page
 # Fonts: Navbar- Century Gothic  Titles-Rockwell  Text-Myriad Pro
 
 # Upload Files from Flask Mega Tutorial
@@ -206,11 +204,11 @@ def order_page():
                             if int(k.order_id) == int(form.select.data):
                                 k.order_status = form.update.data
                                 db.session.commit()
-                                # for person in User.query.all():
-                                #     if person.id == k.userid:
-                                #         if str(form.update.data) == "Dispatched":
-                                #             msg = Message("Your Order Has Been Dispatched", sender="donotreply@wss.com", recipients=str(person.email))
-                                #             mail.send(msg)
+                                for person in User.query.all():
+                                    if person.id == k.userid:
+                                        if str(form.update.data) == "Dispatched":
+                                            msg = "Your Order Has Been Dispatched"
+                                            Config.server.sendmail("whileshesleeps.store.tester@gmail.com", person.email, msg)
                                 # TODO SEND OUT EMAIL
                                 flash("Changes Made")
                     return render_template("user/admin/orders.html", title="Admin-", orders=orders.query.all(), users=User.query.all(), form=form)
@@ -279,7 +277,6 @@ def additem():
                 else:
                     return redirect(url_for(404))
     return render_template("store/store_add.html", title="Admin-", form=form)
-# TODO Add this to admin tools directly rather than a link
 
 
 @app.route("/admin/users", methods=["GET", "POST"])
@@ -439,26 +436,6 @@ def admin():
                     return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist = thelist, total_cost=total_cost, total_prof=total_prof, total_price=total_price)
                 else:
                     return redirect(404)
-
-
-@app.route("/owner/edituser", methods=["GET", "POST"])
-def edit_user_access_level():
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
-        for i in User.query.all():
-            if i.username == current_user.username:
-                if i.accesslevel == 3:
-                    form = edit_user_level()
-                    for j in User.query.all():
-                        if j.username == str(form.username.data):
-                            j.accesslevel = form.accesslevel.data
-                            db.session.commit()
-                            flash("Changes Made")
-                    return render_template("notinuse/change_user_level.html", title="Owner-", form=form)
-                else:
-                    return redirect(404)
-
 
 
 @app.errorhandler(404)
