@@ -1,4 +1,4 @@
-from app import app, db, mail
+from app import app, db
 from config import Config
 from flask import render_template, redirect, url_for, flash, request, Flask
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
@@ -159,8 +159,9 @@ def confirmation():
                 for user in User.query.all():
                     if user.id == current_user.id:
                         card_no = user.card
-                item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing",
+                        item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing",
                               date=current_date, price=(int(i.price)*int(i.quantity)), card=card_no)
+                        Config.server.sendmail("whileshesleeps.store.tester@gmail.com", i.email, "Your Order Has Been Placed")
                 db.session.add(item)
                 db.session.commit()
                 db.session.delete(i)
@@ -208,7 +209,9 @@ def order_page():
                                     if person.id == k.userid:
                                         if str(form.update.data) == "Dispatched":
                                             msg = "Your Order Has Been Dispatched"
-                                            Config.server.sendmail("whileshesleeps.store.tester@gmail.com", person.email, msg)
+                                        elif str(form.update.data) == "Delivered":
+                                            msg = "Your Order Hhas Been Delivered"
+                                        Config.server.sendmail("whileshesleeps.store.tester@gmail.com", person.email, msg)
                                 # TODO SEND OUT EMAIL
                                 flash("Changes Made")
                     return render_template("user/admin/orders.html", title="Admin-", orders=orders.query.all(), users=User.query.all(), form=form)
