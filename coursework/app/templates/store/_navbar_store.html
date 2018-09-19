@@ -5,9 +5,6 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
-{#          <li class="nav-item active">#}
-{#            <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>#}
-{#          </li>#}
             <li class="nav-item">
                 <a class="nav-link">    </a>
             </li>
@@ -29,7 +26,6 @@
             <li class="nav-item">
                 <a id="store_cart" class="nav-link" href="/store/cart"><h1 style="font-size: 160%;font-family: 'Century Gothic'"><b>Cart</b></h1></a>
             </li>
-
         </ul>
           <ul class="navbar navbar-nav navbar-right">
             <li class="nav-item">
@@ -44,7 +40,6 @@
                     <a class="nav-link" href="{{ url_for('profile', username=current_user.username) }}"><h1 style="font-size:175%;text-align: right;margin-top: 0.4em;font-family: 'Century Gothic'"><b>Profile</b></h1></a>
                 </li>
               {% endif %}
-
           </ul>
       </div>
     </nav>

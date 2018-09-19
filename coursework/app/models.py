@@ -79,12 +79,3 @@ class cart(db.Model):
     quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
     size = db.Column(db.String)
-
-
-class musicplayer(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    track = db.Column(db.Integer)
-    name = db.Column(db.String)
-    album = db.Column(db.String)
-    file = db.Column(db.String)
-    cover = db.Column(db.String)

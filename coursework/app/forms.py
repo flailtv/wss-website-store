@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, SelectField, DateTimeField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import orders, User, stock, Concerts
 
@@ -82,7 +82,7 @@ class edit_shows(FlaskForm):
                  ("30", "30"), ("31", "31")])
     month = SelectField(
         choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"),
-                 ("9", "9"), ("10", "10"), ("11", "11"), ("12", "12")] )
+                 ("9", "9"), ("10", "10"), ("11", "11"), ("12", "12")])
     year = SelectField(choices=[("2018", "2018"), ("2019", "2019"), ("2020", "2020"), ("2021", "2021")])
     the_list = [(None, "Select Show ID")]
     for i in Concerts.query.all():
@@ -110,6 +110,7 @@ class add_to_cart(FlaskForm):
     amount = SelectField(choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9")])
     submit = SubmitField("Add To Cart")
 
+
 class add_item_to_store(FlaskForm):
     id = StringField("Item ID", validators=[DataRequired()])
     name = StringField("Item Name", validators=[DataRequired()])
@@ -125,7 +126,6 @@ class add_item_to_store(FlaskForm):
     catagory = SelectField(
         choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens"), ("Outwear", "Outwear"), ("Accessories", "Accessories")]
     )
-#TODO Finish Add Item To Store Form and catagory form
 
 
     def validate_id(self, id):
@@ -170,4 +170,3 @@ class update_orders_form(FlaskForm):
         choices=[(None, "Select Status"), ("Dispatched", "Dispatched"), ("Delivered", "Delivered")]
     )
     submit = SubmitField("Submit")
-

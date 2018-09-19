@@ -2,47 +2,11 @@ from app import app, db
 from config import Config
 from flask import render_template, redirect, url_for, flash, request, Flask
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
-from app.models import User, Concerts, Store, stock, orders, cart, musicplayer
+from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.utils import secure_filename
 import arrow
 
-# TODO Add email comfirmation
-# TODO When item is bought add purchase to stock database
 # Fonts: Navbar- Century Gothic  Titles-Rockwell  Text-Myriad Pro
-
-# Upload Files from Flask Mega Tutorial
-upload_folder_mens = "static/images/mens"
-upload_folder_womens = "static/images/womens"
-allowed_extensions = set(["png", "jpg", "jpeg"])
-app.config["upload_folder_mens"] = upload_folder_mens
-app.config["upload_folder_womens"] = upload_folder_womens
-
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1]/lower() in allowed_extensions
-
-@app.route("/test", methods=["GET", "POST"])
-def test_uplaod():
-    form = add_item_to_store()
-    if request.method == "POST":
-        if "file" not in request.files:
-            flash("No File Part")
-            return redirect(request.url)
-        file = request.files["file"]
-        if file.filename == "":
-            flash("No Selected File")
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            if str(form.catagory.data) == "Mens":
-                file.save(os.path.join(app.config["upload_folder_mens"], filename))
-                return redirect(url_for("uploaded_file", filename=filename))
-            elif str(form.catagory.data) == "Womens":
-                file.save(os.path.join(app.config["upload_folder_mens"], filename))
-                return redirect(url_for("uploaded_file", filename=filename))
-    return render_template("test.html", form=form)
-#             TODO finnish this test with a file and check that it works
-
 
 @app.route('/')
 def index():
@@ -67,7 +31,7 @@ def shows():
 
 @app.route("/music")
 def music():
-    return render_template("Music.html", title="Music-", music=musicplayer.query.all())
+    return render_template("Music.html", title="Music-")
 
 @app.route("/photos")
 def photos():
@@ -151,7 +115,7 @@ def confirmation():
             if current_user.id == i.userid:
                 for j in stock.query.all():
                     if i.itemid == j.itemid:
-                        j.stock = int(j.stock) - (i.quantity)
+                        j.stock = int(j.stock)-i.quantity
                         j.bought = int(j.bought) + int(i.quantity)
                         db.session.commit()
                 current_date = arrow.now().format("DD-MM-YYYY")
@@ -167,6 +131,7 @@ def confirmation():
                 db.session.delete(i)
                 db.session.commit()
         flash("Order Has Been Placed")
+        return redirect(url_for("store"))
     return render_template("store/confirm.html", title="Store-", cart=cart.query.all(), form=form, store=Store.query.all(), users=User.query.all(), final_price=final_price)
 
 
@@ -210,9 +175,8 @@ def order_page():
                                         if str(form.update.data) == "Dispatched":
                                             msg = "Your Order Has Been Dispatched"
                                         elif str(form.update.data) == "Delivered":
-                                            msg = "Your Order Hhas Been Delivered"
+                                            msg = "Your Order Has Been Delivered"
                                         Config.server.sendmail("whileshesleeps.store.tester@gmail.com", person.email, msg)
-                                # TODO SEND OUT EMAIL
                                 flash("Changes Made")
                     return render_template("user/admin/orders.html", title="Admin-", orders=orders.query.all(), users=User.query.all(), form=form)
                 else:
@@ -243,7 +207,6 @@ def store_item(item_id):
                     else:
                         flash("There Is No Stock Available")
     return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
-#TODO Stop Items With No Stock Being Added To Cart
 
 
 @app.route("/admin/additem")
@@ -373,7 +336,7 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel = 1, name = form.name.data)
+        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel=1, name = form.name.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -436,7 +399,7 @@ def admin():
                                 total_prof += ind_profit1
                                 ind_price = j.price*i.bought
                                 total_price += ind_price
-                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist = thelist, total_cost=total_cost, total_prof=total_prof, total_price=total_price)
+                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist=thelist, total_cost=total_cost, total_prof=total_prof, total_price=total_price)
                 else:
                     return redirect(404)
 

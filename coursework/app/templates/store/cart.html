@@ -35,8 +35,6 @@
             <th>Price</th>
         </tr>
         {% for j in cart %}
-{#            {{ the_price = j.price * j.quantity }}#}
-{#            {{ final_price =final_price + the_price }}#}
             {% if j.userid == i.id %}
                 {% for item in store %}
                     {% if j.itemid == item.id %}
@@ -63,9 +61,5 @@
     {% endif %}
 {% endfor %}
 <a id="word" style="float: right; padding-right: 14px; font-size: 160%" href="{{ url_for("delivery") }}">Checkout</a>
-{#<form action="" method="post" style="float: right; padding-right: 14px">#}
-{#            {{ form.hidden_tag() }}#}
-{#            <p>{{ form.submit() }}</p>#}
-{#    </form>#}
 </div>
 {% endblock %}

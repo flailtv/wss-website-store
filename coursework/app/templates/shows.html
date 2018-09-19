@@ -1,6 +1,5 @@
 {%  extends "layout.html" %}
 
-
 {% block head %}
 <style>
 #current_shows{
@@ -9,13 +8,11 @@
 </style>
 {% endblock %}
 
-
 {% block body %}
 <div class="text-center">
     <h1 style="font-family: Rockwell" >Shows</h1>
     {% for i in concerts %}
         <p style="font-family: Rockwell">{{ i.location }} -- {{ i.venue }} -- {{ i.day }}-{{ i.month }}-{{ i.year }}</p>
     {% endfor %}
-
 </div>
 {% endblock %}
