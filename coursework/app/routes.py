@@ -94,7 +94,7 @@ def pay():
         for i in User.query.all():
             if i.id == current_user.id:
                 card_no = str(form.card.data)
-                i.card = card_no[-5:-1]
+                i.card = card_no[-5:-1]   #Brings forward the last 4 digits of the card number
                 db.session.commit()
         return redirect(url_for("confirmation"))
     return render_template("store/pay.html", title="Store-", form=form)
@@ -119,7 +119,6 @@ def confirmation():
                         j.bought = int(j.bought) + int(i.quantity)
                         db.session.commit()
                 current_date = arrow.now().format("DD-MM-YYYY")
-                card_no = "N/A"
                 for user in User.query.all():
                     if user.id == current_user.id:
                         card_no = user.card

@@ -15,7 +15,7 @@ $("#size").change(function () {
 {% block body %}
 <div class="text-center"><h1>{{ store_item.name }}</h1></div>
     <p style="float: left; width: 25%"></p>
-        {% if store_item.id == 10 or store_item.id == 11 or store_item.id == 12 or store_item.id == 13 %}
+        {% if store_item.id == 10 or store_item.id == 11 or store_item.id == 12 or store_item.id == 13 or store_item.id == 8 %}
             <div class="text-center"><img style="float: left; width: 25%;margin-left: 13%" src="{{ url_for("static", filename=store_item.back_image) }}">
             {% elif store_item.id == 8 %}
                 <img style="width: 25%;float: left" src="{{ url_for("static", filename=store_item.image) }}"></div>
