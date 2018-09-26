@@ -1,6 +1,6 @@
 from app import app, db
 from config import Config
-from flask import render_template, redirect, url_for, flash, request, Flask
+from flask import render_template, redirect, url_for, flash
 from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
@@ -122,19 +122,18 @@ def confirmation():
                 for user in User.query.all():
                     if user.id == current_user.id:
                         card_no = user.card
-                        item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing",
-                              date=current_date, price=(int(i.price)*int(i.quantity)), card=card_no)
+                        item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=(int(i.price)*int(i.quantity)), card=card_no)
                         Config.server.sendmail("whileshesleeps.store.tester@gmail.com", i.email, "Your Order Has Been Placed")
-                db.session.add(item)
-                db.session.commit()
-                db.session.delete(i)
-                db.session.commit()
+                        db.session.add(item)   #adss items to order list
+                        db.session.commit()
+                        db.session.delete(i)   #removes items from cart
+                        db.session.commit()
         flash("Order Has Been Placed")
         return redirect(url_for("store"))
     return render_template("store/confirm.html", title="Store-", cart=cart.query.all(), form=form, store=Store.query.all(), users=User.query.all(), final_price=final_price)
 
 
-@app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")
+@app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")  #removing item from cart
 @login_required
 def remove_item_cart(the_cart_id):
     for i in cart.query.all():
@@ -171,6 +170,7 @@ def order_page():
                                 db.session.commit()
                                 for person in User.query.all():
                                     if person.id == k.userid:
+                                        msg = "None"
                                         if str(form.update.data) == "Dispatched":
                                             msg = "Your Order Has Been Dispatched"
                                         elif str(form.update.data) == "Delivered":
@@ -210,6 +210,7 @@ def store_item(item_id):
 
 @app.route("/admin/additem")
 def additem():
+    form = add_item_to_store()
     if current_user.is_anonymous:
         return redirect(404)
     else:
@@ -267,9 +268,9 @@ def shows_page():
     if current_user.is_anonymous:
         return redirect(404)
     else:
-        for i in User.query.all():
-            if current_user.id == i.id:
-                if i.accesslevel >= 2:
+        for j in User.query.all():
+            if current_user.id == j.id:
+                if j.accesslevel >= 2:
                     form = add_shows()
                     form2 = edit_shows()
                     if form.validate_on_submit():
@@ -301,9 +302,9 @@ def stock_page():
                 if i.accesslevel >= 2:
                     form = topup_form()
                     if form.validate_on_submit():
-                        for i in stock.query.all():
-                            if str(form.item.data) == str(i.id):
-                                i.stock = i.stock + int(form.amount.data)
+                        for j in stock.query.all():
+                            if str(form.item.data) == str(j.id):
+                                j.stock = j.stock + int(form.amount.data)
                                 db.session.commit()
                                 flash("Stock Updated")
                     return render_template("user/admin/stock.html", title="Admin-", stock=stock.query.all(), store=Store.query.all(), form=form, users=User.query.all())
@@ -335,7 +336,7 @@ def logout():
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel=1, name = form.name.data)
+        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel=1, name=form.name.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -347,7 +348,7 @@ def register():
 @app.route("/user/<username>")
 @login_required
 def profile(username):
-    return render_template("user/profile.html", title="Profile-", user=User.query.all())
+    return render_template("user/profile.html", title="Profile-", user=User.query.all(), the_username=username)
 
 
 @app.route("/edit", methods=["GET", "POST"])
@@ -375,13 +376,13 @@ def admin():
     if current_user.is_anonymous:
         return redirect(404)
     else:
-        for i in User.query.all():
-            if i.username == current_user.username:
-                if i.accesslevel >= 2:
+        for o in User.query.all():
+            if o.username == current_user.username:
+                if o.accesslevel >= 2:
                     thedect = {}
                     thelist = []
-                    for i in stock.query.all():
-                        thedect[i] = (i.bought, i.id)
+                    for k in stock.query.all():
+                        thedect[k] = (k.bought, k.id)
                     for j in thedect:
                         thelist.append(thedect[j])
                     thelist = sorted(thelist, reverse=True)
