@@ -19,10 +19,10 @@ def about():
 
 
 @app.route("/shows")
-def shows():
-    current_date = arrow.now().format("YYYYMMDD")
-    for i in Concerts.query.all():
-        t = str(i.year) + str(i.month) + str(i.day)
+def shows():                                          ### shows html page ###
+    current_date = arrow.now().format("YYYYMMDD")       # Parameters: None #
+    for i in Concerts.query.all():                      # Return shows.html with the title "Shows" and passes in the Concerts Database #
+        t = str(i.year) + str(i.month) + str(i.day)     # Purpose: To check the date and compare them against the shows int he concerts database. If the show has a date that has already happened, then it is deleted from the database. Then it presents the shows page on the website #
         if int(t) < int(current_date):
             db.session.delete(i)
             db.session.commit()
@@ -71,10 +71,10 @@ def accessories():
 
 @app.route("/store/cart", methods=["GET", "POST"])
 @login_required
-def the_cart():
-    final_price = 0     #This finds the total price of all the items in the cart
-    for j in cart.query.all():
-        if current_user.id == j.userid:
+def the_cart():                                          ### Shopping Cart HTML Page ###
+    final_price = 0                                        # Parameters: None #
+    for j in cart.query.all():                             # Return: cart.html and passes the User, cart and store databases and the final price
+        if current_user.id == j.userid:                    # Purpose: To display the the shopping cart of the logged in user. It also calculates the total price of all that user's items in the cart and passes it into the html file #
             the_price = int(j.price) * int(j.quantity)
             final_price = int(final_price) + int(the_price)
     return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price)
@@ -88,26 +88,33 @@ def delivery():
 
 @app.route("/store/pay", methods=["GET", "POST"])
 @login_required
-def pay():
-    form = pay_money()
-    if form.validate_on_submit():
-        for i in User.query.all():
+def pay():                                            ### Payment HTML File ###
+    form = pay_money()                                  # Parameters: None #
+    if form.validate_on_submit():                       # Return: pay.html file and passes in the pay_money() #
+        for i in User.query.all():                      # Purpose: To display the payment html file and then redirects to confirmation screen when completed. It also saves the last 4 digits of the payment card to the database #
             if i.id == current_user.id:
-                card_no = str(form.card.data)
-                i.card = card_no[-5:-1]   #Brings forward the last 4 digits of the card number
-                db.session.commit()
+                print(form.cvv.data)
+                try:
+                    if int(form.card.data):
+                        if int(form.cvv.data):
+                            card_no = str(form.card.data)
+                            i.card = card_no[-5:-1]
+                            db.session.commit()
+                except:
+                    flash("Card Number or CVV must be a number")
+                    return render_template("store/pay.html", title="Store-", form=form)
         return redirect(url_for("confirmation"))
     return render_template("store/pay.html", title="Store-", form=form)
 
 
 @app.route("/store/confirm", methods=["GET", "POST"])
 @login_required
-def confirmation():
-    form = pay_form()
-    final_price = 0
-    for j in cart.query.all():
-        if current_user.id == j.userid:
-            the_price = int(j.price) * int(j.quantity)
+def confirmation():                                             ### Confirmation Page ###
+    form = pay_form()                                             # Parameters: None #
+    final_price = 0                                               # Returns: confirm.html and passes the cart, store and users databases, and the final price and pay_form #
+    for j in cart.query.all():                                    # Purpose: To show the cart of the user checking out, their payment details and their address that the items are being shipped to. #
+        if current_user.id == j.userid:                           # It shows the total price of the items and the shipping cost of the items. It also adds the items to the order list and remove said items from the cart. #
+            the_price = int(j.price) * int(j.quantity)            # Finally, it sends out an email confirming your order #
             final_price = int(final_price) + int(the_price)
     final_price = int(final_price) + 4  #This makes the total amount from the items in the cart and adds the shipping cost (£4)
     if form.validate_on_submit():
@@ -135,10 +142,10 @@ def confirmation():
 
 @app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")  #removing item from cart
 @login_required
-def remove_item_cart(the_cart_id):
-    for i in cart.query.all():
-        if i.cart_id == int(the_cart_id):
-            if i.quantity == 1:
+def remove_item_cart(the_cart_id):             ### Remove item from cart ###
+    for i in cart.query.all():                   # Parameters: None #
+        if i.cart_id == int(the_cart_id):        # Returns: a redirect for the cart web page #
+            if i.quantity == 1:                  # Purpose: To remove a specific item from the users cart, or lower the quantity of said item #
                 db.session.delete(i)
                 db.session.commit()
             else:
@@ -191,18 +198,24 @@ def store_item(item_id):
             return redirect(url_for("login"))
         else:
             for i in stock.query.all():
+                print("HGFUGUIF")
                 if i.itemid == the_item.id:
                     if i.stock > 0:
                         for item1 in cart.query.all():
+                            print("find")
                             if item1.userid == current_user.id:
                                 if i.itemid == item1.itemid:
+                                    print(i.itemid)
                                     item1.quantity = item1.quantity + 1
                                     db.session.commit()
                                     return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),stock=stock.query.all(), form=form, user=User.query.all())
+                                else:
+                                    print("HERE")
                         item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price)
                         db.session.add(item)
                         db.session.commit()
                         flash("Item Has Been Added To Your Cart!")
+                        break
                     else:
                         flash("There Is No Stock Available")
     return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())

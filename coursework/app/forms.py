@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, IntegerField
+from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length, NumberRange
 from app.models import orders, User, stock, Concerts
 
 
@@ -105,6 +105,7 @@ class edit_user_level(FlaskForm):
     password = PasswordField("Enter Your Password ", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
+
 class add_to_cart(FlaskForm):
     size = SelectField(choices=[("Select Size", "Select Size"), ("S", "S"), ("M", "M"), ("L","L"), ("XL", "XL")])
     amount = SelectField(choices=[("1", "1"), ("2", "2"), ("3", "3"), ("4", "4"), ("5", "5"), ("6", "6"), ("7", "7"), ("8", "8"), ("9", "9")])
@@ -127,7 +128,6 @@ class add_item_to_store(FlaskForm):
         choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens"), ("Outwear", "Outwear"), ("Accessories", "Accessories")]
     )
 
-
     def validate_id(self, id):
         user = User.query.filter_by(id=id.data).first()
         if id is not None:
@@ -138,9 +138,9 @@ class checkout(FlaskForm):
     submit = SubmitField("Checkout")
 
 class pay_money(FlaskForm):
-    card = StringField("Card Number", validators=[DataRequired()])
-    date = StringField("Expiry Date", validators=[DataRequired()])
-    cvv = StringField("CVV", validators=[DataRequired()])
+    card = StringField("Card Number", validators=[DataRequired(), Length(min=16, max=16)])
+    date = StringField("Expiry Date", validators=[DataRequired(), Length(min=5, max=5)])
+    cvv = StringField("CVV", validators=[DataRequired(), Length(min=3, max=16)])
     submit = SubmitField("Next")
 
 class topup_form(FlaskForm):

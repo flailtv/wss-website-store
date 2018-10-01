@@ -8,6 +8,6 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL") or "sqlite:///" + os.path.join(basedir, "app.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    # server = smtplib.SMTP(host="smtp.gmail.com", port=587)
-    # server.starttls()
-    # server.login("whileshesleeps.store.tester@gmail.com", "whileshesleeps")
+    server = smtplib.SMTP(host="smtp.gmail.com", port=587)
+    server.starttls()
+    server.login("whileshesleeps.store.tester@gmail.com", "whileshesleeps")
