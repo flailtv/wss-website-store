@@ -113,8 +113,8 @@ def confirmation():                                             ### Confirmation
     form = pay_form()                                             # Parameters: None #
     final_price = 0                                               # Returns: confirm.html and passes the cart, store and users databases, and the final price and pay_form #
     for j in cart.query.all():                                    # Purpose: To show the cart of the user checking out, their payment details and their address that the items are being shipped to. #
-        if current_user.id == j.userid:                           # It shows the total price of the items and the shipping cost of the items. It also adds the items to the order list and remove said items from the cart. #
-            the_price = int(j.price) * int(j.quantity)            # Finally, it sends out an email confirming your order #
+        if current_user.id == j.userid:                           #          It shows the total price of the items and the shipping cost of the items. It also adds the items to the order list and remove said items from the cart. #
+            the_price = int(j.price) * int(j.quantity)            #          Finally, it sends out an email confirming your order #
             final_price = int(final_price) + int(the_price)
     final_price = int(final_price) + 4  #This makes the total amount from the items in the cart and adds the shipping cost (£4)
     if form.validate_on_submit():
@@ -162,11 +162,11 @@ def the_orders():
 
 
 @app.route("/admin/orders", methods=["GET", "POST"])
-def order_page():
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
-        for i in User.query.all():
+def order_page():                                     ### Admin Order Page ###
+    if current_user.is_anonymous:                       # Parameters: None #
+        return redirect(404)                            # Returns: orders.html file and passes in the orders database, user database and update_orders_form #
+    else:                                               # Purpose: To check if the user is an admin and then if they are, show them all the orders and their #
+        for i in User.query.all():                      #          status. Oder status can be updated from here and when it is done, an email is sent out to the user making the order #
             if i.id == current_user.id:
                 if i.accesslevel >= 2:
                     form = update_orders_form()
@@ -190,11 +190,11 @@ def order_page():
 
 
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
-def store_item(item_id):
-    the_item = Store.query.filter_by(id=item_id).first()
-    form = add_to_cart()
-    if form.validate_on_submit():
-        if current_user.is_anonymous:
+def store_item(item_id):                                    # Item Page #
+    the_item = Store.query.filter_by(id=item_id).first()    # Parameters: item_id #
+    form = add_to_cart()                                    # Returns: store_item.html and passes in current item id, the store, stock and user databases and the add_to_cart form #
+    if form.validate_on_submit():                           # Purpose: To display the specific item that the user has clicked on and be able to add it to their cart. #
+        if current_user.is_anonymous:                       #          If the item has no stock, then it will not be added to cart #
             return redirect(url_for("login"))
         else:
             for i in stock.query.all():
@@ -222,11 +222,10 @@ def store_item(item_id):
 
 
 @app.route("/admin/additem")
-def additem():
-    form = add_item_to_store()
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
+def additem():                                              # Add an item to store #
+    if current_user.is_anonymous:                           # Parameters: None #
+        return redirect(404)                                # Returns: store_add.html file and passes in the add_item_to_store form #
+    else:                                                   # Purpose: To add a new item to the store but you must be an admin to do so, it checks this before displaying the page #
         for i in User.query.all():
             if i.username == current_user.username:
                 if i.accesslevel >= 2:
@@ -259,10 +258,10 @@ def additem():
 
 
 @app.route("/admin/users", methods=["GET", "POST"])
-def owner_user_access():
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
+def owner_user_access():                                          # User Access Levels #
+    if current_user.is_anonymous:                                 # Parameters: None #
+        return redirect(404)                                      # Returns: all_users.html file and passes in the user database and edit_user_level form #
+    else:                                                         # Purpose: For the owner to view and change the access levels of all users. Only access level 3 can access this page #
         for j in User.query.all():
             if current_user.id == j.id:
                 if j.accesslevel == 3:
@@ -277,10 +276,10 @@ def owner_user_access():
 
 
 @app.route("/admin/shows", methods=["GET", "POST"])
-def shows_page():
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
+def shows_page():                                                 # Shows Admin Page #
+    if current_user.is_anonymous:                                 # Parameters: None #
+        return redirect(404)                                      # Returns: shows.html file and passes in the concerts database and add_shows and edit_shows forms #
+    else:                                                         # Purpose: To see, update and add shows to the database. Only Users with an access
         for j in User.query.all():
             if current_user.id == j.id:
                 if j.accesslevel >= 2:
