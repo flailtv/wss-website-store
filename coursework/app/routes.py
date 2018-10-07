@@ -19,7 +19,7 @@ def about():
 
 
 @app.route("/shows")
-def shows():                                          ### shows html page ###
+def shows():                                            # Shows Page #
     current_date = arrow.now().format("YYYYMMDD")       # Parameters: None #
     for i in Concerts.query.all():                      # Return shows.html with the title "Shows" and passes in the Concerts Database #
         t = str(i.year) + str(i.month) + str(i.day)     # Purpose: To check the date and compare them against the shows int he concerts database. If the show has a date that has already happened, then it is deleted from the database. Then it presents the shows page on the website #
@@ -71,13 +71,14 @@ def accessories():
 
 @app.route("/store/cart", methods=["GET", "POST"])
 @login_required
-def the_cart():                                          ### Shopping Cart HTML Page ###
+def the_cart():                                            # Shopping Cart HTML Page #
     final_price = 0                                        # Parameters: None #
     for j in cart.query.all():                             # Return: cart.html and passes the User, cart and store databases and the final price
-        if current_user.id == j.userid:                    # Purpose: To display the the shopping cart of the logged in user. It also calculates the total price of all that user's items in the cart and passes it into the html file #
-            the_price = int(j.price) * int(j.quantity)
+        if current_user.id == j.userid:                    # Purpose: To display the the shopping cart of the logged in user. It also calculates the #
+            the_price = int(j.price) * int(j.quantity)     # total price of all that user's items in the cart and passes it into the html file #
             final_price = int(final_price) + int(the_price)
-    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(), final_price=final_price)
+    return render_template("store/cart.html", title="Store-", users=User.query.all(), cart=cart.query.all(), store=Store.query.all(),
+                           final_price=final_price)
 
 
 @app.route("/store/delivery")
@@ -88,11 +89,11 @@ def delivery():
 
 @app.route("/store/pay", methods=["GET", "POST"])
 @login_required
-def pay():                                            ### Payment HTML File ###
+def pay():                                              # Payment HTML File #
     form = pay_money()                                  # Parameters: None #
     if form.validate_on_submit():                       # Return: pay.html file and passes in the pay_money() #
-        for i in User.query.all():                      # Purpose: To display the payment html file and then redirects to confirmation screen when completed. It also saves the last 4 digits of the payment card to the database #
-            if i.id == current_user.id:
+        for i in User.query.all():                      # Purpose: To display the payment html file and then redirects to confirmation screen when #
+            if i.id == current_user.id:                 # completed. It also saves the last 4 digits of the payment card to the database #
                 print(form.cvv.data)
                 try:
                     if int(form.card.data):
@@ -109,12 +110,12 @@ def pay():                                            ### Payment HTML File ###
 
 @app.route("/store/confirm", methods=["GET", "POST"])
 @login_required
-def confirmation():                                             ### Confirmation Page ###
+def confirmation():                                               # Confirmation Page #
     form = pay_form()                                             # Parameters: None #
     final_price = 0                                               # Returns: confirm.html and passes the cart, store and users databases, and the final price and pay_form #
     for j in cart.query.all():                                    # Purpose: To show the cart of the user checking out, their payment details and their address that the items are being shipped to. #
-        if current_user.id == j.userid:                           #          It shows the total price of the items and the shipping cost of the items. It also adds the items to the order list and remove said items from the cart. #
-            the_price = int(j.price) * int(j.quantity)            #          Finally, it sends out an email confirming your order #
+        if current_user.id == j.userid:                           # It shows the total price of the items and the shipping cost of the items. It also adds the items to the order list and remove said items from the cart. #
+            the_price = int(j.price) * int(j.quantity)            # Finally, it sends out an email confirming your order #
             final_price = int(final_price) + int(the_price)
     final_price = int(final_price) + 4  #This makes the total amount from the items in the cart and adds the shipping cost (£4)
     if form.validate_on_submit():
@@ -129,7 +130,8 @@ def confirmation():                                             ### Confirmation
                 for user in User.query.all():
                     if user.id == current_user.id:
                         card_no = user.card
-                        item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date, price=(int(i.price)*int(i.quantity)), card=card_no)
+                        item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date,
+                                      price=(int(i.price)*int(i.quantity)), card=card_no)
                         Config.server.sendmail("whileshesleeps.store.tester@gmail.com", i.email, "Your Order Has Been Placed")
                         db.session.add(item)   #adss items to order list
                         db.session.commit()
@@ -137,7 +139,8 @@ def confirmation():                                             ### Confirmation
                         db.session.commit()
         flash("Order Has Been Placed")
         return redirect(url_for("store"))
-    return render_template("store/confirm.html", title="Store-", cart=cart.query.all(), form=form, store=Store.query.all(), users=User.query.all(), final_price=final_price)
+    return render_template("store/confirm.html", title="Store-", cart=cart.query.all(), form=form, store=Store.query.all(), users=User.query.all(),
+                           final_price=final_price)
 
 
 @app.route("/store/cart/wgbobgowubwnwhwpiew<the_cart_id>fgb3ighfvynotggb7gfb8ygfo8qgnf3rvyurywfry")  #removing item from cart
@@ -192,11 +195,11 @@ def order_page():                                     ### Admin Order Page ###
 @app.route("/store/item/<item_id>", methods=["GET", "POST"])
 def store_item(item_id):                                    # Item Page #
     the_item = Store.query.filter_by(id=item_id).first()    # Parameters: item_id #
-    form = add_to_cart()                                    # Returns: store_item.html and passes in current item id, the store, stock and user databases and the add_to_cart form #
-    if form.validate_on_submit():                           # Purpose: To display the specific item that the user has clicked on and be able to add it to their cart. #
-        if current_user.is_anonymous:                       #          If the item has no stock, then it will not be added to cart #
-            return redirect(url_for("login"))
-        else:
+    form = add_to_cart()                                    # Returns: store_item.html and passes in current item id, the store, stock and user #
+    if form.validate_on_submit():                           # databases and the add_to_cart form #
+        if current_user.is_anonymous:                       # Purpose: To display the specific item that the user has clicked on and be able to #
+            return redirect(url_for("login"))               # add it to their cart. #
+        else:                                               # If the item has no stock, then it will not be added to cart #
             for i in stock.query.all():
                 print("HGFUGUIF")
                 if i.itemid == the_item.id:
@@ -208,7 +211,8 @@ def store_item(item_id):                                    # Item Page #
                                     print(i.itemid)
                                     item1.quantity = item1.quantity + 1
                                     db.session.commit()
-                                    return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),stock=stock.query.all(), form=form, user=User.query.all())
+                                    return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),
+                                                           stock=stock.query.all(), form=form, user=User.query.all())
                                 else:
                                     print("HERE")
                         item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price)
@@ -218,15 +222,16 @@ def store_item(item_id):                                    # Item Page #
                         break
                     else:
                         flash("There Is No Stock Available")
-    return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form, user=User.query.all())
+    return render_template("store/store_item.html", title="Store-", store_item=the_item, store=Store.query.all(), stock=stock.query.all(), form=form,
+                           user=User.query.all())
 
 
 @app.route("/admin/additem")
 def additem():                                              # Add an item to store #
     if current_user.is_anonymous:                           # Parameters: None #
         return redirect(404)                                # Returns: store_add.html file and passes in the add_item_to_store form #
-    else:                                                   # Purpose: To add a new item to the store but you must be an admin to do so, it checks this before displaying the page #
-        for i in User.query.all():
+    else:                                                   # Purpose: To add a new item to the store but you must be an admin to do so, #
+        for i in User.query.all():                          # it checks this before displaying the page #
             if i.username == current_user.username:
                 if i.accesslevel >= 2:
                     form = add_item_to_store()
@@ -260,10 +265,10 @@ def additem():                                              # Add an item to sto
 @app.route("/admin/users", methods=["GET", "POST"])
 def owner_user_access():                                          # User Access Levels #
     if current_user.is_anonymous:                                 # Parameters: None #
-        return redirect(404)                                      # Returns: all_users.html file and passes in the user database and edit_user_level form #
-    else:                                                         # Purpose: For the owner to view and change the access levels of all users. Only access level 3 can access this page #
-        for j in User.query.all():
-            if current_user.id == j.id:
+        return redirect(404)                                      # Returns: all_users.html file and passes in the user database and #
+    else:                                                         # edit_user_level form #
+        for j in User.query.all():                                # Purpose: For the owner to view and change the access levels of all users. #
+            if current_user.id == j.id:                           # Only access level 3 can access this page #
                 if j.accesslevel == 3:
                     form = edit_user_level()
                     if form.validate_on_submit():
@@ -278,15 +283,16 @@ def owner_user_access():                                          # User Access 
 @app.route("/admin/shows", methods=["GET", "POST"])
 def shows_page():                                                 # Shows Admin Page #
     if current_user.is_anonymous:                                 # Parameters: None #
-        return redirect(404)                                      # Returns: shows.html file and passes in the concerts database and add_shows and edit_shows forms #
-    else:                                                         # Purpose: To see, update and add shows to the database. Only Users with an access
-        for j in User.query.all():
+        return redirect(404)                                      # Returns: shows.html file and passes in the concerts database and add_shows and #
+    else:                                                         # edit_shows forms #
+        for j in User.query.all():                                # Purpose: To see, update and add shows to the database. Only Users with an access #
             if current_user.id == j.id:
                 if j.accesslevel >= 2:
                     form = add_shows()
                     form2 = edit_shows()
                     if form.validate_on_submit():
-                        show = Concerts(location=form.location.data, venue=form.venue.data, day=form.day.data, month=form.month.data, year=form.year.data)
+                        show = Concerts(location=form.location.data, venue=form.venue.data, day=form.day.data, month=form.month.data,
+                                        year=form.year.data)
                         db.session.add(show)
                         db.session.commit()
                         flash("Show Has Been Added")
@@ -300,16 +306,17 @@ def shows_page():                                                 # Shows Admin 
                                 i.year = form2.year.data
                                 db.session.commit()
                                 flash("Show Has Been Updated")
-                    return render_template("user/admin/shows.html", title="Admin-", shows=Concerts.query.all(), form=form, form2=form2, users=User.query.all())
+                    return render_template("user/admin/shows.html", title="Admin-", shows=Concerts.query.all(), form=form, form2=form2,
+                                           users=User.query.all())
                 else:
                     return redirect(404)
 
 @app.route("/admin/stock", methods=["GET", "POST"])
-def stock_page():
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
-        for i in User.query.all():
+def stock_page():                                            # Admin Stock Page #
+    if current_user.is_anonymous:                            # Parameters: None #
+        return redirect(404)                                 # Returns: stock.html page and passes in the sock, store and user database with the #
+    else:                                                    # topup form #
+        for i in User.query.all():                           # Purpose: To show the admin all of the stock and be ble to top up stock #
             if current_user.id == i.id:
                 if i.accesslevel >= 2:
                     form = topup_form()
@@ -319,17 +326,18 @@ def stock_page():
                                 j.stock = j.stock + int(form.amount.data)
                                 db.session.commit()
                                 flash("Stock Updated")
-                    return render_template("user/admin/stock.html", title="Admin-", stock=stock.query.all(), store=Store.query.all(), form=form, users=User.query.all())
+                    return render_template("user/admin/stock.html", title="Admin-", stock=stock.query.all(), store=Store.query.all(), form=form,
+                                           users=User.query.all())
                 else:
                     return redirect(404)
 
 
 @app.route("/login", methods=["GET", "POST"])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
+def login():                                                                 # Login Page #
+    form = LoginForm()                                                       # Parameters: None #
+    if form.validate_on_submit():                                            # Returns: login.html file and passes in the login form #
+        user = User.query.filter_by(username=form.username.data).first()     # Purpose: To allow the user to login in to their account which saves
+        if user is None or not user.check_password(form.password.data):      # some of their data #
             flash("Invalid Username or Password")
             return redirect(url_for("login"))
         login_user(user, remember=form.remember_me.data)
@@ -345,30 +353,31 @@ def logout():
 
 
 @app.route("/register", methods=["GET", "POST"])
-def register():
-    form = RegisterForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data, towncity=form.towncity.data, postcode=form.postcode.data, accesslevel=1, name=form.name.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
+def register():                                      # Register Account Page #
+    form = RegisterForm()                            # Parameters: None #
+    if form.validate_on_submit():                    # Returns: register.html file and passes in the register form #
+        user = User(username=form.username.data, email=form.email.data, address1=form.address1.data, address2=form.address2.data,
+                    towncity=form.towncity.data, postcode=form.postcode.data, accesslevel=1, name=form.name.data)
+        user.set_password(form.password.data)        # Purpose: To allow a user to create account which store some of their data including #
+        db.session.add(user)                         # their orders #
         db.session.commit()
         flash("You Are Now A Registered User!")
         return redirect(url_for("login"))
     return render_template("user/register.html", title="Register-", form=form)
 
 
-@app.route("/user/<username>")
-@login_required
-def profile(username):
+@app.route("/user/<username>")                                       # Profile Page #
+@login_required                                                      # Parameters: username   Returns: profile.html file and passes in username #
+def profile(username):                                               # and user database #
     return render_template("user/profile.html", title="Profile-", user=User.query.all(), the_username=username)
-
+                                                                     # To show the user their profile and link them to their active orders #
 
 @app.route("/edit", methods=["GET", "POST"])
 @login_required
-def edit_profile():
-    form = EditForm(current_user.email)
-    if form.validate_on_submit():
-        current_user.email = form.email.data
+def edit_profile():                                                   # Edit Profile Page #
+    form = EditForm(current_user.email)                               # Parameters: None #
+    if form.validate_on_submit():                                     # Returns: edit_profile.html; and passes in the EditForm #
+        current_user.email = form.email.data                          # Purpose: To allow the user to edit the saved data of their profile #
         current_user.address1 = form.address1.data
         current_user.address2 = form.address2.data
         current_user.towncity = form.towncity.data
@@ -384,13 +393,13 @@ def edit_profile():
 
 
 @app.route("/admin", methods=["GET", "POST"])
-def admin():
-    if current_user.is_anonymous:
-        return redirect(404)
-    else:
-        for o in User.query.all():
-            if o.username == current_user.username:
-                if o.accesslevel >= 2:
+def admin():                                                # Admin Page #
+    if current_user.is_anonymous:                           # Parameters: None #
+        return redirect(404)                                # Returns: admin_index.html file and passes in the user, store and stock databases #
+    else:                                                   # Along with the cost and price of the items in the store #
+        for o in User.query.all():                          # Purpose: To show the admin all of the stock, how much each profit is and the total #
+            if o.username == current_user.username:         # profit of the shore. It also has a table which displays the most profitable items #
+                if o.accesslevel >= 2:                      # in order
                     thedect = {}
                     thelist = []
                     for k in stock.query.all():
@@ -411,7 +420,9 @@ def admin():
                                 total_prof += ind_profit1
                                 ind_price = j.price*i.bought
                                 total_price += ind_price
-                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(), stock=stock.query.all(), thelist=thelist, total_cost=total_cost, total_prof=total_prof, total_price=total_price)
+                    return render_template("user/admin/admin_index.html", title="Admin-",  users=User.query.all(), store=Store.query.all(),
+                                           stock=stock.query.all(), thelist=thelist, total_cost=total_cost, total_prof=total_prof,
+                                           total_price=total_price)
                 else:
                     return redirect(404)
 
