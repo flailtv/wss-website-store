@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<h1>An Unexpected Error Has Occured</h1>
+<h1>An Unexpected Error Has Occurred</h1>
     <h2>Error 500</h2>
 {% endblock %}
+
+{# This is page that is called when there is a server error. It also does a database rollback to make sure #}
+{# The data is safe #}

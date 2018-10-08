@@ -3,6 +3,8 @@
 {% block body %}
     <div class="text-center">
 <h1>Page Not Found Error 404</h1>
-    <p><a href="{{ url_for('index') }}">Back</a></p>
+        <p><a href="{{ url_for('index') }}"><h4>Home</h4></a></p>
     </div>
 {% endblock %}
+
+{# This a page that is called when an incorrect url has been entered. This is to keep the user on the website #}

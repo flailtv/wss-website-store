@@ -2,4 +2,3 @@ venv
 .idea
 __pycache__
 app.db
-accounts_file.txt
