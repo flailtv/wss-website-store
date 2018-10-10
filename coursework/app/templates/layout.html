@@ -13,8 +13,6 @@
 <body>
 <div class="container" style="width: 100%">
     {% include"_navbar.html" %}
-{#<hr>#}
-{# This is the line ^ #}
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul>
@@ -26,8 +24,8 @@
 {% endwith %}
     {% block body %}{% endblock %}
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</div>
 </body>
-{#TODO script alert(" "); can be used to alert#}
 </html>
 
 {# This is the main layout for the website. This keeps everything simlar so it is aesthetically pleasing #}

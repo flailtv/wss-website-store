@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+    #current_profile{
+    color: black;
+}
+</style>
+
+{% endblock %}
+
+{% block body %}
+<div class="text-center">
+    <h1 style="font-size: 250%">Delete Account</h1>
+    <h1 style="font-size: 225%">Are You Sure?</h1>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=32) }}<br>
+            {% for error in form.password.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+</div>
+{% endblock %}

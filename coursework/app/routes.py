@@ -1,7 +1,7 @@
 from app import app, db
 from config import Config
 from flask import render_template, redirect, url_for, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows, delete_account
 from app.models import User, Concerts, Store, stock, orders, cart
 from flask_login import current_user, login_user, logout_user, login_required
 import arrow
@@ -226,7 +226,7 @@ def store_item(item_id):                                    # Item Page #
                            user=User.query.all())
 
 
-@app.route("/admin/additem")
+@app.route("/admin/additem", methods=["GET", "POST"])
 def additem():                                              # Add an item to store #
     if current_user.is_anonymous:                           # Parameters: None #
         return redirect(404)                                # Returns: store_add.html file and passes in the add_item_to_store form #
@@ -236,26 +236,36 @@ def additem():                                              # Add an item to sto
                 if i.accesslevel >= 2:
                     form = add_item_to_store()
                     if form.validate_on_submit():
-                        item = store(
-                            id=int(form.id.data),
-                            name=form.name.data,
-                            image=form.image.data,
-                            back_image=form.back_image.data,
-                            cat=form.cat.data,
-                            price=form.price.data,
-                            sale=form.sale.data
-                        )
-                        db.session.add(item)
-                        db.session.commit()
-                        item = stock(
-                            itemid=form.id.data,
-                            size=form.size.data,
-                            stock=form.stock.data,
-                            colour=form.colour.data,
-                        )
-                        db.session.add(item)
-                        db.session.commit()
-                        flash("Item Added To The Store")
+                        for item in Store.query.all():
+                            print(item.id, "HE")
+                            print(form.item_id.data)
+                            if int(item.id) == int(form.item_id.data):
+                                flash("That ID Is In Use")
+                                return redirect(url_for("additem"))
+                            item = Store(
+                                id=form.item_id.data,
+                                name=form.name.data,
+                                image=form.image.data,
+                                back_image=form.back_image.data,
+                                cat=form.catagory.data,
+                                price=form.price.data,
+                                sale=form.sale.data,
+                            )
+                            db.session.add(item)
+                            db.session.commit()
+                            item = stock(
+                                itemid=form.item_id.data,
+                                size=form.size.data,
+                                stock=form.stock.data,
+                                colour=form.colour.data,
+                                bought=0
+                            )
+                            db.session.add(item)
+                            db.session.commit()
+                            flash("Item Added To The Store")
+                            return redirect(url_for("admin"))
+                        else:
+                            print(form.errors)
 
                 else:
                     return redirect(url_for(404))
@@ -371,6 +381,25 @@ def register():                                      # Register Account Page #
 def profile(username):                                               # and user database #
     return render_template("user/profile.html", title="Profile-", user=User.query.all(), the_username=username)
                                                                      # To show the user their profile and link them to their active orders #
+
+@app.route("/user/delete", methods=["GET", "POST"])
+@login_required
+def delete_profile():
+    form = delete_account()
+    if form.validate_on_submit():
+        for user in User.query.all():
+            if current_user.id == user.id:
+                if user.check_password(form.password.data) == False:
+                    flash("Invalid Password")
+                    return redirect(url_for("delete_profile"))
+                else:
+                    logout_user()
+                    db.session.delete(user)
+                    db.session.commit()
+                    flash("Account Deleted")
+                    return redirect(url_for("index"))
+    return render_template("user/delete.html", title="Profile-", form=form)
+
 
 @app.route("/edit", methods=["GET", "POST"])
 @login_required

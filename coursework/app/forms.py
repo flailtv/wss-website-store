@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo, Length
-from app.models import orders, User, stock, Concerts
+from app.models import orders, User, stock, Concerts, Store
 
 
 class LoginForm(FlaskForm):
@@ -113,25 +113,24 @@ class add_to_cart(FlaskForm):
 
 
 class add_item_to_store(FlaskForm):
-    id = StringField("Item ID", validators=[DataRequired()])
+    item_id = StringField("Item ID", validators=[DataRequired()])
     name = StringField("Item Name", validators=[DataRequired()])
-    cat = StringField("Category", validators=[DataRequired()])
     price = StringField("Price", validators=[DataRequired()])
     sale = StringField("Sale % (If Applicable)")
     image = StringField("Image Url (In Form images/folder/image)")
     back_image = StringField("2nd Image Url")
-    size = StringField("Size")
-    stock = StringField("Stock")
-    colour = StringField("Colour")
-    submit = SubmitField("Submit")
+    size = StringField("Size", validators=[DataRequired()])
+    stock = StringField("Stock", validators=[DataRequired()])
+    colour = StringField("Colour", validators=[DataRequired()])
+    submit = SubmitField("Submit", validators=[DataRequired()])
     catagory = SelectField(
-        choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens"), ("Outwear", "Outwear"), ("Accessories", "Accessories")]
+        choices=[(None, "Select"), ("Mens", "Mens"), ("Womens", "Womens"), ("Outwear", "Outwear"), ("Accessories", "Accessories"), ("Music", "Music")]
     )
 
-    def validate_id(self, id):
-        user = User.query.filter_by(id=id.data).first()
-        if id is not None:
-            raise ValidationError("Please use a different Item ID.")
+    def validate_id(self, item_id):
+        for i in Store.query.all():
+            if i.id == item_id.data:
+                raise ValidationError("Please use a different Item ID.")
 
 
 class checkout(FlaskForm):
@@ -162,11 +161,16 @@ class pay_form(FlaskForm):
 class update_orders_form(FlaskForm):
     the_list = [(None, "Select Order ID")]
     for i in orders.query.all():
-        the_list.append((str(i.order_id), str(i.order_id))) #TODO Use this in other places
+        the_list.append((str(i.order_id), str(i.order_id)))
     select = SelectField(
         choices=the_list
     )
     update = SelectField(
         choices=[(None, "Select Status"), ("Dispatched", "Dispatched"), ("Delivered", "Delivered")]
     )
+    submit = SubmitField("Submit")
+
+               v        
+class delete_account(FlaskForm):
+    password = StringField("Password")
     submit = SubmitField("Submit")
