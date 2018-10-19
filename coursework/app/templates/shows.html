@@ -11,6 +11,7 @@
 {% block body %}
 <div class="text-center">
     <h1 style="font-family: Rockwell;font-size: 300%" >Shows</h1>
+    <a href="shows/setup"><h4>Set Up Email Notifications</h4></a>
     {% for i in concerts %}
         <p style="font-family: Rockwell; font-size: 150%">{{ i.location }} -- {{ i.venue }} -- {{ i.day }}-{{ i.month }}-{{ i.year }}</p>
     {% endfor %}

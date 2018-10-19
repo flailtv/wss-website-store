@@ -173,3 +173,8 @@ class update_orders_form(FlaskForm):
 class delete_account(FlaskForm):
     password = StringField("Password")
     submit = SubmitField("Submit")
+
+
+class setup_shows(FlaskForm):
+    location = StringField("Location")
+    submit = SubmitField("Submit")

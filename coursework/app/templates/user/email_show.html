@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block head %}
+<style>
+#current_shows{
+    color: black;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="text-center">
+    <h1> Set Up Show Notifications</h1>
+        <p>Email: {{ email }}</p>
+        <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.location.label }}<br>
+                    {{ form.location(size=32) }}<br>
+                    {% for error in form.location.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                    {% endfor %}
+                </p>
+            <p>{{ form.submit }}</p>
+
+</div>
+
+{% endblock %}

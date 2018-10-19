@@ -79,3 +79,9 @@ class cart(db.Model):
     quantity = db.Column(db.Integer)
     price = db.Column(db.Integer)
     size = db.Column(db.String)
+
+class shows_not(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    userid = db.Column(db.Integer)
+    location = db.Column(db.String)
+

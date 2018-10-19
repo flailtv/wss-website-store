@@ -1,8 +1,8 @@
 from app import app, db
 from config import Config
 from flask import render_template, redirect, url_for, flash
-from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows, delete_account
-from app.models import User, Concerts, Store, stock, orders, cart
+from app.forms import LoginForm, RegisterForm, EditForm, add_shows, edit_user_level, pay_money, add_to_cart, add_item_to_store, checkout, topup_form, pay_form, update_orders_form, edit_shows, delete_account, setup_shows
+from app.models import User, Concerts, Store, stock, orders, cart, shows_not
 from flask_login import current_user, login_user, logout_user, login_required
 import arrow
 
@@ -18,11 +18,11 @@ def about():
 
 
 @app.route("/shows")
-def shows():                                            # Shows Page
-    current_date = arrow.now().format("YYYYMMDD")       # Parameters: None
-    for show in Concerts.query.all():                      # Return shows.html with the title "Shows" and passes in the Concerts Database
-        time = str(show.year) + str(show.month) + str(show.day)     # Purpose: To check the date and compare them against the shows int he concerts database. If the show has a date that has already happened, then it is deleted from the database. Then it presents the shows page on the website
-        if int(time) < int(current_date):
+def shows():                                                    # Shows Page
+    current_date = arrow.now().format("YYYYMMDD")               # Parameters: None
+    for show in Concerts.query.all():                           # Return shows.html with the title "Shows" and passes in the Concerts Database
+        time = str(show.year) + str(show.month) + str(show.day) # Purpose: To check the date and compare them against the shows int he concerts database. If the show has a date that has already happened,
+        if int(time) < int(current_date):                       # then it is deleted from the database. Then it presents the shows page on the website
             db.session.delete(show)
             db.session.commit()
     return render_template("shows.html", title="Shows-", concerts=Concerts.query.all())
@@ -299,11 +299,19 @@ def shows_page():                                                 # Shows Admin 
                     form = add_shows()
                     form2 = edit_shows()
                     if form.validate_on_submit():
-                        show = Concerts(location=form.location.data, venue=form.venue.data, day=form.day.data, month=form.month.data,
-                                        year=form.year.data)
+                        show = Concerts(location=form.location.data, venue=form.venue.data, day=str(form.day.data), month=str(form.month.data),
+                                        year=str(form.year.data))
                         db.session.add(show)
                         db.session.commit()
                         flash("Show Has Been Added")
+                        for i in shows_not.query.all():
+                            local = i.location
+                            for show in Concerts.query.all():
+                                if str(local) == str(show.location):
+                                    for user in User.query.all():
+                                        if user.id == i.userid:
+                                            Config.server.sendmail("whileshesleeps.store.tester@gmail.com", user.email, F"A Show is happening at {i.location}")
+                                            return redirect(url_for("shows_page"))
                     if form2.validate_on_submit():
                         for i in Concerts.query.all():
                             if int(i.id) == int(form2.show_id.data):
@@ -314,6 +322,14 @@ def shows_page():                                                 # Shows Admin 
                                 i.year = form2.year.data
                                 db.session.commit()
                                 flash("Show Has Been Updated")
+                                for i in shows_not.query.all():
+                                    local = i.location
+                                    for show in Concerts.query.all():
+                                        if str(local) == str(show.location):
+                                            for user in User.query.all():
+                                                if user.id == i.userid:
+                                                    Config.server.sendmail("whileshesleeps.store.tester@gmail.com", user.email, F"A Show is happening at {i.location}")
+                                                    return redirect(url_for("shows_page"))
                     return render_template("user/admin/shows.html", title="Admin-", shows=Concerts.query.all(), form=form, form2=form2,
                                            users=User.query.all())
                 else:
@@ -459,6 +475,21 @@ def admin():                                                # Admin Page
                                            total_price=total_price)
                 else:
                     return redirect(404)
+
+
+@app.route("/shows/setup", methods=["GET", "POST"])
+@login_required
+def setup_show():
+    for user in User.query.all():
+        if user.id == current_user.id:
+            form = setup_shows()
+            if form.validate_on_submit():
+                setup = shows_not(userid=current_user.id, location=form.location.data)
+                db.session.add(setup)
+                db.session.commit()
+                flash("Email Notifications Set Up")
+                return redirect(url_for("shows"))
+    return render_template("user/email_show.html", title="Shows-", form=form, email=current_user.email)
 
 
 @app.errorhandler(404)
