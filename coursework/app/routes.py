@@ -204,11 +204,12 @@ def store_item(item_id):                                    # Item Page
                         for item1 in cart.query.all():
                             if item1.userid == current_user.id:
                                 if i.itemid == item1.itemid:
-                                    item1.quantity = item1.quantity + 1
-                                    db.session.commit()
-                                    return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),
-                                                           stock=stock.query.all(), form=form, user=User.query.all())
-                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price )
+                                    if i.size == item1.size:
+                                        item1.quantity = item1.quantity + 1
+                                        db.session.commit()
+                                        return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),
+                                                               stock=stock.query.all(), form=form, user=User.query.all())
+                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price, size=i.size)
                         db.session.add(item)
                         db.session.commit()
                         flash("Item Has Been Added To Your Cart!")
