@@ -199,21 +199,16 @@ def store_item(item_id):                                    # Item Page
             return redirect(url_for("login"))               # add it to their cart.
         else:                                               # If the item has no stock, then it will not be added to cart
             for i in stock.query.all():
-                print("HGFUGUIF")
                 if i.itemid == the_item.id:
                     if i.stock > 0:
                         for item1 in cart.query.all():
-                            print("find")
                             if item1.userid == current_user.id:
                                 if i.itemid == item1.itemid:
-                                    print(i.itemid)
                                     item1.quantity = item1.quantity + 1
                                     db.session.commit()
                                     return render_template("store/store_item.html", title="Store-",store_item=the_item, store=Store.query.all(),
                                                            stock=stock.query.all(), form=form, user=User.query.all())
-                                else:
-                                    print("HERE")
-                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price)
+                        item = cart(userid=current_user.id, itemid=the_item.id, quantity=form.amount.data, price=the_item.price )
                         db.session.add(item)
                         db.session.commit()
                         flash("Item Has Been Added To Your Cart!")
@@ -294,8 +289,8 @@ def shows_page():                                                 # Shows Admin 
         return redirect(404)                                      # Returns: shows.html file and passes in the concerts database and add_shows and
     else:                                                         # edit_shows forms
         for j in User.query.all():                                # Purpose: To see, update and add shows to the database. Only Users with an access
-            if current_user.id == j.id:
-                if j.accesslevel >= 2:
+            if current_user.id == j.id:                           # Also it checks whether a user has set up notifications, and if they have sends out
+                if j.accesslevel >= 2:                            # an email to the user
                     form = add_shows()
                     form2 = edit_shows()
                     if form.validate_on_submit():
@@ -322,12 +317,11 @@ def shows_page():                                                 # Shows Admin 
                                 i.year = form2.year.data
                                 db.session.commit()
                                 flash("Show Has Been Updated")
-                                for i in shows_not.query.all():
-                                    local = i.location
+                                for k in shows_not.query.all():
                                     for show in Concerts.query.all():
-                                        if str(local) == str(show.location):
+                                        if str(k.location) == str(show.location):
                                             for user in User.query.all():
-                                                if user.id == i.userid:
+                                                if user.id == k.userid:
                                                     Config.server.sendmail("whileshesleeps.store.tester@gmail.com", user.email, F"A Show is happening at {i.location}")
                                                     return redirect(url_for("shows_page"))
                     return render_template("user/admin/shows.html", title="Admin-", shows=Concerts.query.all(), form=form, form2=form2,
