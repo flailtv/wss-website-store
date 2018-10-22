@@ -458,7 +458,7 @@ def admin():                                                # Admin Page
                     for i in stock.query.all():
                         for j in Store.query.all():
                             if i.itemid == j.id:
-                                ind_cost = j.cost * i.bought
+                                ind_cost = int(j.cost) * int(i.bought)
                                 ind_profit = j.price-j.cost
                                 ind_profit1 = ind_profit*i.bought
                                 total_cost += ind_cost
@@ -475,12 +475,12 @@ def admin():                                                # Admin Page
 @app.route("/shows/setup", methods=["GET", "POST"])
 @login_required
 def setup_show():
-    for user in User.query.all():
-        if user.id == current_user.id:
-            form = setup_shows()
-            if form.validate_on_submit():
-                setup = shows_not(userid=current_user.id, location=form.location.data)
-                db.session.add(setup)
+    for user in User.query.all():                                       # Set Up Email Notifications
+        if user.id == current_user.id:                                  # Parameters: None
+            form = setup_shows()                                        # Returns: the email_show.html file and passes in their setup_shows form and
+            if form.validate_on_submit():                               # the currents user's email address
+                setup = shows_not(userid=current_user.id, location=form.location.data) # Purpose: So that the user can receive email notifications
+                db.session.add(setup)                                   # For when the band are playing in a certain area.
                 db.session.commit()
                 flash("Email Notifications Set Up")
                 return redirect(url_for("shows"))

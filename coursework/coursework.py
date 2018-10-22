@@ -1,5 +1,6 @@
 from app import app, db
 from app.models import User, Concerts, Store, cart, stock
+from flask_wtf import CSRFProtect
 
 
 @app.shell_context_processor
@@ -13,6 +14,7 @@ def make_shell_context():
         "Cart": cart,
     }
 
+csrf = CSRFProtect()
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
