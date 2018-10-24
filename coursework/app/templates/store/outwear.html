@@ -11,7 +11,6 @@
 {% block body %}
 <div class="text-center">
 <br>
-<h1 style="font-size: 150%">Outwear</h1>
 {% for item in store %}
                 {% if item.cat == "Outwear" %}
                     <a href="{{ url_for("store_item", item_id=item.id) }}">

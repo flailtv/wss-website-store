@@ -244,6 +244,7 @@ def additem():                                              # Add an item to sto
                                 cat=form.catagory.data,
                                 price=form.price.data,
                                 sale=form.sale.data,
+                                cost=0
                             )
                             db.session.add(item)
                             db.session.commit()
