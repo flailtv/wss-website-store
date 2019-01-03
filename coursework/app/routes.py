@@ -131,7 +131,7 @@ def confirmation():                                               # Confirmation
                         item = orders(userid=i.userid, item_id=i.itemid, item_quant=i.quantity, order_status="Processing", date=current_date,
                                       price=(int(i.price)*int(i.quantity)), card=card_no)
                         Config.server.sendmail("whileshesleeps.store.tester@gmail.com", user.email, "Your Order Has Been Placed")
-                        db.session.add(item)   #adds items to order list
+                        db.session.add(it em)   #adds items to order list
                         db.session.commit()
                         db.session.delete(i)   #removes items from cart
                         db.session.commit()
